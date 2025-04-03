@@ -4,6 +4,10 @@ A new Flutter project.
 
 ## Getting Started
 
+set up packet : fullter get pub
+
+run : flutter run
+
 This project is a starting point for a Flutter application.
 
 A few resources to get you started if this is your first Flutter project:
