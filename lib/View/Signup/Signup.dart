@@ -40,7 +40,7 @@ class Signup extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(
-                    height: 60,
+                    height: 70,
                   ),
                   Align(
                     alignment: Alignment.center,
@@ -272,7 +272,7 @@ class Signup extends StatelessWidget {
                               foregroundColor: Colors.white,
                               backgroundColor: Colors.blue,
                               padding: EdgeInsets.symmetric(
-                                  horizontal: 130, vertical: 15),
+                                  horizontal: 140, vertical: 15),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -292,7 +292,7 @@ class Signup extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(
-                          height: 20,
+                          height: 10,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,

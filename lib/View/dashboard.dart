@@ -1,10 +1,11 @@
 import 'package:app_hm/Controller/DashboardController.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Services/Auth.dart';
-import 'package:app_hm/View/Account/ChangePassword.dart';
-import 'package:app_hm/View/Appointment/Appointment.dart';
+import 'package:app_hm/View/Account/CreatePassword.dart';
+import 'package:app_hm/View/Appointment/ListAppointment.dart';
 import 'package:app_hm/View/Login/Login.dart';
 import 'package:app_hm/View/Personal/Personal.dart';
+import 'package:app_hm/View/ServiceCar/ServiceCar.dart';
 import 'package:app_hm/View/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -123,7 +124,7 @@ class Dashboard extends StatelessWidget {
                   case 0:
                     return const Home();
                   case 1:
-                    return const Appointment();
+                    return const ServiceCar();
                   case 2:
                     return const Personal();
 
@@ -139,36 +140,40 @@ class Dashboard extends StatelessWidget {
                         'assets/icons/home.svg',
                         colorFilter: controller.currentPageIndex.value == 0
                             ? const ColorFilter.mode(
-                                Color.fromRGBO(45, 116, 255, 1),
+                                Color.fromRGBO(14, 93, 250, 1),
                                 BlendMode.srcIn,
                               )
                             : null,
                       ),
-                      label: 'Home',
+                      label: 'home'.tr,
                     ),
                     BottomNavigationBarItem(
                       icon: SvgPicture.asset(
-                        'assets/icons/filter_icon.svg',
+                        'assets/icons/service.svg',
                         colorFilter: controller.currentPageIndex.value == 1
                             ? const ColorFilter.mode(
-                                Color.fromRGBO(45, 116, 255, 1),
+                                Color.fromRGBO(14, 93, 250, 1),
                                 BlendMode.srcIn,
                               )
                             : null,
+                        width: 24,
+                        height: 24,
                       ),
-                      label: 'personal'.tr,
+                      label: 'service_car'.tr,
                     ),
                     BottomNavigationBarItem(
                       icon: SvgPicture.asset(
-                        'assets/icons/user_octagon.svg',
+                        'assets/icons/setting.svg',
                         colorFilter: controller.currentPageIndex.value == 2
                             ? const ColorFilter.mode(
-                                Color.fromRGBO(45, 116, 255, 1),
+                                Color.fromRGBO(14, 93, 250, 1),
                                 BlendMode.srcIn,
                               )
                             : null,
+                        width: 24,
+                        height: 24,
                       ),
-                      label: 'personal'.tr,
+                      label: 'setting'.tr,
                     ),
                   ],
                   currentIndex: controller.currentPageIndex.value,

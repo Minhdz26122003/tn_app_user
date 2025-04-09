@@ -1,10 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:app_hm/Controller/DashboardController.dart';
 import 'package:app_hm/Global/Constant.dart';
 import 'package:app_hm/Model/Account/AccountModel.dart';
+import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Services/APICaller.dart';
+import 'package:app_hm/Services/Cloudiary.dart';
 import 'package:app_hm/Utils/Utils.dart';
+import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -13,6 +17,8 @@ class Personalcontroller extends GetxController {
   RxBool isLoading = true.obs;
   DateTime timeNow = DateTime.now();
   int uidAcc = 0;
+  String emailAcc = "";
+  String UsernameAcc = "";
 
   RxString selectedGender = ''.obs;
   Rx<File> imageFile = File('').obs;
@@ -28,9 +34,20 @@ class Personalcontroller extends GetxController {
   TextEditingController textRole = TextEditingController();
   TextEditingController textGender = TextEditingController();
 
+  TextEditingController textPasswordOld = TextEditingController();
+  TextEditingController textPasswordNew = TextEditingController();
+  TextEditingController textPasswordConfirm = TextEditingController();
+  RxBool isHidePasswordNew = true.obs;
+  RxBool isHidePasswordConfirm = true.obs;
+  RxBool isHidePasswordOld = true.obs;
+
   Future<void> onInit() async {
     super.onInit();
     uidAcc = await Utils.getIntValueWithKey(Constant.UUID_USER_ACC);
+    emailAcc = await Utils.getStringValueWithKey(Constant.EMAIL);
+    UsernameAcc = await Utils.getStringValueWithKey(Constant.USERNAME);
+    textEmail.text = emailAcc;
+    textUserName.text = UsernameAcc;
 
     await getAccount();
     setAccount();
@@ -81,7 +98,7 @@ class Personalcontroller extends GetxController {
       "keyCert":
           Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
       "time": formattedTime,
-      "uid": uidAcc,
+      "email": emailAcc,
     };
     try {
       var response = await APICaller.getInstance()
@@ -95,10 +112,18 @@ class Personalcontroller extends GetxController {
   }
 
   setAccount() {
+    textUserName.text =
+        (account.username != null && account.username!.isNotEmpty)
+            ? account.username!
+            : UsernameAcc;
+
     textFullName.text = account.fullname ?? '';
     textPhone.text = account.phonenum ?? '';
     textAddress.text = account.address ?? '';
-    textEmail.text = account.email ?? '';
+    // Nếu account.email rỗng thì giữ lại emailAcc đã có
+    textEmail.text = (account.email != null && account.email!.isNotEmpty)
+        ? account.email!
+        : emailAcc;
     textGender.text = setGender(account.gender ?? 0);
     if (account.birthday != null) {
       setDateOfBirth(DateTime.parse(account.birthday!));
@@ -106,90 +131,168 @@ class Personalcontroller extends GetxController {
     textRole.text = getRoleAccount(account.status ?? 2);
   }
 
+  // setAccount() {
+  //   textUserName.text = account.username ?? '';
+  //   textFullName.text = account.fullname ?? '';
+  //   textPhone.text = account.phonenum ?? '';
+  //   textAddress.text = account.address ?? '';
+  //   textEmail.text = account.email ?? '';
+  //   textGender.text = setGender(account.gender ?? 0);
+  //   if (account.birthday != null) {
+  //     setDateOfBirth(DateTime.parse(account.birthday!));
+  //   }
+  //   textRole.text = getRoleAccount(account.status ?? 2);
+  // }
+
   setDateOfBirth(DateTime dateTime) {
     textDateOfBirth.text = DateFormat('dd/MM/yyyy').format(dateTime);
   }
 
-//   updateAccount() async {
-//   if (textFullName.text.trim().isEmpty) {
-//     Utils.showSnackBar(title: 'notification'.tr, message: 'enter_full_name'.tr);
-//   } else if (textFullName.text.trim().length > 50) {
-//     Utils.showSnackBar(title: 'notification'.tr, message: 'full_name_50_characters'.tr);
-//   } else if (textPhone.text.trim().isNotEmpty && !RegExp(r'^(0?)(3[2-9]|5[2689]|7[06-9]|8[1-689]|9[0-46-9])[0-9]{7}$').hasMatch(textPhone.text.trim())) {
-//     Utils.showSnackBar(title: 'notification'.tr, message: 'phone_number_format'.tr);
-//   } else if (textAddress.text.trim().isNotEmpty && textAddress.text.trim().length > 255) {
-//     Utils.showSnackBar(title: 'notification'.tr, message: 'address_255_characters'.tr);
-//   } else {
-//     // Biến để lưu Cloudinary public ID hoặc URL
-//     String cloudinaryImage = "";
+  changePassword() async {
+    if (textPasswordOld.text.isEmpty) {
+      Utils.showSnackBar(
+          title: 'notification'.tr, message: 'enter_old_password'.tr);
+    } else if (textPasswordNew.text.isEmpty) {
+      Utils.showSnackBar(
+          title: 'notification'.tr, message: 'enter_new_password'.tr);
+    } else if (textPasswordConfirm.text.isEmpty) {
+      Utils.showSnackBar(
+          title: 'notification'.tr, message: 're_enter_new_password'.tr);
+    } else if (textPasswordNew.text.length < 6) {
+      Utils.showSnackBar(title: 'notification'.tr, message: '6_characters'.tr);
+    } else if (textPasswordNew.text.length > 50) {
+      Utils.showSnackBar(title: 'notification'.tr, message: '50_characters'.tr);
+    } else if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$')
+        .hasMatch(textPasswordNew.text)) {
+      Utils.showSnackBar(
+          title: 'notification'.tr, message: 'password_contain'.tr);
+    } else if (textPasswordNew.text != textPasswordConfirm.text) {
+      Utils.showSnackBar(
+          title: 'notification'.tr, message: 'password_not_match'.tr);
+    } else {
+      String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
+      var param = {
+        "keyCert":
+            Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
+        "time": formattedTime,
+        "uid": uidAcc,
+        "oldPassword": textPasswordOld.text.trim(),
+        "newPassword": textPasswordConfirm.text.trim(),
+        "confirmPassword": textPasswordConfirm.text.trim(),
+      };
+      try {
+        var response = await APICaller.getInstance()
+            .post('/Account/change_pass.php', param);
+        if (response != null) {
+          textPasswordNew.clear();
+          textPasswordConfirm.clear();
+          Get.offAllNamed(Routes.personal);
+          Utils.showSnackBar(
+              title: 'notification'.tr,
+              message: 'password_changed_successfully'.tr);
+        }
+      } catch (e) {
+        debugPrint("Lỗi API: $e", wrapWidth: 1024);
+      }
+    }
+  }
 
-//     if (imageFile.value.path != '') {
-//       await pushFile();
-//       cloudinaryImage = responseFileApi.value;
-//     }
+  Future<void> updateAccount() async {
+    if (textUserName.text.trim().isEmpty) {
+      Utils.showSnackBar(
+          title: 'notification'.tr, message: 'enter_username'.tr);
+      return;
+    } else if (textFullName.text.trim().isEmpty) {
+      Utils.showSnackBar(
+          title: 'notification'.tr, message: 'enter_full_name'.tr);
+      return;
+    } else if (textFullName.text.trim().length > 50) {
+      Utils.showSnackBar(
+          title: 'notification'.tr, message: 'full_name_50_characters'.tr);
+      return;
+    } else if (textPhone.text.trim().isNotEmpty &&
+        !RegExp(r'^(0?)(3[2-9]|5[2689]|7[06-9]|8[1-689]|9[0-46-9])[0-9]{7}$')
+            .hasMatch(textPhone.text.trim())) {
+      Utils.showSnackBar(
+          title: 'notification'.tr, message: 'phone_number_format'.tr);
+      return;
+    } else if (textAddress.text.trim().isNotEmpty &&
+        textAddress.text.trim().length > 255) {
+      Utils.showSnackBar(
+          title: 'notification'.tr, message: 'address_255_characters'.tr);
+      return;
+    } else {
+      // lưu Cloudinary publicId hoặc URL
+      String cloudinaryImage = "";
 
-//     String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
-//     var param = {
-//       "keyCert": Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
-//       "time": formattedTime,
-//       "uuid": uuidAcc,
-//       "roleUuid": roleUuid,
-//       "imagesUuid": cloudinaryImage, // Sử dụng Cloudinary publicId hoặc URL
-//       "fullName": textFullName.text.trim(),
-//       "gender": typeRadio.value,
-//       "phone": textPhone.text.trim(),
-//       "birthday": DateFormat('yyyy-MM-dd').format(DateFormat('dd/MM/yyyy').parse(textDateOfBirth.text)),
-//       "address": textAddress.text.trim(),
-//       "regencyUuid": regencyUuid,
-//       "email": textEmail.text
-//     };
+      if (imageFile.value.path.isNotEmpty) {
+        await pushFile();
+        cloudinaryImage = responseFileApi.value;
+      }
 
-//     print(param);
-//     try {
-//       var response = await APICaller.getInstance().post('v1/Account/Update_account_login', param);
-//       if (response != null) {
-//         Utils.saveStringWithKey(Constant.FULL_NAME, textFullName.text.trim());
-//         if (Get.isRegistered<DashboardController>()) {
-//           final controller = Get.find<DashboardController>();
-//           controller.fullName.value = textFullName.text.trim();
+      String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
+      var param = {
+        "keyCert":
+            Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
+        "time": formattedTime,
+        "uid": uidAcc ?? "",
+        "username": textUserName.text.trim(),
+        "avatar": cloudinaryImage,
+        "fullname": textFullName.text.trim(),
+        "gender": textGender.text.trim(),
+        "phonenum": textPhone.text.trim(),
+        "birthday": DateFormat('yyyy-MM-dd')
+            .format(DateFormat('dd/MM/yyyy').parse(textDateOfBirth.text)),
+        "address": textAddress.text.trim(),
+        "email": textEmail.text.trim()
+      };
 
-//           // Cập nhật avatar - tùy theo bạn lưu publicId hay URL đầy đủ
-//           if (cloudinaryImage.isNotEmpty) {
-//             // Nếu bạn lưu publicId thì cần cấu hình để hiển thị ảnh
-//             // Ví dụ: https://res.cloudinary.com/your_cloud_name/image/upload/publicId
-//             String cloudinaryUrl = "https://res.cloudinary.com/your_cloud_name/image/upload/$cloudinaryImage";
-//             controller.avatar.value = cloudinaryUrl;
-//           }
-//         }
-//         Get.back();
-//         Utils.showSnackBar(title: 'notification'.tr, message: 'account_updated_successfully'.tr);
-//       }
-//     } catch (e) {
-//       Utils.showSnackBar(title: 'notification'.tr, message: '$e');
-//     }
-//   }
-// }
+      print(param);
+      try {
+        var response = await APICaller.getInstance()
+            .post('/Account/edit_account.php', param);
+        if (response != null) {
+          Utils.saveStringWithKey(Constant.FULL_NAME, textFullName.text.trim());
 
-// Hàm upload file lên Cloudinary
-// Future<void> pushFile() async {
-//   try {
-//     // Tạo CloudinaryFile từ path
-//     final cloudinaryFile = CloudinaryFile.fromFile(
-//       imageFile.value.path,
-//       resourceType: CloudinaryResourceType.Image,
-//       folder: 'user_profiles', // Tùy chọn thư mục lưu trữ
-//     );
+          if (Get.isRegistered<Dashboardcontroller>()) {
+            final controllerDashboard = Get.find<Dashboardcontroller>();
+            controllerDashboard.username.value = textUserName.text.trim();
+            controllerDashboard.email.value = textEmail.text.trim();
+            // controllerDashboard.avatar.value = imageFile.value.path;
+            if (cloudinaryImage.isNotEmpty) {
+              // Nếu lưu URL đầy đủ từ Cloudinary thì sử dụng luôn
+              controllerDashboard.avatar.value = cloudinaryImage;
+            }
+          }
+          Get.back();
+          Utils.showSnackBar(
+              title: 'notification'.tr,
+              message: 'account_updated_successfully'.tr);
+        }
+      } catch (e) {
+        // Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+        debugPrint("Lỗi API: $e", wrapWidth: 1024);
+      }
+    }
+  }
 
-//     // Upload lên Cloudinary
-//     final response = await cloudinary.uploadFile(cloudinaryFile);
-
-//     // Lưu lại publicId hoặc URL trả về
-//     responseFileApi.value = response.publicId; // Hoặc lấy response.secureUrl nếu bạn muốn lưu URL đầy đủ
-
-//     print('Cloudinary upload success: ${response.secureUrl}');
-//   } catch (e) {
-//     print('Cloudinary upload error: $e');
-//     Utils.showSnackBar(title: 'notification'.tr, message: 'Image upload failed: $e');
-//   }
-// }
+  // Hàm upload file lên Cloudinary
+  Future<void> pushFile() async {
+    try {
+      CloudinaryResponse response = await cloudinary.uploadFile(
+        CloudinaryFile.fromFile(
+          imageFile.value.path,
+          resourceType: CloudinaryResourceType.Image,
+          folder: 'user_profiles',
+        ),
+      );
+      // Lưu lại publicId hoặc secureUrl (tuỳ chọn)
+      responseFileApi.value = response.secureUrl;
+      print('Cloudinary tải lên thành công: ${response.secureUrl}');
+    } catch (e) {
+      print('Cloudinary tải lên lỗi: $e');
+      Utils.showSnackBar(
+          title: 'notification'.tr, message: 'Ảnh tải lên lỗi: $e');
+    }
+  }
 }

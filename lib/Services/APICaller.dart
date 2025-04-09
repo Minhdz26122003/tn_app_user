@@ -10,7 +10,7 @@ import 'package:network_info_plus/network_info_plus.dart';
 
 class APICaller {
   static APICaller _apiCaller = APICaller();
-  static String BASE_URL = "http://192.168.1.9/apihm/User/";
+  static String BASE_URL = "http://192.168.1.7/apihm/User/";
   // static String BASE_URL = "http://10.0.2.2/apihm/User/";
   // static late String BASE_URL;
 

@@ -1,5 +1,5 @@
 import 'package:app_hm/Controller/Login/LoginController.dart';
-import 'package:app_hm/View/Account/ChangePassword.dart';
+import 'package:app_hm/View/Account/CreatePassword.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';

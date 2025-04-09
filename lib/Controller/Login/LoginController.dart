@@ -3,7 +3,7 @@ import 'package:app_hm/Global/Constant.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Services/APICaller.dart';
 import 'package:app_hm/Utils/Utils.dart';
-import 'package:app_hm/View/Account/ChangePassword.dart';
+import 'package:app_hm/View/Account/CreatePassword.dart';
 import 'package:app_hm/View/Account/SendOTP.dart';
 import 'package:app_hm/View/Login/Login.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +27,7 @@ class LoginController extends GetxController {
   RxBool isForgotPasswordLoading = false.obs;
   TextEditingController textEmail = TextEditingController();
   TextEditingController textOTP = TextEditingController();
+  TextEditingController textPasswordOld = TextEditingController();
   TextEditingController textPasswordNew = TextEditingController();
   TextEditingController textPasswordConfirm = TextEditingController();
 
@@ -114,7 +115,7 @@ class LoginController extends GetxController {
         if (response != null && response["error"]["code"] == 0) {
           Utils.showSnackBar(
               title: 'notification'.tr, message: "Xác thực OTP thành công");
-          Get.to(() => const Changepassword());
+          Get.to(() => const Createpassword());
         } else {
           Utils.showSnackBar(
               title: 'notification'.tr, message: response["error"]["message"]);
@@ -125,7 +126,7 @@ class LoginController extends GetxController {
     }
   }
 
-  changePassword() async {
+  createPassword() async {
     if (textPasswordNew.text.isEmpty) {
       Utils.showSnackBar(
           title: 'notification'.tr, message: 'enter_new_password'.tr);

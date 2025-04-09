@@ -24,12 +24,16 @@ class Auth {
     try {
       clearData();
       await FirebaseAuth.instance.signOut();
-      final controller = Get.find<Dashboardcontroller>();
+      final GoogleSignIn _googleSignIn = GoogleSignIn();
+      await _googleSignIn.signOut();
 
+      final controller = Get.find<Dashboardcontroller>();
       controller.username.value = '';
       controller.email.value = '';
       controller.avatar.value = '';
       controller.loginMethod.value = null;
+      controller.isPhpLoggedIn.value = false;
+      controller.isLoggedIn.value = false;
       controller.updateIsLoggedIn();
 
       Utils.showSnackBar(title: 'Thông báo', message: 'log_out_success'.tr);
@@ -67,7 +71,14 @@ class Auth {
 
   static Future<void> loginWithFirebase() async {
     try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+
+      await FirebaseAuth.instance.signOut();
+      if (await googleSignIn.isSignedIn()) {
+        await googleSignIn.signOut();
+        // await googleSignIn.disconnect();
+      }
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
       if (googleUser == null) {
         Utils.showSnackBar(title: 'Thông báo', message: 'Đăng nhập bị hủy.');
@@ -77,6 +88,11 @@ class Auth {
       final GoogleSignInAuthentication? googleAuth =
           await googleUser.authentication;
 
+      if (googleAuth?.accessToken == null || googleAuth?.idToken == null) {
+        Utils.showSnackBar(title: 'Lỗi', message: 'Không thể xác thực Google.');
+        return;
+      }
+
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
@@ -84,8 +100,8 @@ class Auth {
 
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
-
       User? user = userCredential.user;
+
       if (user != null) {
         final controller = Get.find<Dashboardcontroller>();
 
@@ -97,9 +113,6 @@ class Auth {
         await Utils.saveStringWithKey(
             Constant.USERNAME, user.displayName ?? '');
         await Utils.saveStringWithKey(Constant.EMAIL, user.email ?? '');
-        await Utils.saveStringWithKey(
-            Constant.AVATAR_USER, user.photoURL ?? '');
-
         await Utils.saveStringWithKey(
             Constant.AVATAR_USER, user.photoURL ?? '');
 
@@ -174,17 +187,19 @@ class Auth {
     }
   }
 
-  static clearData() async {
-    await Utils.removeKey(Constant.UUID_USER_ACC);
-    await Utils.removeKey(Constant.GENDER);
-    await Utils.removeKey(Constant.STATUS);
+  static Future<void> clearData() async {
     await Utils.removeKey(Constant.USERNAME);
-    await Utils.removeKey(Constant.FULL_NAME);
     await Utils.removeKey(Constant.EMAIL);
+    await Utils.removeKey(Constant.AVATAR_USER);
+    await Utils.removeKey(Constant.ACCESS_TOKEN);
+    await Utils.removeKey(Constant.PASSWORD);
+    await Utils.removeKey(Constant.TOKEN_EXPIRY);
+    await Utils.removeKey(Constant.FULL_NAME);
+    await Utils.removeKey(Constant.UUID_USER_ACC);
     await Utils.removeKey(Constant.ADDRESS);
     await Utils.removeKey(Constant.PHONENUM);
     await Utils.removeKey(Constant.BIRTHDAY);
-    await Utils.removeKey(Constant.AVATAR_USER);
-    await Utils.removeKey(Constant.ACCESS_TOKEN);
+    await Utils.removeKey(Constant.GENDER);
+    await Utils.removeKey(Constant.STATUS);
   }
 }

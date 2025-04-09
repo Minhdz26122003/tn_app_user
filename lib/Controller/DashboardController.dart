@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 class Dashboardcontroller extends GetxController {
   RxInt currentPageIndex = 0.obs;
   RxString username = ''.obs;
+  RxString fullname = ''.obs;
   RxString avatar = ''.obs;
   RxString email = ''.obs;
   RxString phoneNumber = ''.obs;
@@ -71,7 +72,7 @@ class Dashboardcontroller extends GetxController {
     if (firebaseUser.value != null) {
       isLoggedIn.value = true;
       loginMethod.value ??= LoginMethod.firebase;
-    } else if (isPhpLoggedIn.value) {
+    } else if (isPhpLoggedIn.value && loginMethod.value == null) {
       isLoggedIn.value = true;
       loginMethod.value ??= LoginMethod.php;
     } else {

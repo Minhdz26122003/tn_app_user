@@ -29,7 +29,7 @@ class AccountModel {
     fullname = json['fullname'];
     email = json['email'];
     phonenum = json['phonenum'];
-    username = json['userName'];
+    username = json['username'];
     timeCreated = json['timeCreated'];
     avatar = json['avatar'];
     birthday = json['birthday'];
@@ -44,7 +44,7 @@ class AccountModel {
     data['fullname'] = fullname;
     data['email'] = email;
     data['phonenum'] = phonenum;
-    data['userName'] = username;
+    data['username'] = username;
     data['timeCreated'] = timeCreated;
     data['avatar'] = avatar;
     data['birthday'] = birthday;

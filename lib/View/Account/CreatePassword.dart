@@ -1,13 +1,14 @@
-import 'package:app_hm/Controller/Personal/PersonalController.dart';
+import 'package:app_hm/Controller/Login/LoginController.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-class Changepassword extends StatelessWidget {
-  const Changepassword({super.key});
+class Createpassword extends StatelessWidget {
+  const Createpassword({super.key});
+
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(Personalcontroller());
+    final controller = Get.put(LoginController());
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -38,7 +39,7 @@ class Changepassword extends StatelessWidget {
                     height: 60,
                   ),
                   Text(
-                    'change_new_password'.tr,
+                    'create_new_password'.tr,
                     style: const TextStyle(
                       color: Colors.blue,
                       fontSize: 24,
@@ -63,44 +64,6 @@ class Changepassword extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'old_password'.tr,
-                          style: TextStyle(fontSize: 12),
-                          textAlign: TextAlign.start,
-                        ),
-                        TextField(
-                          controller: controller.textPasswordOld,
-                          obscureText: controller.isHidePasswordOld.value,
-                          onChanged: (value) {},
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.lock_outline),
-                            hintText: 'old_password'.tr,
-                            hintStyle: const TextStyle(
-                                color: Color.fromRGBO(134, 133, 133, 1)),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 10),
-                            border: const OutlineInputBorder(),
-                            suffixIcon: InkWell(
-                              onTap: () {
-                                controller.isHidePasswordOld.value =
-                                    !controller.isHidePasswordOld.value;
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: SvgPicture.asset(
-                                    controller.isHidePasswordOld.value
-                                        ? 'assets/icons/hidden.svg'
-                                        : 'assets/icons/eye_login.svg',
-                                    fit: BoxFit.cover),
-                              ),
-                            ),
-                          ),
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        Text(
                           'new_password'.tr,
                           style: TextStyle(fontSize: 12),
                           textAlign: TextAlign.start,
@@ -119,13 +82,13 @@ class Changepassword extends StatelessWidget {
                             border: const OutlineInputBorder(),
                             suffixIcon: InkWell(
                               onTap: () {
-                                controller.isHidePasswordNew.value =
-                                    !controller.isHidePasswordNew.value;
+                                controller.isHidePassword.value =
+                                    !controller.isHidePassword.value;
                               },
                               child: Padding(
                                 padding: const EdgeInsets.all(12),
                                 child: SvgPicture.asset(
-                                    controller.isHidePasswordNew.value
+                                    controller.isHidePassword.value
                                         ? 'assets/icons/hidden.svg'
                                         : 'assets/icons/eye_login.svg',
                                     fit: BoxFit.cover),
@@ -184,7 +147,7 @@ class Changepassword extends StatelessWidget {
                           alignment: Alignment.center,
                           child: ElevatedButton(
                             onPressed: () async {
-                              controller.changePassword();
+                              controller.createPassword();
                             },
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.white,
@@ -197,7 +160,7 @@ class Changepassword extends StatelessWidget {
                               elevation: 5,
                             ),
                             child: Text(
-                              'change_password'.tr,
+                              'create_password'.tr,
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,

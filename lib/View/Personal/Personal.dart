@@ -98,6 +98,7 @@ class Personal extends StatelessWidget {
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
+                            _buildSectionTitle('personal'.tr),
                             _item(
                               title: 'personal_information'.tr,
                               svg: 'assets/icons/profile.svg',
@@ -116,10 +117,6 @@ class Personal extends StatelessWidget {
                                 title: 'change_password'.tr,
                                 svg: 'assets/icons/security.svg',
                                 onTap: () {
-                                  print(
-                                      'isLoggedIn: ${controller.isLoggedIn.value}');
-                                  print(
-                                      'loginMethod: ${controller.loginMethod.value}');
                                   if (!controller.isLoggedIn.value) {
                                     Get.toNamed(Routes.login);
                                   } else {
@@ -128,21 +125,24 @@ class Personal extends StatelessWidget {
                                 },
                               ),
                             ],
+                            _buildSectionTitle('appointment'.tr),
+                            const SizedBox(height: 5),
                             _item(
                               title: 'Quản lý lịch hẹn',
-                              svg: 'assets/icons/security.svg',
+                              svg: 'assets/icons/appointment.svg',
                               onTap: () {
                                 if (!controller.isLoggedIn.value) {
                                   Get.toNamed(Routes.login);
                                 } else {
-                                  Get.toNamed(Routes.changepassword);
+                                  Get.toNamed(Routes.listappointment);
                                 }
                               },
                             ),
+                            _buildSectionTitle('setting_app'.tr),
                             const SizedBox(height: 5),
                             _item(
-                              title: 'language'.tr,
-                              svg: 'assets/icons/language_icon.svg',
+                              title: 'setting'.tr,
+                              svg: 'assets/icons/setting.svg',
                               onTap: () {
                                 Get.toNamed(Routes.setting);
                               },
@@ -170,6 +170,24 @@ class Personal extends StatelessWidget {
     );
   }
 
+  Widget _buildSectionTitle(String title) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 5, top: 10),
+        child: Text(
+          title.toUpperCase(),
+          textAlign: TextAlign.left,
+          style: const TextStyle(
+            color: Color.fromARGB(179, 0, 0, 0),
+            fontWeight: FontWeight.bold,
+            fontSize: 13,
+          ),
+        ),
+      ),
+    );
+  }
+
   _item({
     required String title,
     required String svg,
@@ -179,11 +197,9 @@ class Personal extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
         decoration: BoxDecoration(
-          // color: isLogout
-          //     ? const Color.fromRGBO(248, 80, 80, 0.1)
-          //     : const Color.fromRGBO(249, 250, 251, 1),
+          color: Color.fromRGBO(238, 238, 238, 1),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(

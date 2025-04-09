@@ -17,18 +17,18 @@ class Login extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-          // leading: Builder(
-          //   builder: (BuildContext context) {
-          //     return IconButton(
-          //       icon: const Icon(Icons.arrow_back_ios_outlined),
-          //       onPressed: () {
-          //         Get.back();
-          //       },
-          //       tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-          //     );
-          //   },
-          // ),
-          ),
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.arrow_back_ios_outlined),
+              onPressed: () {
+                Get.back();
+              },
+              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+            );
+          },
+        ),
+      ),
       body: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -193,7 +193,7 @@ class Login extends StatelessWidget {
                               foregroundColor: Colors.white,
                               backgroundColor: Colors.blue,
                               padding: EdgeInsets.symmetric(
-                                  horizontal: 120, vertical: 15),
+                                  horizontal: 140, vertical: 15),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -212,7 +212,7 @@ class Login extends StatelessWidget {
                           height: 20,
                         ),
                         Center(
-                          child: Text('or'),
+                          child: Text('or'.tr),
                         ),
                         const SizedBox(
                           height: 20,
