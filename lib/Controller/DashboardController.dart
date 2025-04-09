@@ -30,7 +30,7 @@ class Dashboardcontroller extends GetxController {
   Future<void> onInit() async {
     super.onInit();
 
-    firebaseUser.bindStream(FirebaseAuth.instance.authStateChanges());
+    // firebaseUser.bindStream(FirebaseAuth.instance.authStateChanges());
 
     checkPhpToken();
     // Mỗi khi firebaseUser thay đổi, cập nhật isLoggedIn

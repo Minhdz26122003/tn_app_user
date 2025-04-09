@@ -141,7 +141,7 @@ class Personal extends StatelessWidget {
                             _buildSectionTitle('setting_app'.tr),
                             const SizedBox(height: 5),
                             _item(
-                              title: 'setting'.tr,
+                              title: 'setting_all'.tr,
                               svg: 'assets/icons/setting.svg',
                               onTap: () {
                                 Get.toNamed(Routes.setting);
@@ -199,7 +199,7 @@ class Personal extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
         decoration: BoxDecoration(
-          color: Color.fromRGBO(238, 238, 238, 1),
+          color: Color.fromRGBO(244, 244, 244, 0.996),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(

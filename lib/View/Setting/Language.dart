@@ -13,6 +13,7 @@ class Language extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('language'.tr),
+        backgroundColor: const Color(0xFF2D74FF),
         titleSpacing: 0,
       ),
       body: Container(

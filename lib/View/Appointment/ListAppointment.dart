@@ -24,7 +24,7 @@ class ListAppointment extends StatelessWidget {
         children: [
           const Center(
             child: EmptyList(
-              imgSrc: 'assets/empty.svg',
+              imgSrc: 'assets/images/appointment_empty.png',
               title: 'Không có lịch hẹn sắp tới',
               content:
                   'Sau khi đặt lịch, bạn có thể theo dõi lịch hẹn dịch vụ tại đây.',

@@ -1,4 +1,5 @@
 import 'package:app_hm/Controller/DashboardController.dart';
+import 'package:app_hm/Router/AppPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -12,8 +13,15 @@ class Setting extends StatelessWidget {
     final controller = Get.put(Dashboardcontroller());
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: const Color(0xFF2D74FF),
+        title: Text('setting_all'.tr, style: TextStyle(color: Colors.black)),
+        elevation: 0,
+        leading: const BackButton(color: Colors.black),
+      ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: EdgeInsets.symmetric(horizontal: 10),
         child: Obx(() {
           return controller.isLoading.value
               ? const Center(
@@ -22,7 +30,31 @@ class Setting extends StatelessWidget {
               : Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(top: 30, left: 5),
+                      padding: const EdgeInsets.only(top: 10, left: 5),
+                      child: Expanded(
+                          child: Column(
+                        children: [
+                          _item(
+                            title: 'language'.tr,
+                            svg: 'assets/icons/language_icon.svg',
+                            onTap: () {
+                              Get.toNamed(Routes.language);
+                            },
+                          ),
+                          const SizedBox(height: 5),
+                          _item(
+                            title: 'notification'.tr,
+                            svg: 'assets/icons/notification.svg',
+                            onTap: () {
+                              if (!controller.isLoggedIn.value) {
+                                Get.toNamed(Routes.notification);
+                              } else {
+                                Get.toNamed(Routes.login);
+                              }
+                            },
+                          ),
+                        ],
+                      )),
                     ),
                   ],
                 );
@@ -40,9 +72,12 @@ class Setting extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+        padding: EdgeInsets.symmetric(
+          vertical: 15,
+          horizontal: 10,
+        ),
         decoration: BoxDecoration(
-          color: Color.fromRGBO(238, 238, 238, 1),
+          color: Color.fromRGBO(244, 244, 244, 0.996),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
