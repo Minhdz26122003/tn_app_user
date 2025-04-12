@@ -17,9 +17,13 @@ abstract class Routes {
   static const language = _Paths.language;
   static const personal = _Paths.personal;
   static const personaldetail = _Paths.personaldetail;
-  static const listappointment = _Paths.listappointment;
+  static const appointmentlist = _Paths.appointmentlist;
   static const servicecar = _Paths.servicecar;
   static const appointmentbook = _Paths.appointmentbook;
+  static const appointmenthistory = _Paths.appointmenthistory;
+  static const appointmentplace = _Paths.appointmentplace;
+  static const appointmenttime = _Paths.appointmenttime;
+  static const appointmentconfirm = _Paths.appointmentconfirm;
   Routes._();
 }
 
@@ -41,7 +45,11 @@ abstract class _Paths {
   static const changepassword = '/changepassword';
   static const personal = '/personal';
   static const personaldetail = '/personaldetail';
-  static const listappointment = '/listappointment';
+  static const appointmentlist = '/appointmentlist';
   static const servicecar = '/servicecar';
   static const appointmentbook = '/appointmentbook';
+  static const appointmenthistory = '/appointmenthistory';
+  static const appointmentplace = '/appointmentplace';
+  static const appointmenttime = '/appointmenttime';
+  static const appointmentconfirm = '/appointmentconfirm';
 }

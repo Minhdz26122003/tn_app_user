@@ -30,7 +30,7 @@ class ServiceCar extends StatelessWidget {
                       if (!controller.isLoggedIn.value) {
                         Get.toNamed(Routes.appointmentbook);
                       } else {
-                        Get.toNamed(Routes.home);
+                        Get.toNamed(Routes.appointmentbook);
                       }
                     },
                   ),

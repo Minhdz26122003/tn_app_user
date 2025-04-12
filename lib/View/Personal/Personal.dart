@@ -134,7 +134,7 @@ class Personal extends StatelessWidget {
                                 if (!controller.isLoggedIn.value) {
                                   Get.toNamed(Routes.login);
                                 } else {
-                                  Get.toNamed(Routes.listappointment);
+                                  Get.toNamed(Routes.appointmentlist);
                                 }
                               },
                             ),
@@ -147,22 +147,20 @@ class Personal extends StatelessWidget {
                                 Get.toNamed(Routes.setting);
                               },
                             ),
+                            const SizedBox(height: 5),
+                            if (controller.isLoggedIn.value)
+                              _item(
+                                svg: 'assets/icons/logout.svg',
+                                title: 'log_out'.tr,
+                                isLogout: true,
+                                onTap: () {
+                                  Auth.backLogin(true);
+                                },
+                              ),
                           ],
                         ),
                       ),
                     ),
-                    if (controller.isLoggedIn.value)
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: _item(
-                          svg: 'assets/icons/logout.svg',
-                          title: 'log_out'.tr,
-                          isLogout: true,
-                          onTap: () {
-                            Auth.backLogin(true);
-                          },
-                        ),
-                      ),
                   ],
                 );
         }),

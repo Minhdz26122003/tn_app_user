@@ -36,7 +36,7 @@ class Setting extends StatelessWidget {
                         children: [
                           _item(
                             title: 'language'.tr,
-                            svg: 'assets/icons/language_icon.svg',
+                            svg: 'assets/icons/language.svg',
                             onTap: () {
                               Get.toNamed(Routes.language);
                             },
@@ -44,7 +44,7 @@ class Setting extends StatelessWidget {
                           const SizedBox(height: 5),
                           _item(
                             title: 'notification'.tr,
-                            svg: 'assets/icons/notification.svg',
+                            svg: 'assets/icons/bell.svg',
                             onTap: () {
                               if (!controller.isLoggedIn.value) {
                                 Get.toNamed(Routes.notification);

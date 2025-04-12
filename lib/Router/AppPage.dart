@@ -3,6 +3,10 @@ import 'package:app_hm/View/Account/CreatePassword.dart';
 import 'package:app_hm/View/Account/ForgotPassword.dart';
 import 'package:app_hm/View/Account/SendOTP.dart';
 import 'package:app_hm/View/Appointment/AppointmentBook.dart';
+import 'package:app_hm/View/Appointment/AppointmentConfirm.dart';
+import 'package:app_hm/View/Appointment/AppointmentHistory.dart';
+import 'package:app_hm/View/Appointment/AppointmentPlace.dart';
+import 'package:app_hm/View/Appointment/AppointmentTime.dart';
 import 'package:app_hm/View/Appointment/ListAppointment.dart';
 import 'package:app_hm/View/Login/Login.dart';
 import 'package:app_hm/View/Login/Onboarding.dart';
@@ -84,8 +88,8 @@ class AppPages {
       page: () => const Changepassword(),
     ),
     GetPage(
-      name: Routes.listappointment,
-      page: () => const ListAppointment(),
+      name: Routes.appointmentlist,
+      page: () => const AppointmentList(),
     ),
     GetPage(
       name: Routes.servicecar,
@@ -94,6 +98,22 @@ class AppPages {
     GetPage(
       name: Routes.appointmentbook,
       page: () => const AppointmentBook(),
+    ),
+    GetPage(
+      name: Routes.appointmenthistory,
+      page: () => const Appointmenthistory(),
+    ),
+    GetPage(
+      name: Routes.appointmentplace,
+      page: () => const Appointmentplace(),
+    ),
+    GetPage(
+      name: Routes.appointmenttime,
+      page: () => const Appointmenttime(),
+    ),
+    GetPage(
+      name: Routes.appointmentconfirm,
+      page: () => const Appointmentconfirm(),
     ),
   ];
 }
