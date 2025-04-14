@@ -1,5 +1,6 @@
 import 'package:app_hm/Component/StepBook.dart';
 import 'package:app_hm/Controller/Appointment/AppointmentController.dart';
+import 'package:app_hm/Router/AppPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -13,9 +14,15 @@ class Appointmenttime extends StatelessWidget {
     final Appointmentcontroller controller = Get.put(Appointmentcontroller());
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Đặt dịch vụ'),
+        title: Text('book_service'.tr, style: TextStyle(color: Colors.white)),
         backgroundColor: const Color(0xFF2D74FF),
         elevation: 0,
+        leading: GestureDetector(
+          onTap: () {
+            controller.previousStep();
+          },
+          child: const Icon(Icons.arrow_back, color: Colors.white),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -28,7 +35,7 @@ class Appointmenttime extends StatelessWidget {
             _buildDateRow(context, controller),
             const SizedBox(height: 12),
             const Text("Bạn cần đặt lịch hẹn trước 06 tiếng",
-                style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                style: TextStyle(color: Colors.red, fontSize: 11)),
             const SizedBox(height: 12),
             _buildLabel("THỜI GIAN BẮT ĐẦU*"),
             const SizedBox(height: 8),
@@ -36,7 +43,7 @@ class Appointmenttime extends StatelessWidget {
             const SizedBox(height: 12),
             _ViewTimes(controller),
             const Spacer(),
-            _buildButtons(),
+            _buildButtons(controller),
           ],
         ),
       ),
@@ -46,36 +53,51 @@ class Appointmenttime extends StatelessWidget {
   Widget _buildLabel(String text) {
     return Text(
       text,
-      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      style: const TextStyle(
+          color: Color.fromARGB(255, 0, 0, 0), fontWeight: FontWeight.bold),
     );
   }
 
   // chọn ngày
   _selectDate(BuildContext context, Appointmentcontroller controller) async {
+    DateTime now = DateTime.now();
     DateTime? picked = await showDatePicker(
       context: context,
       initialDate: controller.selectedDate.value,
-      firstDate: DateTime(2000),
+      firstDate: DateTime(now.year, now.month, now.day),
       lastDate: DateTime(2100),
       locale: const Locale("vi", "VN"),
     );
-    if (picked != null && picked != controller.selectedDate.value) {
-      controller.updateDate(picked);
-    }
+
+    // if (picked != null) {
+    //   if (picked.isBefore(DateTime(now.year, now.month, now.day))) {
+    //     // Hiển thị thông báo nếu người dùng cố gắng chọn ngày trong quá khứ (phòng trường hợp lách giới hạn)
+    //     Get.snackbar(
+    //       "Lỗi",
+    //       "Không thể chọn ngày trong quá khứ.",
+    //       backgroundColor: Colors.redAccent,
+    //       colorText: Colors.white,
+    //       snackPosition: SnackPosition.TOP,
+    //     );
+    //   } else if (picked != controller.selectedDate.value) {
+    //     controller.updateDate(picked);
+    //   }
+    // }
   }
 
   // Hiển thị ngày
   Widget _buildDateRow(BuildContext context, Appointmentcontroller controller) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Color.fromARGB(255, 228, 228, 228),
-        border: Border.all(color: Colors.grey, width: 2),
+        color: Color.fromARGB(255, 231, 231, 231),
+        border: Border.all(color: Colors.grey, width: 1),
       ),
       child: Row(
         children: [
-          const Icon(Icons.calendar_today, color: Color.fromARGB(255, 0, 0, 0)),
+          const Icon(Icons.calendar_month_outlined,
+              color: Color.fromARGB(255, 0, 0, 0)),
           const SizedBox(width: 8),
           Expanded(
             child: Obx(() {
@@ -97,6 +119,7 @@ class Appointmenttime extends StatelessWidget {
     );
   }
 
+  // Hiển thị tab sáng chiều
   Widget _ViewTabs(Appointmentcontroller controller) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -108,6 +131,7 @@ class Appointmenttime extends StatelessWidget {
     );
   }
 
+  // Widget tabtab
   Widget _buildSessionTab(String session, Appointmentcontroller controller) {
     return GestureDetector(
       onTap: () {
@@ -117,9 +141,11 @@ class Appointmenttime extends StatelessWidget {
       child: Obx(() {
         final isSelected = controller.selectedSession.value == session;
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 54, vertical: 10),
           decoration: BoxDecoration(
-            color: isSelected ? const Color(0xFF4A90E2) : Colors.white,
+            color: isSelected
+                ? const Color(0xFF4A90E2)
+                : Color.fromARGB(255, 231, 231, 231),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: isSelected ? const Color(0xFF4A90E2) : Colors.grey[300]!,
@@ -147,6 +173,7 @@ class Appointmenttime extends StatelessWidget {
     );
   }
 
+  // Hiển thị thời gian
   Widget _ViewTimes(Appointmentcontroller controller) {
     return Obx(() {
       final times = controller.selectedSession.value == 'Sáng'
@@ -161,6 +188,7 @@ class Appointmenttime extends StatelessWidget {
     });
   }
 
+  // Widget thời gian
   Widget _buildTimeSlot(String time, Appointmentcontroller controller) {
     return GestureDetector(
       onTap: () => controller.selectedTime.value = time,
@@ -170,10 +198,12 @@ class Appointmenttime extends StatelessWidget {
           width: 80,
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
-            color: isSelected ? const Color(0xFF4A90E2) : Colors.white,
+            color: isSelected
+                ? const Color(0xFF4A90E2)
+                : Color.fromARGB(255, 231, 231, 231),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: isSelected ? const Color(0xFF4A90E2) : Colors.grey[300]!,
+              color: isSelected ? const Color(0xFF4A90E2) : Colors.grey!,
               width: 1.5,
             ),
             boxShadow: [
@@ -200,7 +230,7 @@ class Appointmenttime extends StatelessWidget {
     );
   }
 
-  Widget _buildButtons() {
+  Widget _buildButtons(Appointmentcontroller controller) {
     return Row(
       children: [
         Expanded(
@@ -208,7 +238,6 @@ class Appointmenttime extends StatelessWidget {
             height: 48,
             child: OutlinedButton(
               onPressed: () {
-                final controller = Get.find<Appointmentcontroller>();
                 controller.previousStep();
               },
               style: OutlinedButton.styleFrom(
@@ -224,22 +253,25 @@ class Appointmenttime extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 16),
-        Expanded(
-          child: SizedBox(
-            height: 48,
-            child: ElevatedButton(
-              onPressed: () {
-                final controller = Get.find<Appointmentcontroller>();
-                controller.nextStep();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-              ),
-              child: Text(
-                'next'.tr,
-                style: const TextStyle(fontSize: 16, color: Colors.white),
+        Obx(
+          () => Expanded(
+            child: SizedBox(
+              height: 48,
+              child: ElevatedButton(
+                onPressed: !controller.selectedTime.value.isEmpty
+                    ? () {
+                        controller.nextStep();
+                      }
+                    : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                ),
+                child: Text(
+                  'next'.tr,
+                  style: const TextStyle(fontSize: 16, color: Colors.white),
+                ),
               ),
             ),
           ),

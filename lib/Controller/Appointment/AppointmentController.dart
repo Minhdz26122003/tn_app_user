@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:app_hm/Global/Constant.dart';
+import 'package:app_hm/Model/Car/CarModel.dart';
 import 'package:app_hm/Model/Center/CenterModel.dart';
 import 'package:app_hm/Model/Service/ServiceModel.dart';
 import 'package:app_hm/Model/Service/TypeServiceModel.dart';
@@ -13,12 +14,18 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:intl/intl.dart';
 
 class Appointmentcontroller extends GetxController {
+  String emailAcc = "";
   RxList<bool> checkedValuesService = <bool>[].obs;
   RxInt currentStep = 1.obs;
   RxBool isLoading = false.obs;
+
   Rxn<TypeServiceModel> selectedType = Rxn<TypeServiceModel>();
-  RxList<ServiceModel> serviceList = RxList<ServiceModel>();
   RxList<TypeServiceModel> typeList = RxList<TypeServiceModel>();
+  RxList<ServiceModel> serviceList = RxList<ServiceModel>();
+
+  RxList<CarModel> carList = RxList<CarModel>();
+  Rxn<CarModel> selectedCar = Rxn<CarModel>();
+
   RxList<CenterModel> centerList = RxList<CenterModel>();
   Rxn<CenterModel> selectedAddress = Rxn<CenterModel>();
 
@@ -38,11 +45,14 @@ class Appointmentcontroller extends GetxController {
 
   @override
   void onInit() async {
+    emailAcc = await Utils.getStringValueWithKey(Constant.EMAIL);
+    isLoading.value = false;
+    checkedValuesService.value = List<bool>.filled(serviceList.length, false);
     await GetServiceTypeList();
     await GetServiceList();
     await GetAddressList();
-    isLoading.value = false;
-    checkedValuesService.value = List<bool>.filled(serviceList.length, false);
+    await GetCarList();
+
     super.onInit();
   }
 
@@ -142,6 +152,16 @@ class Appointmentcontroller extends GetxController {
     }
   }
 
+  List<ServiceModel> get selectedServices {
+    List<ServiceModel> selected = [];
+    for (int i = 0; i < checkedValuesService.length; i++) {
+      if (checkedValuesService[i]) {
+        selected.add(serviceList[i]);
+      }
+    }
+    return selected;
+  }
+
   GetAddressList() async {
     centerList.clear();
     try {
@@ -158,6 +178,28 @@ class Appointmentcontroller extends GetxController {
         var listItem =
             list.map((dynamic json) => CenterModel.fromJson(json)).toList();
         centerList.addAll(listItem);
+      }
+    } catch (e) {
+      Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+    }
+  }
+
+  GetCarList() async {
+    carList.clear();
+    try {
+      String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
+      var param = {
+        "keyCert":
+            Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
+        "time": formattedTime,
+        "email": emailAcc,
+      };
+      var data = await APICaller.getInstance().post('Car/get_car.php', param);
+      if (data != null) {
+        List<dynamic> list = data['items'];
+        var listItem =
+            list.map((dynamic json) => CarModel.fromJson(json)).toList();
+        carList.addAll(listItem);
       }
     } catch (e) {
       Utils.showSnackBar(title: 'notification'.tr, message: '$e');

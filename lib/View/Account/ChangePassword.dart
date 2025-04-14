@@ -38,7 +38,7 @@ class Changepassword extends StatelessWidget {
                     height: 60,
                   ),
                   Text(
-                    'change_new_password'.tr,
+                    'change_password'.tr,
                     style: const TextStyle(
                       color: Colors.blue,
                       fontSize: 24,
@@ -190,7 +190,7 @@ class Changepassword extends StatelessWidget {
                               foregroundColor: Colors.white,
                               backgroundColor: Colors.blue,
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 100, vertical: 15),
+                                  horizontal: 130, vertical: 15),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),

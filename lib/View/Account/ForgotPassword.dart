@@ -84,9 +84,8 @@ class Forgotpassword extends StatelessWidget {
                         backgroundColor: controller.isButtonDisabled.value
                             ? const Color.fromARGB(255, 146, 192, 237)
                             : Colors.blue,
-                        padding: EdgeInsets.symmetric(
-                            horizontal: MediaQuery.of(context).size.width * 0.3,
-                            vertical: 15),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 130, vertical: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),

@@ -49,23 +49,16 @@ class Home extends StatelessWidget {
                                           crossAxisCellCount: 1,
                                           child: _itemOverview(
                                             title: 'Quản lý xe',
-                                            url: 'assets/icons/shipped.svg',
+                                            url:
+                                                'assets/images/appointment_empty.png',
                                           )),
                                     ),
-                                    // GestureDetector(
-                                    //   onTap: () => Get.to(() => const Ship()),
-                                    //   child: StaggeredGridTile.fit(
-                                    //       crossAxisCellCount: 1,
-                                    //       child: _itemOverview(
-                                    //         title: 'Quản lý tàu',
-                                    //         url: 'assets/icons/cargo-ship.svg',
-                                    //       )),
-                                    // ),
                                     StaggeredGridTile.fit(
                                         crossAxisCellCount: 1,
                                         child: _itemOverview(
                                           title: 'Quản lý RIFD',
-                                          url: 'assets/icons/rfid.svg',
+                                          url:
+                                              'assets/images/appointment_empty.png',
                                         )),
                                   ],
                                 );

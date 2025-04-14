@@ -24,14 +24,15 @@ class StepBook extends StatelessWidget {
           return _StepCircle(
             number: (stepIndex + 1).toString(),
             label: labels[stepIndex],
-            isActive: steps[stepIndex], // Chỉ các bước trước và tại currentStep
+            isActive: steps[stepIndex],
           );
         } else {
           // Đường nối
           int stepIndex = index ~/ 2;
           return Expanded(
             child: Container(
-              height: 4,
+              height: 5,
+              margin: const EdgeInsets.only(bottom: 18),
               color: stepIndex < (currentStep - 1)
                   ? Colors.blue
                   : Colors.grey.shade300,

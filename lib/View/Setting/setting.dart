@@ -16,9 +16,9 @@ class Setting extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFF2D74FF),
-        title: Text('setting_all'.tr, style: TextStyle(color: Colors.black)),
+        title: Text('setting_all'.tr, style: TextStyle(color: Colors.white)),
         elevation: 0,
-        leading: const BackButton(color: Colors.black),
+        leading: const BackButton(color: Colors.white),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10),

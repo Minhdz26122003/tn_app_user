@@ -15,9 +15,14 @@ class Appointmentplace extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('book_service'.tr),
+        title: Text('book_service'.tr, style: TextStyle(color: Colors.white)),
         backgroundColor: const Color(0xFF2D74FF),
-        leading: const BackButton(color: Colors.white),
+        leading: GestureDetector(
+          onTap: () {
+            controller.previousStep();
+          },
+          child: const Icon(Icons.arrow_back, color: Colors.white),
+        ),
       ),
       body: Obx(() => Padding(
             padding: const EdgeInsets.all(16),

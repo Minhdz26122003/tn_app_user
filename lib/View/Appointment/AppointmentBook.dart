@@ -15,11 +15,16 @@ class AppointmentBook extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('book_service'.tr),
+        title: Text('book_service'.tr, style: TextStyle(color: Colors.white)),
         automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFF2D74FF),
         elevation: 0,
-        leading: const BackButton(color: Colors.black),
+        leading: GestureDetector(
+          onTap: () {
+            Get.offAllNamed(Routes.dashboard);
+          },
+          child: const Icon(Icons.arrow_back, color: Colors.white),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
