@@ -33,8 +33,7 @@ class Personal extends StatelessWidget {
                           }
                         },
                         child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 5),
+                          padding: const EdgeInsets.symmetric(vertical: 15),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(15),
@@ -63,30 +62,35 @@ class Personal extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(width: 5),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    controller.isLoggedIn.value
-                                        ? controller.username.value
-                                        : 'login'.tr,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  if (controller.isLoggedIn.value)
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
                                     Text(
-                                      controller.email.value,
+                                      controller.isLoggedIn.value
+                                          ? controller.username.value
+                                          : 'login'.tr,
                                       style: const TextStyle(
-                                        color: Color.fromRGBO(119, 126, 144, 1),
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 13,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
                                       ),
                                     ),
-                                ],
+                                    const SizedBox(height: 5),
+                                    if (controller.isLoggedIn.value)
+                                      Text(
+                                        controller.email.value,
+                                        style: const TextStyle(
+                                          color:
+                                              Color.fromRGBO(119, 126, 144, 1),
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 13,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -102,6 +106,18 @@ class Personal extends StatelessWidget {
                             _item(
                               title: 'personal_information'.tr,
                               svg: 'assets/icons/profile.svg',
+                              onTap: () {
+                                if (!controller.isLoggedIn.value) {
+                                  Get.toNamed(Routes.login);
+                                } else {
+                                  Get.toNamed(Routes.personaldetail);
+                                }
+                              },
+                            ),
+                            const SizedBox(height: 5),
+                            _item(
+                              title: 'mycar'.tr,
+                              svg: 'assets/icons/car.svg',
                               onTap: () {
                                 if (!controller.isLoggedIn.value) {
                                   Get.toNamed(Routes.login);
@@ -128,7 +144,7 @@ class Personal extends StatelessWidget {
                             _buildSectionTitle('appointment'.tr),
                             const SizedBox(height: 5),
                             _item(
-                              title: 'Quản lý lịch hẹn',
+                              title: 'list_appointment'.tr,
                               svg: 'assets/icons/appointment.svg',
                               onTap: () {
                                 if (!controller.isLoggedIn.value) {

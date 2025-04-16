@@ -243,7 +243,7 @@ class Personaldetail extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Text('select_gender'.tr + ": ", style: TextStyle(fontSize: 16)),
+              Text('select_gender'.tr + ": ", style: TextStyle(fontSize: 12)),
               const SizedBox(width: 10),
               Obx(() => CheckBoxRounded(
                     isChecked: controller.selectedGender.value == 'male'.tr,
@@ -251,11 +251,11 @@ class Personaldetail extends StatelessWidget {
                       controller.selectedGender.value = 'male'.tr;
                     },
                     borderColor: Colors.grey,
-                    size: 20,
+                    size: 15,
                     checkedColor: const Color.fromARGB(255, 0, 34, 255),
                   )),
               const SizedBox(width: 5),
-              Text('male'.tr),
+              Text('male'.tr, style: TextStyle(fontSize: 13)),
               const SizedBox(width: 10),
               Obx(() => CheckBoxRounded(
                     isChecked: controller.selectedGender.value == 'female'.tr,
@@ -263,11 +263,11 @@ class Personaldetail extends StatelessWidget {
                       controller.selectedGender.value = 'female'.tr;
                     },
                     borderColor: Colors.grey,
-                    size: 20,
+                    size: 15,
                     checkedColor: const Color.fromARGB(255, 0, 34, 255),
                   )),
               const SizedBox(width: 5),
-              Text('female'.tr),
+              Text('female'.tr, style: TextStyle(fontSize: 13)),
               const SizedBox(width: 10),
               Obx(() => CheckBoxRounded(
                     isChecked: controller.selectedGender.value == 'other'.tr,
@@ -275,11 +275,11 @@ class Personaldetail extends StatelessWidget {
                       controller.selectedGender.value = 'other'.tr;
                     },
                     borderColor: Colors.grey,
-                    size: 20,
+                    size: 15,
                     checkedColor: const Color.fromARGB(255, 0, 34, 255),
                   )),
               const SizedBox(width: 5),
-              Text('other'.tr),
+              Text('other'.tr, style: TextStyle(fontSize: 13)),
             ],
           ),
         ),

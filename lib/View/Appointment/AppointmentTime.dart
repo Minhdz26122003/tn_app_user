@@ -17,12 +17,7 @@ class Appointmenttime extends StatelessWidget {
         title: Text('book_service'.tr, style: TextStyle(color: Colors.white)),
         backgroundColor: const Color(0xFF2D74FF),
         elevation: 0,
-        leading: GestureDetector(
-          onTap: () {
-            controller.previousStep();
-          },
-          child: const Icon(Icons.arrow_back, color: Colors.white),
-        ),
+        automaticallyImplyLeading: false, // Ẩn nút quay lại
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -124,9 +119,9 @@ class Appointmenttime extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _buildSessionTab("Sáng", controller),
+        Flexible(child: _buildSessionTab("Sáng", controller)),
         const SizedBox(width: 20),
-        _buildSessionTab("Chiều", controller),
+        Flexible(child: _buildSessionTab("Chiều", controller)),
       ],
     );
   }
@@ -141,7 +136,7 @@ class Appointmenttime extends StatelessWidget {
       child: Obx(() {
         final isSelected = controller.selectedSession.value == session;
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 54, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
           decoration: BoxDecoration(
             color: isSelected
                 ? const Color(0xFF4A90E2)

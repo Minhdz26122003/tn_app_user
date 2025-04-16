@@ -85,7 +85,7 @@ class Forgotpassword extends StatelessWidget {
                             ? const Color.fromARGB(255, 146, 192, 237)
                             : Colors.blue,
                         padding:
-                            EdgeInsets.symmetric(horizontal: 130, vertical: 15),
+                            EdgeInsets.symmetric(horizontal: 100, vertical: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),

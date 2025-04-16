@@ -55,7 +55,7 @@ class Onboarding extends StatelessWidget {
                           foregroundColor: Colors.blue,
                           backgroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 120, vertical: 15),
+                              horizontal: 100, vertical: 15),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),

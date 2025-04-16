@@ -19,12 +19,6 @@ class AppointmentBook extends StatelessWidget {
         automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFF2D74FF),
         elevation: 0,
-        leading: GestureDetector(
-          onTap: () {
-            Get.offAllNamed(Routes.dashboard);
-          },
-          child: const Icon(Icons.arrow_back, color: Colors.white),
-        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),

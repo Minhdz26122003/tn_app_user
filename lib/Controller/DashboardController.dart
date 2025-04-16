@@ -30,17 +30,16 @@ class Dashboardcontroller extends GetxController {
   Future<void> onInit() async {
     super.onInit();
 
-    // firebaseUser.bindStream(FirebaseAuth.instance.authStateChanges());
-
+    firebaseUser.bindStream(FirebaseAuth.instance.authStateChanges());
     checkPhpToken();
-    // Mỗi khi firebaseUser thay đổi, cập nhật isLoggedIn
     ever<User?>(firebaseUser, (_) => updateIsLoggedIn());
 
-    super.onInit();
     try {
       isLoading.value = true;
       username.value =
           await Utils.getStringValueWithKey(Constant.USERNAME) ?? '';
+      fullname.value = await Utils.getStringValueWithKey(Constant.FULL_NAME) ??
+          ''; // Đảm bảo tải fullname
       avatar.value =
           await Utils.getStringValueWithKey(Constant.AVATAR_USER) ?? '';
       email.value = await Utils.getStringValueWithKey(Constant.EMAIL) ?? '';

@@ -2,6 +2,7 @@ import 'package:app_hm/Component/StepBook.dart';
 import 'package:app_hm/Controller/Appointment/AppointmentController.dart';
 import 'package:app_hm/Controller/DashboardController.dart';
 import 'package:app_hm/Model/Car/CarModel.dart';
+import 'package:app_hm/Router/AppPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -13,18 +14,13 @@ class Appointmentconfirm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(Appointmentcontroller());
-    final dashboard = Get.find<Dashboardcontroller>();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF2D74FF),
         title: Text('book_service'.tr, style: TextStyle(color: Colors.white)),
         elevation: 0,
-        leading: GestureDetector(
-          onTap: () {
-            controller.previousStep();
-          },
-          child: const Icon(Icons.arrow_back, color: Colors.white),
-        ),
+        automaticallyImplyLeading: false, // Ẩn nút quay lại
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
@@ -42,36 +38,57 @@ class Appointmentconfirm extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            StepBook(currentStep: controller.currentStep.value),
-            const SizedBox(height: 20),
-            _buildTitle("BIỂN SỐ XE", onEdit: () {}),
-            _buildCarBox(controller),
-            const SizedBox(height: 20),
-            _buildTitle("LIÊN HỆ*", onEdit: () {
-              bottomSheetEditContact(context: context, controller: dashboard);
-            }),
-            _buildContactBox(dashboard),
-            const SizedBox(height: 20),
-            _buildTitle("DỊCH VỤ*", editText: "Thay đổi", onEdit: () {}),
-            _buildServiceBox(controller),
-            const Spacer(),
-            _buildButtons(controller),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              StepBook(currentStep: controller.currentStep.value),
+              const SizedBox(height: 20),
+              _buildTitle("BIỂN SỐ XE", onEdit: () {}),
+              _buildCarBox(controller),
+              const SizedBox(height: 20),
+              _buildTitle("LIÊN HỆ", onEdit: () {
+                Get.toNamed(Routes.personaldetail);
+              }),
+              _buildContactBox(controller),
+              const SizedBox(height: 20),
+              _buildTitle("DỊCH VỤ", editText: "Thay đổi", onEdit: () {
+                controller.currentStep.value = 1;
+                controller.resetService();
+                controller.navigateToStep();
+              }),
+              _buildServiceBox(controller),
+              const SizedBox(height: 20),
+              _buildTitle("Địa điểm", editText: "Thay đổi", onEdit: () {
+                controller.currentStep.value = 2;
+                controller.resetService();
+                controller.navigateToStep();
+              }),
+              _buildAddressBox(controller),
+              const SizedBox(height: 20),
+              _buildTitle("Thời gian", editText: "Thay đổi", onEdit: () {
+                controller.currentStep.value = 3;
+                controller.resetService();
+                controller.navigateToStep();
+              }),
+              _buildTimeBox(controller),
+              const SizedBox(height: 20),
+              _buildButtons(controller),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
+// Tiêu đề
 Widget _buildTitle(String title,
     {VoidCallback? onEdit, String editText = "Sửa"}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      Text(title.toUpperCase(),
+      Text(title.toUpperCase() + '*',
           style: const TextStyle(
               color: Color.fromARGB(255, 0, 0, 0),
               fontWeight: FontWeight.bold)),
@@ -83,16 +100,25 @@ Widget _buildTitle(String title,
   );
 }
 
+// Hiển thị xe
 Widget _buildCarBox(Appointmentcontroller controller) {
   return Obx(
     () {
       if (controller.carList.isEmpty) {
-        return Text(
-          'no_car'.tr,
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.grey.shade600,
-            fontWeight: FontWeight.bold,
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 231, 231, 231),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Text(
+            'no_car'.tr,
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey.shade600,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         );
       }
@@ -129,9 +155,60 @@ Widget _buildCarBox(Appointmentcontroller controller) {
   );
 }
 
-Widget _buildContactBox(Dashboardcontroller dashboard) {
+// Hiển thị thông tin liên hệ
+Widget _buildContactBox(Appointmentcontroller controller) {
   return Obx(
     () => Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Color.fromARGB(255, 231, 231, 231),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text("Tên",
+              style: TextStyle(
+                  fontSize: 11, color: Color.fromARGB(255, 75, 75, 75))),
+          Text(controller.account.value.fullname ?? "Chưa cập nhật",
+              style: const TextStyle(fontSize: 13, color: Colors.black)),
+          const SizedBox(height: 12),
+          const Text("Số điện thoại",
+              style: TextStyle(
+                  fontSize: 11, color: Color.fromARGB(255, 75, 75, 75))),
+          Text(controller.account.value.phonenum ?? "Chưa cập nhật",
+              style: const TextStyle(fontSize: 13, color: Colors.black)),
+          const SizedBox(height: 12),
+          const Text("Địa chỉ email",
+              style: TextStyle(
+                  fontSize: 11, color: Color.fromARGB(255, 75, 75, 75))),
+          Text(controller.account.value.address ?? "Chưa cập nhật",
+              style: const TextStyle(fontSize: 13, color: Colors.black)),
+        ],
+      ),
+    ),
+  );
+}
+
+// Hiển thị thông tin dịch vụ
+Widget _buildServiceBox(Appointmentcontroller controller) {
+  return Obx(() {
+    if (controller.selectedServices.isEmpty) {
+      return const Text('Chưa có dịch vụ',
+          style: TextStyle(color: Colors.grey));
+    }
+
+    // Lấy tên loại dịch vụ từ controller.selectedType
+    final String typeName = controller.selectedType.value?.type_name ?? '---';
+
+    // Nối danh sách tên dịch vụ thành chuỗi, ngăn cách bởi dấu phẩy
+    final String servicesText = controller.selectedServices
+        .map((service) => service.service_name ?? '')
+        .where((name) => name.isNotEmpty)
+        .join(', ');
+
+    return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -141,39 +218,58 @@ Widget _buildContactBox(Dashboardcontroller dashboard) {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Tên",
+          const Text("Loại dịch vụ:",
               style: TextStyle(
                   fontSize: 11, color: Color.fromARGB(255, 75, 75, 75))),
-          Text(
-              dashboard.fullname.value.isNotEmpty
-                  ? dashboard.fullname.value
-                  : "Chưa cập nhật",
+          Text(typeName,
               style: const TextStyle(fontSize: 13, color: Colors.black)),
-          const SizedBox(height: 12),
-          const Text("Số điện thoại",
+          const SizedBox(height: 10),
+          const Text("Dịch vụ:",
               style: TextStyle(
                   fontSize: 11, color: Color.fromARGB(255, 75, 75, 75))),
-          Text(
-              dashboard.phoneNumber.value.isNotEmpty
-                  ? dashboard.phoneNumber.value
-                  : "Chưa cập nhật",
-              style: const TextStyle(fontSize: 13, color: Colors.black)),
-          const SizedBox(height: 12),
-          const Text("Địa chỉ email",
-              style: TextStyle(
-                  fontSize: 11, color: Color.fromARGB(255, 75, 75, 75))),
-          Text(
-              dashboard.email.value.isNotEmpty
-                  ? dashboard.email.value
-                  : "Chưa cập nhật",
+          Text(servicesText,
               style: const TextStyle(fontSize: 13, color: Colors.black)),
         ],
       ),
-    ),
-  );
+    );
+  });
 }
 
-Widget _buildServiceBox(Appointmentcontroller controller) {
+// Hiển thị thông tin địa điểm
+Widget _buildAddressBox(Appointmentcontroller controller) {
+  return Obx(() {
+    final center = controller.selectedAddress.value;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Color.fromARGB(255, 231, 231, 231),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: center == null
+          ? const Text('Chưa có địa điểm', style: TextStyle(color: Colors.grey))
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text("Tên trung tâm",
+                    style: TextStyle(
+                        fontSize: 11, color: Color.fromARGB(255, 75, 75, 75))),
+                Text(center.gara_name ?? "Chưa có",
+                    style: TextStyle(fontSize: 13)),
+                const SizedBox(height: 8),
+                const Text("Địa chỉ",
+                    style: TextStyle(
+                        fontSize: 11, color: Color.fromARGB(255, 75, 75, 75))),
+                Text(center.gara_address ?? "Chưa có",
+                    style: TextStyle(fontSize: 13)),
+              ],
+            ),
+    );
+  });
+}
+
+// Hiển thị thông tin thời gian
+Widget _buildTimeBox(Appointmentcontroller controller) {
   return Obx(() {
     return Container(
       width: double.infinity,
@@ -182,41 +278,31 @@ Widget _buildServiceBox(Appointmentcontroller controller) {
         color: Color.fromARGB(255, 231, 231, 231),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: controller.selectedServices.isEmpty
-          ? const Text('Chưa chọn dịch vụ',
+      child: controller.selectedTime.value == null
+          ? const Text('Chưa chọn thời gian',
               style: TextStyle(color: Colors.grey))
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: controller.selectedServices.map((service) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("Loại dịch vụ",
-                          style: TextStyle(
-                              fontSize: 11,
-                              color: Color.fromARGB(255, 75, 75, 75))),
-                      Text(controller.selectedType.value?.type_name ?? '',
-                          style: const TextStyle(
-                              fontSize: 13, color: Colors.black)),
-                      const SizedBox(height: 10),
-                      const Text("Dịch vụ",
-                          style: TextStyle(
-                              fontSize: 11,
-                              color: Color.fromARGB(255, 75, 75, 75))),
-                      Text(service.service_name ?? '',
-                          style: const TextStyle(
-                              fontSize: 13, color: Colors.black)),
-                    ],
-                  ),
-                );
-              }).toList(),
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("Thời gian",
+                        style: TextStyle(
+                            fontSize: 11,
+                            color: Color.fromARGB(255, 75, 75, 75))),
+                    Text(controller.selectedTime.value ?? 'Chưa chọn thơi gian',
+                        style:
+                            const TextStyle(fontSize: 13, color: Colors.black)),
+                  ],
+                ),
+              ],
             ),
     );
   });
 }
 
+// Hiển thị nút
 Widget _buildButtons(Appointmentcontroller controller) {
   return Row(
     children: [
@@ -261,7 +347,7 @@ Widget _buildButtons(Appointmentcontroller controller) {
   );
 }
 
-//
+// Sửa thông tin liên hệ
 void bottomSheetEditContact({
   required BuildContext context,
   required Dashboardcontroller controller,

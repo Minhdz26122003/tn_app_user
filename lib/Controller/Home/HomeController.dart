@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 class HomeController extends GetxController {
   RxBool isShowOverview = true.obs;
   DateTime timeNow = DateTime.now();
-  RxBool isLoading = true.obs;
+  RxBool isLoading = false.obs;
   RxBool isExpanded = false.obs;
   TextEditingController textSearchCompanyUuid = TextEditingController();
   TextEditingController textSearch = TextEditingController();
@@ -29,7 +29,7 @@ class HomeController extends GetxController {
   void onInit() async {
     username = await Utils.getStringValueWithKey(Constant.USERNAME);
     int uidAcc = await Utils.getIntValueWithKey(Constant.UUID_USER_ACC);
-    //await getDashboardWarehouse();
+
     isLoading.value = false;
     super.onInit();
   }

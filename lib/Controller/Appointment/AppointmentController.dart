@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:app_hm/Global/Constant.dart';
+import 'package:app_hm/Model/Account/AccountModel.dart';
+import 'package:app_hm/Model/Appointment/ApointmentModel.dart';
 import 'package:app_hm/Model/Car/CarModel.dart';
 import 'package:app_hm/Model/Center/CenterModel.dart';
 import 'package:app_hm/Model/Service/ServiceModel.dart';
@@ -18,10 +20,13 @@ class Appointmentcontroller extends GetxController {
   RxList<bool> checkedValuesService = <bool>[].obs;
   RxInt currentStep = 1.obs;
   RxBool isLoading = false.obs;
+  var account = AccountModel().obs; // Rx
 
   Rxn<TypeServiceModel> selectedType = Rxn<TypeServiceModel>();
   RxList<TypeServiceModel> typeList = RxList<TypeServiceModel>();
   RxList<ServiceModel> serviceList = RxList<ServiceModel>();
+
+  RxList<AppointmentModel> appointmentList = RxList<AppointmentModel>();
 
   RxList<CarModel> carList = RxList<CarModel>();
   Rxn<CarModel> selectedCar = Rxn<CarModel>();
@@ -52,7 +57,8 @@ class Appointmentcontroller extends GetxController {
     await GetServiceList();
     await GetAddressList();
     await GetCarList();
-
+    await GetAppointmentList();
+    await getAccount();
     super.onInit();
   }
 
@@ -71,9 +77,15 @@ class Appointmentcontroller extends GetxController {
       currentStep.value++;
       navigateToStep();
     } else {
+      BookAppointment();
       Get.snackbar('Thông báo', 'Bạn đã hoàn tất quy trình đặt dịch vụ!');
       Get.offAllNamed(Routes.home);
     }
+  }
+
+  void resetService() {
+    selectedType.value == null;
+    checkedValuesService.isEmpty;
   }
 
   void previousStep() {
@@ -100,6 +112,27 @@ class Appointmentcontroller extends GetxController {
       case 4:
         Get.toNamed(Routes.appointmentconfirm);
         break;
+    }
+  }
+
+  getAccount() async {
+    String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
+
+    var param = {
+      "keyCert":
+          Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
+      "time": formattedTime,
+      "email": emailAcc,
+    };
+
+    try {
+      var response = await APICaller.getInstance()
+          .post('/Account/account_detail.php', param);
+      if (response != null && response['data'] != null) {
+        account.value = AccountModel.fromJson(response['data']);
+      }
+    } catch (e) {
+      debugPrint("Lỗi API: $e", wrapWidth: 1024);
     }
   }
 
@@ -203,6 +236,65 @@ class Appointmentcontroller extends GetxController {
       }
     } catch (e) {
       Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+    }
+  }
+
+  GetAppointmentList() async {
+    appointmentList.clear();
+    try {
+      String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
+      var param = {
+        "keyCert":
+            Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
+        "time": formattedTime,
+        "email": emailAcc,
+      };
+      var data = await APICaller.getInstance()
+          .post('Appointment/get_appointment.php', param);
+      if (data != null) {
+        List<dynamic> list = data['items'];
+        var listItem = list
+            .map((dynamic json) => AppointmentModel.fromJson(json))
+            .toList();
+        appointmentList.addAll(listItem);
+      }
+    } catch (e) {
+      Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+    }
+  }
+
+  Future<void> BookAppointment() async {
+    try {
+      isLoading.value = true;
+      String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
+      var param = {
+        "keyCert":
+            Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
+        "time": formattedTime,
+        "email": emailAcc,
+        "car_id": selectedCar.value?.car_id,
+        "gara_id": selectedAddress.value?.gara_id,
+        "appointment_date": DateFormat('yyyy-MM-dd').format(selectedDate.value),
+        "appointment_time": selectedTime.value,
+        "description": description.value,
+        "status": 0,
+      };
+      var data = await APICaller.getInstance()
+          .post('Book/book_appointment.php', param);
+      if (data != null) {
+        Utils.showSnackBar(
+            title: 'notification'.tr, message: "Đặt lịch thành công");
+        Get.offAllNamed(Routes.appointmentlist);
+      } else {
+        Utils.showSnackBar(
+          title: 'Thông báo',
+          message: data?['error']['message'] ?? 'Đặt lịch thất bại',
+        );
+      }
+    } catch (e) {
+      Utils.showSnackBar(title: 'Thông báo', message: 'Lỗi: $e');
+    } finally {
+      isLoading.value = false;
     }
   }
 }

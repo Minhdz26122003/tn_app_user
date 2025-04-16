@@ -1,4 +1,5 @@
 import 'package:app_hm/Controller/Signup/SignupController.dart';
+import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Services/Auth.dart';
 import 'package:app_hm/Utils/Utils.dart';
 import 'package:app_hm/View/Login/Login.dart';
@@ -13,7 +14,6 @@ class Signup extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(SignupController());
     return Scaffold(
-      extendBodyBehindAppBar: true,
       appBar: AppBar(
         leading: Builder(
           builder: (BuildContext context) {
@@ -22,26 +22,18 @@ class Signup extends StatelessWidget {
               onPressed: () {
                 Get.back();
               },
-              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
             );
           },
         ),
       ),
-      body: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
+      body: Expanded(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 30,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Obx(
               () => Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(
-                    height: 70,
-                  ),
                   Align(
                     alignment: Alignment.center,
                     child: Text(
@@ -237,7 +229,7 @@ class Signup extends StatelessWidget {
                               fontSize: 16, fontWeight: FontWeight.w500),
                         ),
                         const SizedBox(
-                          height: 40,
+                          height: 20,
                         ),
                         Align(
                           alignment: Alignment.center,
@@ -272,7 +264,7 @@ class Signup extends StatelessWidget {
                               foregroundColor: Colors.white,
                               backgroundColor: Colors.blue,
                               padding: EdgeInsets.symmetric(
-                                  horizontal: 140, vertical: 15),
+                                  horizontal: 120, vertical: 15),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -303,7 +295,7 @@ class Signup extends StatelessWidget {
                             ),
                             TextButton(
                               onPressed: () {
-                                Get.to(() => const Login());
+                                Get.offAllNamed(Routes.login);
                               },
                               child: Text(
                                 'login_now'.tr,

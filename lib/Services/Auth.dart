@@ -1,4 +1,5 @@
 import 'package:app_hm/Controller/DashboardController.dart';
+import 'package:app_hm/Controller/Login/LoginController.dart';
 import 'package:app_hm/Global/Constant.dart';
 import 'package:app_hm/Global/GlobalValue.dart';
 import 'package:app_hm/Router/AppPage.dart';
@@ -23,6 +24,7 @@ class Auth {
 
     try {
       clearData();
+
       await FirebaseAuth.instance.signOut();
       final GoogleSignIn _googleSignIn = GoogleSignIn();
       await _googleSignIn.signOut();
@@ -70,13 +72,14 @@ class Auth {
   }
 
   static Future<void> loginWithFirebase() async {
+    final login = Get.find<LoginController>();
+    login.isLoading.value = true;
     try {
       final GoogleSignIn googleSignIn = GoogleSignIn();
 
       await FirebaseAuth.instance.signOut();
       if (await googleSignIn.isSignedIn()) {
         await googleSignIn.signOut();
-        // await googleSignIn.disconnect();
       }
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
@@ -103,29 +106,51 @@ class Auth {
       User? user = userCredential.user;
 
       if (user != null) {
-        final controller = Get.find<Dashboardcontroller>();
+        var param = {
+          "email": user.email,
+          "username": user.displayName,
+          "avatar": user.photoURL,
+        };
+        var data =
+            await APICaller.getInstance().post('Auth/check_user.php', param);
+        if (data != null) {
+          final controller = Get.find<Dashboardcontroller>();
 
-        controller.loginMethod.value = LoginMethod.firebase;
-        controller.username.value = user.displayName ?? '';
-        controller.email.value = user.email ?? '';
-        controller.avatar.value = user.photoURL ?? '';
+          controller.loginMethod.value = LoginMethod.firebase;
+          // Gán các giá trị từ Google
+          controller.username.value = user.displayName ?? '';
+          controller.fullname.value = user.displayName ?? '';
+          controller.email.value = user.email ?? '';
+          controller.avatar.value = user.photoURL ?? '';
 
-        await Utils.saveStringWithKey(
-            Constant.USERNAME, user.displayName ?? '');
-        await Utils.saveStringWithKey(Constant.EMAIL, user.email ?? '');
-        await Utils.saveStringWithKey(
-            Constant.AVATAR_USER, user.photoURL ?? '');
+          controller.phoneNumber.value = '';
 
-        Utils.showSnackBar(
-            title: 'Thông báo', message: 'Đăng nhập thành công.');
-        Get.offAllNamed(Routes.dashboard);
+          // Lưu tất cả vào storage
+          await Utils.saveStringWithKey(
+              Constant.USERNAME, controller.username.value);
+          await Utils.saveStringWithKey(
+              Constant.FULL_NAME, controller.fullname.value);
+          await Utils.saveStringWithKey(Constant.EMAIL, controller.email.value);
+          await Utils.saveStringWithKey(
+              Constant.AVATAR_USER, controller.avatar.value);
+          await Utils.saveStringWithKey(
+              Constant.PHONENUM, controller.phoneNumber.value);
+
+          Utils.showSnackBar(
+              title: 'Thông báo', message: 'Đăng nhập thành công.');
+          Get.offAllNamed(Routes.dashboard);
+          login.isLoading.value = false;
+        }
       }
     } catch (e) {
       Utils.showSnackBar(title: 'Lỗi đăng nhập', message: e.toString());
+      login.isLoading.value = false;
     }
   }
 
   static loginWithPHP({String? userName, String? password}) async {
+    final login = Get.find<LoginController>();
+    login.isLoading.value = true;
     DateTime timeNow = DateTime.now();
     String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
 
@@ -147,33 +172,9 @@ class Auth {
 
       if (data != null) {
         GlobalValue.getInstance().setToken('Bearer ${data['data']['token']}');
-        Utils.saveStringWithKey(Constant.ACCESS_TOKEN, data['data']['token']);
-
-        DateTime newExpiryTime = timeNow.add(const Duration(minutes: 10));
-        String formattedExpiryTime =
-            DateFormat('MM/dd/yyyy HH:mm:ss').format(newExpiryTime);
-        Utils.saveStringWithKey(Constant.TOKEN_EXPIRY, formattedExpiryTime);
-
-        Utils.saveIntWithKey(
-            Constant.UUID_USER_ACC, (data['data']['uid'] ?? 0));
-        Utils.saveStringWithKey(
-            Constant.USERNAME, data['data']['username'] ?? '');
-        Utils.saveStringWithKey(
-            Constant.FULL_NAME, data['data']['fullname'] ?? '');
-        Utils.saveStringWithKey(Constant.EMAIL, data['data']['email'] ?? '');
-        Utils.saveStringWithKey(
-            Constant.ADDRESS, data['data']['address'] ?? '');
-        Utils.saveStringWithKey(
-            Constant.PHONENUM, data['data']['phonenum'] ?? '');
-        Utils.saveStringWithKey(
-            Constant.BIRTHDAY, data['data']['birthday'] ?? '');
-        Utils.saveIntWithKey(Constant.GENDER, (data['data']['gender'] ?? 0));
-        Utils.saveStringWithKey(
-            Constant.AVATAR_USER, data['data']['avatar'] ?? '');
-        Utils.saveIntWithKey(Constant.STATUS, data['data']['status'] ?? 0);
+        saveKey(data, timeNow);
         Utils.saveStringWithKey(
             Constant.PASSWORD, password ?? passwordPreferences);
-
         final controller = Get.find<Dashboardcontroller>();
         controller.isPhpLoggedIn.value = true;
         controller.updateIsLoggedIn();
@@ -181,10 +182,32 @@ class Auth {
         Utils.showSnackBar(
             title: 'Thông báo', message: 'Đăng nhập thành công.');
         Get.offAllNamed(Routes.dashboard);
+        login.isLoading.value = false;
       }
     } catch (e) {
-      debugPrint("Lỗi API: $e", wrapWidth: 1024);
+      // debugPrint("Lỗi API: $e", wrapWidth: 1024);
+      Utils.showSnackBar(title: 'Lỗi đăng nhập', message: e.toString());
+      login.isLoading.value = false;
     }
+  }
+
+  static saveKey(var data, DateTime timeNow) async {
+    DateTime newExpiryTime = timeNow.add(const Duration(minutes: 10));
+    Utils.saveStringWithKey(Constant.ACCESS_TOKEN, data['data']['token']);
+    String formattedExpiryTime =
+        DateFormat('MM/dd/yyyy HH:mm:ss').format(newExpiryTime);
+    Utils.saveStringWithKey(Constant.TOKEN_EXPIRY, formattedExpiryTime);
+
+    Utils.saveIntWithKey(Constant.UUID_USER_ACC, (data['data']['uid'] ?? 0));
+    Utils.saveStringWithKey(Constant.USERNAME, data['data']['username'] ?? '');
+    Utils.saveStringWithKey(Constant.FULL_NAME, data['data']['fullname'] ?? '');
+    Utils.saveStringWithKey(Constant.EMAIL, data['data']['email'] ?? '');
+    Utils.saveStringWithKey(Constant.ADDRESS, data['data']['address'] ?? '');
+    Utils.saveStringWithKey(Constant.PHONENUM, data['data']['phonenum'] ?? '');
+    Utils.saveStringWithKey(Constant.BIRTHDAY, data['data']['birthday'] ?? '');
+    Utils.saveIntWithKey(Constant.GENDER, (data['data']['gender'] ?? 0));
+    Utils.saveStringWithKey(Constant.AVATAR_USER, data['data']['avatar'] ?? '');
+    Utils.saveIntWithKey(Constant.STATUS, data['data']['status'] ?? 0);
   }
 
   static Future<void> clearData() async {

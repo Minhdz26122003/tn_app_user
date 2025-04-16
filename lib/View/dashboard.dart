@@ -73,8 +73,9 @@ class Dashboard extends StatelessWidget {
                                   Text(
                                     'welcome'.tr,
                                     style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600),
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white),
                                   ),
                                   const SizedBox(
                                     height: 4,
@@ -83,7 +84,8 @@ class Dashboard extends StatelessWidget {
                                     controller.username.value,
                                     style: const TextStyle(
                                         fontSize: 13,
-                                        fontWeight: FontWeight.w500),
+                                        fontWeight: FontWeight.w300,
+                                        color: Colors.white),
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ],

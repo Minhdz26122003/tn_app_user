@@ -43,7 +43,7 @@ class Personalcontroller extends GetxController {
 
   Future<void> onInit() async {
     super.onInit();
-    uidAcc = await Utils.getIntValueWithKey(Constant.UUID_USER_ACC);
+
     emailAcc = await Utils.getStringValueWithKey(Constant.EMAIL);
     UsernameAcc = await Utils.getStringValueWithKey(Constant.USERNAME);
     textEmail.text = emailAcc;
@@ -247,18 +247,27 @@ class Personalcontroller extends GetxController {
         "email": textEmail.text.trim()
       };
 
-      print(param);
+      // print(param);
       try {
         var response = await APICaller.getInstance()
             .post('/Account/edit_account.php', param);
         if (response != null) {
           Utils.saveStringWithKey(Constant.FULL_NAME, textFullName.text.trim());
 
+          Utils.saveStringWithKey(Constant.USERNAME, textUserName.text);
+
+          Utils.saveStringWithKey(Constant.EMAIL, textEmail.text);
+          Utils.saveStringWithKey(Constant.ADDRESS, textAddress.text);
+          Utils.saveStringWithKey(Constant.PHONENUM, textPhone.text);
+          Utils.saveStringWithKey(Constant.BIRTHDAY, textDateOfBirth.text);
+          Utils.saveStringWithKey(Constant.GENDER, textGender.text);
+
           if (Get.isRegistered<Dashboardcontroller>()) {
             final controllerDashboard = Get.find<Dashboardcontroller>();
             controllerDashboard.username.value = textUserName.text.trim();
             controllerDashboard.email.value = textEmail.text.trim();
             // controllerDashboard.avatar.value = imageFile.value.path;
+
             if (cloudinaryImage.isNotEmpty) {
               // Nếu lưu URL đầy đủ từ Cloudinary thì sử dụng luôn
               controllerDashboard.avatar.value = cloudinaryImage;
