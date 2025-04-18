@@ -11,8 +11,6 @@ import 'package:app_hm/Services/APICaller.dart';
 import 'package:app_hm/Utils/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:intl/intl.dart';
 
 class Appointmentcontroller extends GetxController {
@@ -20,7 +18,7 @@ class Appointmentcontroller extends GetxController {
   RxList<bool> checkedValuesService = <bool>[].obs;
   RxInt currentStep = 1.obs;
   RxBool isLoading = false.obs;
-  var account = AccountModel().obs; // Rx
+  var account = AccountModel().obs;
 
   Rxn<TypeServiceModel> selectedType = Rxn<TypeServiceModel>();
   RxList<TypeServiceModel> typeList = RxList<TypeServiceModel>();
@@ -35,7 +33,7 @@ class Appointmentcontroller extends GetxController {
   Rxn<CenterModel> selectedAddress = Rxn<CenterModel>();
 
   Rx<DateTime> selectedDate = DateTime.now().obs;
-  DateTime timeNow = DateTime.now();
+  DateTime timeNow = DateTime.now().toUtc();
   var description = ''.obs;
   TextEditingController descriptionController = TextEditingController();
 
@@ -47,6 +45,14 @@ class Appointmentcontroller extends GetxController {
   bool get hasSelectedService =>
       selectedType.value != null &&
       checkedValuesService.any((isChecked) => isChecked);
+
+  bool get checkdetail =>
+      account.value.fullname != null &&
+      account.value.fullname!.trim().isNotEmpty &&
+      account.value.address != null &&
+      account.value.address!.trim().isNotEmpty &&
+      account.value.phonenum != null &&
+      account.value.phonenum!.trim().isNotEmpty;
 
   @override
   void onInit() async {
@@ -132,7 +138,8 @@ class Appointmentcontroller extends GetxController {
         account.value = AccountModel.fromJson(response['data']);
       }
     } catch (e) {
-      debugPrint("Lỗi API: $e", wrapWidth: 1024);
+      // debugPrint("Lỗi API: $e", wrapWidth: 1024);
+      Utils.showSnackBar(title: 'notification'.tr, message: '$e');
     }
   }
 
@@ -155,6 +162,7 @@ class Appointmentcontroller extends GetxController {
         typeList.addAll(listItem);
       }
     } catch (e) {
+      // debugPrint("Lỗi API: $e", wrapWidth: 1024);
       Utils.showSnackBar(title: 'notification'.tr, message: '$e');
     }
   }
@@ -181,6 +189,7 @@ class Appointmentcontroller extends GetxController {
             List<bool>.filled(serviceList.length, false);
       }
     } catch (e) {
+      //debugPrint("Lỗi API: $e", wrapWidth: 1024);
       Utils.showSnackBar(title: 'notification'.tr, message: '$e');
     }
   }
@@ -213,6 +222,7 @@ class Appointmentcontroller extends GetxController {
         centerList.addAll(listItem);
       }
     } catch (e) {
+      // debugPrint("Lỗi API: $e", wrapWidth: 1024);
       Utils.showSnackBar(title: 'notification'.tr, message: '$e');
     }
   }
@@ -235,6 +245,7 @@ class Appointmentcontroller extends GetxController {
         carList.addAll(listItem);
       }
     } catch (e) {
+      // debugPrint("Lỗi API: $e", wrapWidth: 1024);
       Utils.showSnackBar(title: 'notification'.tr, message: '$e');
     }
   }
@@ -259,12 +270,23 @@ class Appointmentcontroller extends GetxController {
         appointmentList.addAll(listItem);
       }
     } catch (e) {
-      Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+      // debugPrint("Lỗi API: $e", wrapWidth: 1024);
+      // Utils.showSnackBar(title: 'notification'.tr, message: '$e');
     }
   }
 
   Future<void> BookAppointment() async {
     try {
+      // Lấy danh sách serviceIds từ serviceList và checkedValuesService
+      List<int> serviceIds = [];
+      for (int i = 0; i < serviceList.length; i++) {
+        if (checkedValuesService[i]) {
+          if (serviceList[i].service_id != null) {
+            serviceIds.add(int.parse(serviceList[i].service_id!));
+          }
+        }
+      }
+
       isLoading.value = true;
       String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
       var param = {
@@ -272,19 +294,27 @@ class Appointmentcontroller extends GetxController {
             Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
         "time": formattedTime,
         "email": emailAcc,
-        "car_id": selectedCar.value?.car_id,
+        "carr_id": selectedCar.value?.car_id,
         "gara_id": selectedAddress.value?.gara_id,
         "appointment_date": DateFormat('yyyy-MM-dd').format(selectedDate.value),
         "appointment_time": selectedTime.value,
         "description": description.value,
         "status": 0,
+        "serviceIds": serviceIds,
       };
+
       var data = await APICaller.getInstance()
           .post('Book/book_appointment.php', param);
-      if (data != null) {
+      if (data != null && data['status'] == 'success') {
+        String appointmentId = data['items']['appointment_id'].toString();
         Utils.showSnackBar(
-            title: 'notification'.tr, message: "Đặt lịch thành công");
+          title: 'notification'.tr,
+          message: "Đặt lịch thành công với ID: $appointmentId",
+        );
         Get.offAllNamed(Routes.appointmentlist);
+        // Get.offAllNamed(Routes.appointmentlist, arguments: {
+        //   'appointmentId': appointmentId, // Truyền appointmentId nếu cần
+        // });
       } else {
         Utils.showSnackBar(
           title: 'Thông báo',

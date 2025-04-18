@@ -11,7 +11,7 @@ Future<String> getLocalIP() async {
 
       try {
         final response =
-            await http.get(Uri.parse(url)).timeout(Duration(seconds: 1));
+            await http.get(Uri.parse(url)).timeout(const Duration(seconds: 1));
         if (response.statusCode == 200) {
           return url;
         }

@@ -1,15 +1,12 @@
-import 'dart:async';
 import 'package:app_hm/Global/Constant.dart';
 
-import 'package:app_hm/Services/APICaller.dart';
 import 'package:app_hm/Utils/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class HomeController extends GetxController {
   RxBool isShowOverview = true.obs;
-  DateTime timeNow = DateTime.now();
+  DateTime timeNow = DateTime.now().toUtc();
   RxBool isLoading = false.obs;
   RxBool isExpanded = false.obs;
   TextEditingController textSearchCompanyUuid = TextEditingController();

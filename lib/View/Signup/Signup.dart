@@ -38,7 +38,7 @@ class Signup extends StatelessWidget {
                     alignment: Alignment.center,
                     child: Text(
                       'Welcome'.tr,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.blue,
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
@@ -51,7 +51,7 @@ class Signup extends StatelessWidget {
                     alignment: Alignment.center,
                     child: Text(
                       'sign_up'.tr,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
@@ -67,7 +67,7 @@ class Signup extends StatelessWidget {
                       children: [
                         Text(
                           'fullname'.tr,
-                          style: TextStyle(fontSize: 12),
+                          style: const TextStyle(fontSize: 12),
                           textAlign: TextAlign.start,
                         ),
                         TextField(
@@ -75,11 +75,11 @@ class Signup extends StatelessWidget {
                           onChanged: (value) {},
                           decoration: InputDecoration(
                             hintText: 'fullname'.tr,
-                            hintStyle: TextStyle(
+                            hintStyle: const TextStyle(
                                 color: Color.fromRGBO(134, 133, 133, 1)),
-                            contentPadding: EdgeInsets.symmetric(
+                            contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 10),
-                            border: OutlineInputBorder(),
+                            border: const OutlineInputBorder(),
                           ),
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w500),
@@ -89,7 +89,7 @@ class Signup extends StatelessWidget {
                         ),
                         Text(
                           'username'.tr,
-                          style: TextStyle(fontSize: 12),
+                          style: const TextStyle(fontSize: 12),
                           textAlign: TextAlign.start,
                         ),
                         TextField(
@@ -97,11 +97,11 @@ class Signup extends StatelessWidget {
                           onChanged: (value) {},
                           decoration: InputDecoration(
                             hintText: 'username'.tr,
-                            hintStyle: TextStyle(
+                            hintStyle: const TextStyle(
                                 color: Color.fromRGBO(134, 133, 133, 1)),
-                            contentPadding: EdgeInsets.symmetric(
+                            contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 10),
-                            border: OutlineInputBorder(),
+                            border: const OutlineInputBorder(),
                           ),
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w500),
@@ -111,7 +111,7 @@ class Signup extends StatelessWidget {
                         ),
                         Text(
                           'email'.tr,
-                          style: TextStyle(fontSize: 12),
+                          style: const TextStyle(fontSize: 12),
                           textAlign: TextAlign.start,
                         ),
                         TextField(
@@ -120,11 +120,11 @@ class Signup extends StatelessWidget {
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                             hintText: 'email'.tr,
-                            hintStyle: TextStyle(
+                            hintStyle: const TextStyle(
                                 color: Color.fromRGBO(134, 133, 133, 1)),
-                            contentPadding: EdgeInsets.symmetric(
+                            contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 10),
-                            border: OutlineInputBorder(),
+                            border: const OutlineInputBorder(),
                           ),
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w500),
@@ -134,7 +134,7 @@ class Signup extends StatelessWidget {
                         ),
                         Text(
                           'phone_number'.tr,
-                          style: TextStyle(fontSize: 12),
+                          style: const TextStyle(fontSize: 12),
                           textAlign: TextAlign.start,
                         ),
                         TextField(
@@ -143,11 +143,11 @@ class Signup extends StatelessWidget {
                           keyboardType: TextInputType.phone,
                           decoration: InputDecoration(
                             hintText: 'phone_number'.tr,
-                            hintStyle: TextStyle(
+                            hintStyle: const TextStyle(
                                 color: Color.fromRGBO(134, 133, 133, 1)),
-                            contentPadding: EdgeInsets.symmetric(
+                            contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 10),
-                            border: OutlineInputBorder(),
+                            border: const OutlineInputBorder(),
                           ),
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w500),
@@ -157,7 +157,7 @@ class Signup extends StatelessWidget {
                         ),
                         Text(
                           'password'.tr,
-                          style: TextStyle(fontSize: 12),
+                          style: const TextStyle(fontSize: 12),
                           textAlign: TextAlign.start,
                         ),
                         TextField(
@@ -195,7 +195,7 @@ class Signup extends StatelessWidget {
                         ),
                         Text(
                           'confirm_password'.tr,
-                          style: TextStyle(fontSize: 12),
+                          style: const TextStyle(fontSize: 12),
                           textAlign: TextAlign.start,
                         ),
                         TextField(
@@ -263,7 +263,7 @@ class Signup extends StatelessWidget {
                               alignment: Alignment.center,
                               foregroundColor: Colors.white,
                               backgroundColor: Colors.blue,
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   horizontal: 120, vertical: 15),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
@@ -276,7 +276,7 @@ class Signup extends StatelessWidget {
                                   )
                                 : Text(
                                     'sign_up'.tr,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -291,7 +291,7 @@ class Signup extends StatelessWidget {
                           children: [
                             Text(
                               'already_have_account'.tr,
-                              style: TextStyle(fontSize: 12),
+                              style: const TextStyle(fontSize: 12),
                             ),
                             TextButton(
                               onPressed: () {
@@ -299,7 +299,7 @@ class Signup extends StatelessWidget {
                               },
                               child: Text(
                                 'login_now'.tr,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 12,
                                   color: Colors.blue,
                                   fontWeight: FontWeight.bold,

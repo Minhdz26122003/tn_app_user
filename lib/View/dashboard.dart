@@ -72,7 +72,7 @@ class Dashboard extends StatelessWidget {
                                 children: [
                                   Text(
                                     'welcome'.tr,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 11,
                                         fontWeight: FontWeight.w600,
                                         color: Colors.white),

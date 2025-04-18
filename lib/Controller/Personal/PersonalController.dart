@@ -15,7 +15,7 @@ import 'package:intl/intl.dart';
 
 class Personalcontroller extends GetxController {
   RxBool isLoading = true.obs;
-  DateTime timeNow = DateTime.now();
+  DateTime timeNow = DateTime.now().toUtc();
   int uidAcc = 0;
   String emailAcc = "";
   String UsernameAcc = "";
@@ -41,6 +41,7 @@ class Personalcontroller extends GetxController {
   RxBool isHidePasswordConfirm = true.obs;
   RxBool isHidePasswordOld = true.obs;
 
+  @override
   Future<void> onInit() async {
     super.onInit();
 
@@ -92,8 +93,7 @@ class Personalcontroller extends GetxController {
   }
 
   getAccount() async {
-    String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
-
+    String formattedTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(timeNow);
     var param = {
       "keyCert":
           Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),

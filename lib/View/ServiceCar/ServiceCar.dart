@@ -65,9 +65,9 @@ class ServiceCar extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
         decoration: BoxDecoration(
-          color: Color.fromRGBO(244, 244, 244, 0.996),
+          color: const Color.fromRGBO(244, 244, 244, 0.996),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
@@ -81,7 +81,7 @@ class ServiceCar extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 15,
                   overflow: TextOverflow.ellipsis,

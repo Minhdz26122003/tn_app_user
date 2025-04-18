@@ -14,7 +14,8 @@ class Appointmenttime extends StatelessWidget {
     final Appointmentcontroller controller = Get.put(Appointmentcontroller());
     return Scaffold(
       appBar: AppBar(
-        title: Text('book_service'.tr, style: TextStyle(color: Colors.white)),
+        title: Text('book_service'.tr,
+            style: const TextStyle(color: Colors.white)),
         backgroundColor: const Color(0xFF2D74FF),
         elevation: 0,
         automaticallyImplyLeading: false, // Ẩn nút quay lại
@@ -86,7 +87,7 @@ class Appointmenttime extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Color.fromARGB(255, 231, 231, 231),
+        color: const Color.fromARGB(255, 231, 231, 231),
         border: Border.all(color: Colors.grey, width: 1),
       ),
       child: Row(
@@ -100,7 +101,7 @@ class Appointmenttime extends StatelessWidget {
                   .format(controller.selectedDate.value);
               return Text(
                 formattedDate,
-                style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
+                style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
               );
             }),
           ),
@@ -140,7 +141,7 @@ class Appointmenttime extends StatelessWidget {
           decoration: BoxDecoration(
             color: isSelected
                 ? const Color(0xFF4A90E2)
-                : Color.fromARGB(255, 231, 231, 231),
+                : const Color.fromARGB(255, 231, 231, 231),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: isSelected ? const Color(0xFF4A90E2) : Colors.grey[300]!,
@@ -195,10 +196,10 @@ class Appointmenttime extends StatelessWidget {
           decoration: BoxDecoration(
             color: isSelected
                 ? const Color(0xFF4A90E2)
-                : Color.fromARGB(255, 231, 231, 231),
+                : const Color.fromARGB(255, 231, 231, 231),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: isSelected ? const Color(0xFF4A90E2) : Colors.grey!,
+              color: isSelected ? const Color(0xFF4A90E2) : Colors.grey,
               width: 1.5,
             ),
             boxShadow: [
@@ -253,7 +254,7 @@ class Appointmenttime extends StatelessWidget {
             child: SizedBox(
               height: 48,
               child: ElevatedButton(
-                onPressed: !controller.selectedTime.value.isEmpty
+                onPressed: controller.selectedTime.value.isNotEmpty
                     ? () {
                         controller.nextStep();
                       }

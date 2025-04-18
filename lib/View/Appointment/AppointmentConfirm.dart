@@ -18,16 +18,15 @@ class Appointmentconfirm extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF2D74FF),
-        title: Text('book_service'.tr, style: TextStyle(color: Colors.white)),
+        title: Text('book_service'.tr,
+            style: const TextStyle(color: Colors.white)),
         elevation: 0,
         automaticallyImplyLeading: false, // Ẩn nút quay lại
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
             child: Center(
-              child: Text(
-                  DateFormat('HH:mm:ss')
-                      .format(DateTime.now()), // Hiển thị giờ hiện tại
+              child: Text(DateFormat('HH:mm:ss').format(DateTime.now()),
                   style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
@@ -47,8 +46,11 @@ class Appointmentconfirm extends StatelessWidget {
               _buildTitle("BIỂN SỐ XE", onEdit: () {}),
               _buildCarBox(controller),
               const SizedBox(height: 20),
-              _buildTitle("LIÊN HỆ", onEdit: () {
-                Get.toNamed(Routes.personaldetail);
+              _buildTitle("LIÊN HỆ", onEdit: () async {
+                var result = await Get.toNamed(Routes.personaldetail);
+                if (result == true) {
+                  controller.getAccount();
+                }
               }),
               _buildContactBox(controller),
               const SizedBox(height: 20),
@@ -88,7 +90,7 @@ Widget _buildTitle(String title,
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      Text(title.toUpperCase() + '*',
+      Text('${title.toUpperCase()}*',
           style: const TextStyle(
               color: Color.fromARGB(255, 0, 0, 0),
               fontWeight: FontWeight.bold)),
@@ -109,7 +111,7 @@ Widget _buildCarBox(Appointmentcontroller controller) {
           width: double.infinity,
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Color.fromARGB(255, 231, 231, 231),
+            color: const Color.fromARGB(255, 231, 231, 231),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(
@@ -162,7 +164,7 @@ Widget _buildContactBox(Appointmentcontroller controller) {
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 231, 231, 231),
+        color: const Color.fromARGB(255, 231, 231, 231),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -183,7 +185,7 @@ Widget _buildContactBox(Appointmentcontroller controller) {
           const Text("Địa chỉ email",
               style: TextStyle(
                   fontSize: 11, color: Color.fromARGB(255, 75, 75, 75))),
-          Text(controller.account.value.address ?? "Chưa cập nhật",
+          Text(controller.account.value.email ?? "Chưa cập nhật",
               style: const TextStyle(fontSize: 13, color: Colors.black)),
         ],
       ),
@@ -243,7 +245,7 @@ Widget _buildAddressBox(Appointmentcontroller controller) {
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 231, 231, 231),
+        color: const Color.fromARGB(255, 231, 231, 231),
         borderRadius: BorderRadius.circular(12),
       ),
       child: center == null
@@ -255,13 +257,13 @@ Widget _buildAddressBox(Appointmentcontroller controller) {
                     style: TextStyle(
                         fontSize: 11, color: Color.fromARGB(255, 75, 75, 75))),
                 Text(center.gara_name ?? "Chưa có",
-                    style: TextStyle(fontSize: 13)),
+                    style: const TextStyle(fontSize: 13)),
                 const SizedBox(height: 8),
                 const Text("Địa chỉ",
                     style: TextStyle(
                         fontSize: 11, color: Color.fromARGB(255, 75, 75, 75))),
                 Text(center.gara_address ?? "Chưa có",
-                    style: TextStyle(fontSize: 13)),
+                    style: const TextStyle(fontSize: 13)),
               ],
             ),
     );
@@ -275,7 +277,7 @@ Widget _buildTimeBox(Appointmentcontroller controller) {
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 231, 231, 231),
+        color: const Color.fromARGB(255, 231, 231, 231),
         borderRadius: BorderRadius.circular(12),
       ),
       child: controller.selectedTime.value == null
@@ -291,7 +293,7 @@ Widget _buildTimeBox(Appointmentcontroller controller) {
                         style: TextStyle(
                             fontSize: 11,
                             color: Color.fromARGB(255, 75, 75, 75))),
-                    Text(controller.selectedTime.value ?? 'Chưa chọn thơi gian',
+                    Text(controller.selectedTime.value ?? 'Chưa chọn thời gian',
                         style:
                             const TextStyle(fontSize: 13, color: Colors.black)),
                   ],
@@ -320,7 +322,8 @@ Widget _buildButtons(Appointmentcontroller controller) {
               ),
               minimumSize: const Size(double.infinity, 45),
             ),
-            child: Text('cancel'.tr, style: TextStyle(color: Colors.white)),
+            child:
+                Text('cancel'.tr, style: const TextStyle(color: Colors.white)),
           ),
         ),
       ),
@@ -329,9 +332,11 @@ Widget _buildButtons(Appointmentcontroller controller) {
         child: SizedBox(
           height: 48,
           child: ElevatedButton(
-            onPressed: () {
-              controller.nextStep();
-            },
+            onPressed: controller.checkdetail
+                ? () {
+                    controller.nextStep();
+                  }
+                : null,
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,
               shape: RoundedRectangleBorder(
@@ -348,77 +353,77 @@ Widget _buildButtons(Appointmentcontroller controller) {
 }
 
 // Sửa thông tin liên hệ
-void bottomSheetEditContact({
-  required BuildContext context,
-  required Dashboardcontroller controller,
-}) {
-  final nameController = TextEditingController(text: controller.fullname.value);
-  final phoneController =
-      TextEditingController(text: controller.phoneNumber.value);
-  final emailController = TextEditingController(text: controller.email.value);
+// void bottomSheetEditContact({
+//   required BuildContext context,
+//   required Dashboardcontroller controller,
+// }) {
+//   final nameController = TextEditingController(text: controller.fullname.value);
+//   final phoneController =
+//       TextEditingController(text: controller.phoneNumber.value);
+//   final emailController = TextEditingController(text: controller.email.value);
 
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-    ),
-    builder: (context) {
-      return Padding(
-        padding: EdgeInsets.only(
-          left: 20,
-          right: 20,
-          top: 20,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text("Chỉnh sửa thông tin liên hệ",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 16),
-            TextField(
-              controller: nameController,
-              decoration: const InputDecoration(
-                  labelText: "Tên", hintStyle: TextStyle(color: Colors.black)),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: phoneController,
-              decoration: const InputDecoration(
-                  labelText: "Số điện thoại",
-                  hintStyle: TextStyle(color: Colors.black)),
-              keyboardType: TextInputType.phone,
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: emailController,
-              decoration: const InputDecoration(
-                  labelText: "Email",
-                  hintStyle: TextStyle(color: Colors.black)),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                controller.fullname.value = nameController.text.trim();
-                controller.phoneNumber.value = phoneController.text.trim();
-                controller.email.value = emailController.text.trim();
-                Navigator.pop(context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 130, vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: const Text("Lưu", style: TextStyle(color: Colors.white)),
-            ),
-          ],
-        ),
-      );
-    },
-  );
-}
+//   showModalBottomSheet(
+//     context: context,
+//     isScrollControlled: true,
+//     shape: const RoundedRectangleBorder(
+//       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+//     ),
+//     builder: (context) {
+//       return Padding(
+//         padding: EdgeInsets.only(
+//           left: 20,
+//           right: 20,
+//           top: 20,
+//           bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+//         ),
+//         child: Column(
+//           mainAxisSize: MainAxisSize.min,
+//           children: [
+//             const Text("Chỉnh sửa thông tin liên hệ",
+//                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+//             const SizedBox(height: 16),
+//             TextField(
+//               controller: nameController,
+//               decoration: const InputDecoration(
+//                   labelText: "Tên", hintStyle: TextStyle(color: Colors.black)),
+//             ),
+//             const SizedBox(height: 12),
+//             TextField(
+//               controller: phoneController,
+//               decoration: const InputDecoration(
+//                   labelText: "Số điện thoại",
+//                   hintStyle: TextStyle(color: Colors.black)),
+//               keyboardType: TextInputType.phone,
+//             ),
+//             const SizedBox(height: 12),
+//             TextField(
+//               controller: emailController,
+//               decoration: const InputDecoration(
+//                   labelText: "Email",
+//                   hintStyle: TextStyle(color: Colors.black)),
+//               keyboardType: TextInputType.emailAddress,
+//             ),
+//             const SizedBox(height: 20),
+//             ElevatedButton(
+//               onPressed: () {
+//                 controller.fullname.value = nameController.text.trim();
+//                 controller.phoneNumber.value = phoneController.text.trim();
+//                 controller.email.value = emailController.text.trim();
+//                 Navigator.pop(context);
+//               },
+//               style: ElevatedButton.styleFrom(
+//                 backgroundColor: Colors.blue,
+//                 padding:
+//                     const EdgeInsets.symmetric(horizontal: 130, vertical: 12),
+//                 shape: RoundedRectangleBorder(
+//                   borderRadius: BorderRadius.circular(12),
+//                 ),
+//               ),
+//               child: const Text("Lưu", style: TextStyle(color: Colors.white)),
+//             ),
+//           ],
+//         ),
+//       );
+//     },
+//   );
+// }

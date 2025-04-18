@@ -18,7 +18,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final Locale initialLocale;
-  const MyApp({Key? key, required this.initialLocale}) : super(key: key);
+  const MyApp({super.key, required this.initialLocale});
 
   @override
   Widget build(BuildContext context) {

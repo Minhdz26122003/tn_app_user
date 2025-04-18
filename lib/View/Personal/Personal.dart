@@ -16,7 +16,7 @@ class Personal extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Obx(() {
           return controller.isLoading.value
               ? const Center(
@@ -211,9 +211,9 @@ class Personal extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
         decoration: BoxDecoration(
-          color: Color.fromRGBO(244, 244, 244, 0.996),
+          color: const Color.fromRGBO(244, 244, 244, 0.996),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(

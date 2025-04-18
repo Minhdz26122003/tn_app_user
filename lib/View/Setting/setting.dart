@@ -16,12 +16,13 @@ class Setting extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFF2D74FF),
-        title: Text('setting_all'.tr, style: TextStyle(color: Colors.white)),
+        title:
+            Text('setting_all'.tr, style: const TextStyle(color: Colors.white)),
         elevation: 0,
         leading: const BackButton(color: Colors.white),
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Obx(() {
           return controller.isLoading.value
               ? const Center(
@@ -72,12 +73,12 @@ class Setting extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           vertical: 15,
           horizontal: 10,
         ),
         decoration: BoxDecoration(
-          color: Color.fromRGBO(244, 244, 244, 0.996),
+          color: const Color.fromRGBO(244, 244, 244, 0.996),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(

@@ -64,7 +64,7 @@ class Changepassword extends StatelessWidget {
                       children: [
                         Text(
                           'old_password'.tr,
-                          style: TextStyle(fontSize: 12),
+                          style: const TextStyle(fontSize: 12),
                           textAlign: TextAlign.start,
                         ),
                         TextField(
@@ -102,7 +102,7 @@ class Changepassword extends StatelessWidget {
                         ),
                         Text(
                           'new_password'.tr,
-                          style: TextStyle(fontSize: 12),
+                          style: const TextStyle(fontSize: 12),
                           textAlign: TextAlign.start,
                         ),
                         TextField(
@@ -140,7 +140,7 @@ class Changepassword extends StatelessWidget {
                         ),
                         Text(
                           'confirm_password'.tr,
-                          style: TextStyle(fontSize: 12),
+                          style: const TextStyle(fontSize: 12),
                           textAlign: TextAlign.start,
                         ),
                         TextField(
@@ -198,7 +198,7 @@ class Changepassword extends StatelessWidget {
                             ),
                             child: Text(
                               'change_password'.tr,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                               ),

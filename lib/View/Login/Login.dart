@@ -45,7 +45,7 @@ class Login extends StatelessWidget {
                             alignment: Alignment.center,
                             child: Text(
                               'welcome'.tr,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.blue,
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold,
@@ -58,7 +58,7 @@ class Login extends StatelessWidget {
                             alignment: Alignment.center,
                             child: Text(
                               'login'.tr,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20,
@@ -74,7 +74,7 @@ class Login extends StatelessWidget {
                               children: [
                                 Text(
                                   'account'.tr,
-                                  style: TextStyle(fontSize: 12),
+                                  style: const TextStyle(fontSize: 12),
                                   textAlign: TextAlign.start,
                                 ),
                                 TextField(
@@ -82,12 +82,12 @@ class Login extends StatelessWidget {
                                   onChanged: (value) {},
                                   decoration: InputDecoration(
                                     hintText: 'account'.tr,
-                                    hintStyle: TextStyle(
+                                    hintStyle: const TextStyle(
                                         color:
                                             Color.fromRGBO(134, 133, 133, 1)),
-                                    contentPadding: EdgeInsets.symmetric(
+                                    contentPadding: const EdgeInsets.symmetric(
                                         horizontal: 16, vertical: 10),
-                                    border: OutlineInputBorder(),
+                                    border: const OutlineInputBorder(),
                                   ),
                                   style: const TextStyle(
                                       fontSize: 16,
@@ -98,7 +98,7 @@ class Login extends StatelessWidget {
                                 ),
                                 Text(
                                   'password'.tr,
-                                  style: TextStyle(fontSize: 12),
+                                  style: const TextStyle(fontSize: 12),
                                   textAlign: TextAlign.start,
                                 ),
                                 TextField(
@@ -144,7 +144,7 @@ class Login extends StatelessWidget {
                                     },
                                     child: Text(
                                       'forgot_password'.tr,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 12, color: Colors.blue),
                                     ),
                                   ),
@@ -198,7 +198,7 @@ class Login extends StatelessWidget {
                                       alignment: Alignment.center,
                                       foregroundColor: Colors.white,
                                       backgroundColor: Colors.blue,
-                                      padding: EdgeInsets.symmetric(
+                                      padding: const EdgeInsets.symmetric(
                                           horizontal: 110, vertical: 15),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
@@ -207,7 +207,7 @@ class Login extends StatelessWidget {
                                     ),
                                     child: Text(
                                       'login'.tr,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -234,7 +234,7 @@ class Login extends StatelessWidget {
                                       }
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      padding: EdgeInsets.symmetric(
+                                      padding: const EdgeInsets.symmetric(
                                           horizontal: 130, vertical: 7),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),

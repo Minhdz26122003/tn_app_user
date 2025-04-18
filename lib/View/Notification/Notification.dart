@@ -20,7 +20,7 @@ class Notification extends StatelessWidget {
         backgroundColor: const Color(0xFF2D74FF),
         titleSpacing: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_outlined, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_ios_outlined, color: Colors.white),
           onPressed: () => Get.back(),
           color: Colors.white,
         ),

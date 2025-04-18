@@ -39,7 +39,7 @@ class Onboarding extends StatelessWidget {
                   children: [
                     Text(
                       'welcome_to_GaraTech'.tr,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -63,7 +63,7 @@ class Onboarding extends StatelessWidget {
                         ),
                         child: Text(
                           'next'.tr,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                           ),

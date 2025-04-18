@@ -35,7 +35,7 @@ class Forgotpassword extends StatelessWidget {
                 children: [
                   Text(
                     'forgot_password'.tr,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.blue,
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -45,12 +45,12 @@ class Forgotpassword extends StatelessWidget {
                   const SizedBox(height: 10),
                   Text(
                     'we_send_password'.tr,
-                    style: TextStyle(color: Colors.black, fontSize: 13),
+                    style: const TextStyle(color: Colors.black, fontSize: 13),
                   ),
                   const SizedBox(height: 30),
                   Text(
                     'email'.tr,
-                    style: TextStyle(fontSize: 12),
+                    style: const TextStyle(fontSize: 12),
                     textAlign: TextAlign.start,
                   ),
                   TextField(
@@ -59,13 +59,13 @@ class Forgotpassword extends StatelessWidget {
                       controller.isButtonDisabled.value = value.isEmpty;
                     },
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.email),
+                      prefixIcon: const Icon(Icons.email),
                       hintText: 'email'.tr,
-                      hintStyle:
-                          TextStyle(color: Color.fromRGBO(134, 133, 133, 1)),
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                      border: OutlineInputBorder(),
+                      hintStyle: const TextStyle(
+                          color: Color.fromRGBO(134, 133, 133, 1)),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 10),
+                      border: const OutlineInputBorder(),
                     ),
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w500),
@@ -84,8 +84,8 @@ class Forgotpassword extends StatelessWidget {
                         backgroundColor: controller.isButtonDisabled.value
                             ? const Color.fromARGB(255, 146, 192, 237)
                             : Colors.blue,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 100, vertical: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -93,7 +93,7 @@ class Forgotpassword extends StatelessWidget {
                       ),
                       child: Text(
                         'send_link'.tr,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),

@@ -2,6 +2,7 @@ import 'package:app_hm/Component/StepBook.dart';
 import 'package:app_hm/Controller/Appointment/AppointmentController.dart';
 import 'package:app_hm/Model/Service/TypeServiceModel.dart';
 import 'package:app_hm/Router/AppPage.dart';
+import 'package:app_hm/View/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -15,10 +16,16 @@ class AppointmentBook extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('book_service'.tr, style: TextStyle(color: Colors.white)),
-        automaticallyImplyLeading: false,
+        title: Text('book_service'.tr,
+            style: const TextStyle(color: Colors.white)),
         backgroundColor: const Color(0xFF2D74FF),
         elevation: 0,
+        leading: GestureDetector(
+          onTap: () {
+            Get.offAll(Dashboard());
+          },
+          child: const Icon(Icons.arrow_back, color: Colors.white),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -77,7 +84,7 @@ class AppointmentBook extends StatelessWidget {
               if (controller.selectedType.value == null) {
                 return Text(
                   'select_service_type_first'.tr,
-                  style: TextStyle(fontSize: 14, color: Colors.red),
+                  style: const TextStyle(fontSize: 14, color: Colors.red),
                 );
               }
               final filteredServices = controller.serviceList
@@ -102,8 +109,7 @@ class AppointmentBook extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 6.0),
                     child: Text(
-                      'selected'.tr +
-                          "${controller.checkedValuesService.where((e) => e).length}",
+                      "${'selected'.tr}${controller.checkedValuesService.where((e) => e).length}",
                       style: const TextStyle(
                         fontSize: 14,
                         color: Colors.blue,
@@ -161,7 +167,7 @@ class AppointmentBook extends StatelessWidget {
                   ),
                   child: Text(
                     'next'.tr,
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                    style: const TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
               );
@@ -204,23 +210,23 @@ class AppointmentBook extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Icon(Icons.add, color: Colors.blue),
+                const Icon(Icons.add, color: Colors.blue),
                 Text('add_description'.tr,
-                    style: TextStyle(color: Colors.blue)),
+                    style: const TextStyle(color: Colors.blue)),
               ],
             ),
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Obx(() {
           return Text(
             controller.description.value.isNotEmpty
                 ? controller.description.value
                 : '',
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           );
         }),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
       ],
     );
   }

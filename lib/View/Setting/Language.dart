@@ -12,7 +12,7 @@ class Language extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('language'.tr, style: TextStyle(color: Colors.white)),
+        title: Text('language'.tr, style: const TextStyle(color: Colors.white)),
         backgroundColor: const Color(0xFF2D74FF),
         titleSpacing: 0,
         leading: const BackButton(color: Colors.white),
@@ -20,7 +20,7 @@ class Language extends StatelessWidget {
       body: Container(
         color: Colors.white,
         child: ListView(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
           children: [
             _item(
                 languageCode: 'vi_VN',
@@ -45,14 +45,14 @@ class Language extends StatelessWidget {
         if (languageCode == 'vi_VN') {
           TranslationService.changeLocale('vi');
           Utils.showSnackBar(
-              duration: Duration(seconds: 1),
+              duration: const Duration(seconds: 1),
               title: 'Thông báo',
               message: 'Đã chuyển ngôn ngữ sang Tiếng VIệt.');
           Get.back();
         } else {
           TranslationService.changeLocale('en');
           Utils.showSnackBar(
-              duration: Duration(seconds: 1),
+              duration: const Duration(seconds: 1),
               title: 'Thông báo',
               message: 'Language has been changed to English.');
           Get.back();
@@ -77,7 +77,7 @@ class Language extends StatelessWidget {
             Expanded(
                 child: Text(
               title,
-              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+              style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
             )),
             const SizedBox(width: 10),
             Get.locale.toString() == languageCode

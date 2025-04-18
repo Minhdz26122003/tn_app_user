@@ -6,10 +6,10 @@ class StepBook extends StatelessWidget {
   final List<String> labels;
 
   const StepBook({
-    Key? key,
+    super.key,
     required this.currentStep,
     this.labels = const ["Dịch vụ", "Địa điểm", "Thời gian", "Xác nhận"],
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -50,11 +50,11 @@ class _StepCircle extends StatelessWidget {
   final bool isActive;
 
   const _StepCircle({
-    Key? key,
+    super.key,
     required this.number,
     required this.label,
     this.isActive = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

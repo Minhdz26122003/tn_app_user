@@ -5,7 +5,6 @@ import 'package:app_hm/Services/APICaller.dart';
 import 'package:app_hm/Utils/Utils.dart';
 import 'package:app_hm/View/Account/CreatePassword.dart';
 import 'package:app_hm/View/Account/SendOTP.dart';
-import 'package:app_hm/View/Login/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -15,7 +14,7 @@ class LoginController extends GetxController {
   TextEditingController textPass = TextEditingController();
   RxBool isHidePassword = true.obs;
   RxBool isLoading = false.obs;
-  DateTime timeNow = DateTime.now();
+  DateTime timeNow = DateTime.now().toUtc();
 
   // Forgot password
   RxBool isOTP = false.obs;

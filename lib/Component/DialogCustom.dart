@@ -3,21 +3,24 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class DialogCustom extends StatelessWidget {
-  DialogCustom(
-      {super.key,
-      required this.title,
-      required this.description,
-      required this.svg,
-      this.svgColor,
-      this.btnColor,
-      required this.onTap});
+  const DialogCustom({
+    super.key,
+    required this.title,
+    required this.description,
+    required this.svg,
+    this.svgColor,
+    this.btnColor,
+    required this.onTap,
+    this.showCancel = true, // Thêm tham số để ẩn/hiện nút cancel
+  });
 
-  String title;
-  String description;
-  String svg;
-  Color? svgColor;
-  Color? btnColor;
-  GestureTapCallback onTap;
+  final String title;
+  final String description;
+  final String svg;
+  final Color? svgColor;
+  final Color? btnColor;
+  final GestureTapCallback onTap;
+  final bool showCancel;
 
   @override
   Widget build(BuildContext context) {
@@ -39,48 +42,41 @@ class DialogCustom extends StatelessWidget {
                       BlendMode.srcIn,
                     ),
             ),
-            const SizedBox(
-              height: 12,
-            ),
+            const SizedBox(height: 12),
             Text(
               title,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
-            const SizedBox(
-              height: 7,
-            ),
+            const SizedBox(height: 7),
             Text(
               description,
-              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(
-              height: 12,
-            ),
+            const SizedBox(height: 12),
             Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 17, vertical: 9),
-                    decoration: BoxDecoration(
-                        color: const Color.fromRGBO(241, 244, 249, 1),
-                        borderRadius: BorderRadius.circular(6)),
-                    child: Text(
-                      'cancel'.tr,
-                      style: const TextStyle(
-                          fontSize: 13, fontWeight: FontWeight.w500),
+                if (showCancel) // Chỉ hiển thị nút cancel nếu showCancel là true
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 17, vertical: 9),
+                      decoration: BoxDecoration(
+                          color: const Color.fromRGBO(241, 244, 249, 1),
+                          borderRadius: BorderRadius.circular(6)),
+                      child: Text(
+                        'cancel'.tr,
+                        style: const TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.w500),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  width: 12,
-                ),
+                if (showCancel) const SizedBox(width: 12),
                 GestureDetector(
                   onTap: onTap,
                   child: Container(
@@ -91,16 +87,16 @@ class DialogCustom extends StatelessWidget {
                             btnColor ?? const Color.fromRGBO(55, 114, 255, 1),
                         borderRadius: BorderRadius.circular(6)),
                     child: Text(
-                      'confirm'.tr,
+                      'confirm'.tr, // Có thể đổi thành 'OK' nếu muốn
                       style: const TextStyle(
-                          fontSize: 13,
+                          fontSize: 12,
                           fontWeight: FontWeight.w500,
                           color: Colors.white),
                     ),
                   ),
-                )
+                ),
               ],
-            )
+            ),
           ],
         ),
       ),

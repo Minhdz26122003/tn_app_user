@@ -59,7 +59,7 @@ class Sentotp extends StatelessWidget {
                   ),
                   const SizedBox(height: 30),
                   Text('otp_code'.tr,
-                      style: TextStyle(fontSize: 12),
+                      style: const TextStyle(fontSize: 12),
                       textAlign: TextAlign.start),
                   TextField(
                     controller: controller.textOTP,
@@ -68,13 +68,13 @@ class Sentotp extends StatelessWidget {
                       controller.isButtonDisabled.value = value.isEmpty;
                     },
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.shield_outlined),
+                      prefixIcon: const Icon(Icons.shield_outlined),
                       hintText: 'otp_code'.tr,
-                      hintStyle:
-                          TextStyle(color: Color.fromRGBO(134, 133, 133, 1)),
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                      border: OutlineInputBorder(),
+                      hintStyle: const TextStyle(
+                          color: Color.fromRGBO(134, 133, 133, 1)),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 10),
+                      border: const OutlineInputBorder(),
                     ),
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w500),
@@ -102,7 +102,7 @@ class Sentotp extends StatelessWidget {
                       ),
                       child: Text(
                         'confirm'.tr,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),

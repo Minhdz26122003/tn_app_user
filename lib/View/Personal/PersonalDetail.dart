@@ -17,8 +17,8 @@ class Personaldetail extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Color(0xFF2D74FF),
-        title: Text('details'.tr, style: TextStyle(color: Colors.white)),
+        backgroundColor: const Color(0xFF2D74FF),
+        title: Text('details'.tr, style: const TextStyle(color: Colors.white)),
         leading: const BackButton(color: Colors.white),
       ),
       body: SingleChildScrollView(
@@ -60,7 +60,7 @@ class Personaldetail extends StatelessWidget {
                                         shape: BoxShape.circle,
                                         color: Colors.grey,
                                       ),
-                                      child: Icon(Icons.person,
+                                      child: const Icon(Icons.person,
                                           color: Colors.white),
                                     );
                                   },
@@ -129,12 +129,13 @@ class Personaldetail extends StatelessWidget {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
-                  minimumSize: Size(double.infinity, 50),
+                  minimumSize: const Size(double.infinity, 50),
                 ),
                 onPressed: () async {
                   await controller.updateAccount();
                 },
-                child: Text('update'.tr, style: TextStyle(color: Colors.white)),
+                child: Text('update'.tr,
+                    style: const TextStyle(color: Colors.white)),
               ),
             ),
           ],
@@ -236,14 +237,15 @@ class Personaldetail extends StatelessWidget {
     return Row(
       children: [
         Padding(
-          padding: EdgeInsets.only(
+          padding: const EdgeInsets.only(
             left: 8,
             top: 5,
             bottom: 5,
           ),
           child: Row(
             children: [
-              Text('select_gender'.tr + ": ", style: TextStyle(fontSize: 12)),
+              Text("${'select_gender'.tr}: ",
+                  style: const TextStyle(fontSize: 12)),
               const SizedBox(width: 10),
               Obx(() => CheckBoxRounded(
                     isChecked: controller.selectedGender.value == 'male'.tr,
@@ -255,7 +257,7 @@ class Personaldetail extends StatelessWidget {
                     checkedColor: const Color.fromARGB(255, 0, 34, 255),
                   )),
               const SizedBox(width: 5),
-              Text('male'.tr, style: TextStyle(fontSize: 13)),
+              Text('male'.tr, style: const TextStyle(fontSize: 13)),
               const SizedBox(width: 10),
               Obx(() => CheckBoxRounded(
                     isChecked: controller.selectedGender.value == 'female'.tr,
@@ -267,7 +269,7 @@ class Personaldetail extends StatelessWidget {
                     checkedColor: const Color.fromARGB(255, 0, 34, 255),
                   )),
               const SizedBox(width: 5),
-              Text('female'.tr, style: TextStyle(fontSize: 13)),
+              Text('female'.tr, style: const TextStyle(fontSize: 13)),
               const SizedBox(width: 10),
               Obx(() => CheckBoxRounded(
                     isChecked: controller.selectedGender.value == 'other'.tr,
@@ -279,7 +281,7 @@ class Personaldetail extends StatelessWidget {
                     checkedColor: const Color.fromARGB(255, 0, 34, 255),
                   )),
               const SizedBox(width: 5),
-              Text('other'.tr, style: TextStyle(fontSize: 13)),
+              Text('other'.tr, style: const TextStyle(fontSize: 13)),
             ],
           ),
         ),

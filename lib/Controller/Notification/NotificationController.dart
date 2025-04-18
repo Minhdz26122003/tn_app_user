@@ -16,7 +16,7 @@ class NotificationController extends GetxController {
   int totalPage = 0;
   RxList<NotificationModel> notificationList = RxList<NotificationModel>();
   ScrollController scrollController = ScrollController();
-  DateTime timeNow = DateTime.now();
+  DateTime timeNow = DateTime.now().toUtc();
   String uuidAcc = '';
 
   @override

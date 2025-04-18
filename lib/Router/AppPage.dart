@@ -11,7 +11,6 @@ import 'package:app_hm/View/Appointment/ListAppointment.dart';
 import 'package:app_hm/View/Login/Login.dart';
 import 'package:app_hm/View/Login/Onboarding.dart';
 import 'package:app_hm/View/Notification/Notification.dart';
-import 'package:app_hm/View/Personal/Personal.dart';
 import 'package:app_hm/View/Personal/PersonalDetail.dart';
 import 'package:app_hm/View/ServiceCar/ServiceCar.dart';
 import 'package:app_hm/View/Setting/Language.dart';

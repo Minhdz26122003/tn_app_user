@@ -13,7 +13,8 @@ class AppointmentList extends StatelessWidget {
     final controller = Get.put(Appointmentcontroller());
     return Scaffold(
       appBar: AppBar(
-        title: Text('book_service'.tr, style: TextStyle(color: Colors.white)),
+        title: Text('book_service'.tr,
+            style: const TextStyle(color: Colors.white)),
         backgroundColor: const Color(0xFF2D74FF),
         titleSpacing: 0,
         // actions: [
@@ -111,9 +112,9 @@ class AppointmentList extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               "Xưởng dịch vụ",
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(

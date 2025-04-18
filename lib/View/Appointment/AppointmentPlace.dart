@@ -109,7 +109,7 @@ class Appointmentplace extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isSelected
                       ? Colors.blue.shade100
-                      : Color.fromARGB(255, 228, 228, 228),
+                      : const Color.fromARGB(255, 228, 228, 228),
                   borderRadius: BorderRadius.circular(16),
                   border: isSelected
                       ? Border.all(color: Colors.blue, width: 2)

@@ -50,7 +50,7 @@ class Home extends StatelessWidget {
                                           child: _itemOverview(
                                             title: 'Quản lý xe',
                                             url:
-                                                'assets/images/appointment_empty.png',
+                                                'assets/images/appointment_empty.svg',
                                           )),
                                     ),
                                     StaggeredGridTile.fit(
@@ -58,7 +58,7 @@ class Home extends StatelessWidget {
                                         child: _itemOverview(
                                           title: 'Quản lý RIFD',
                                           url:
-                                              'assets/images/appointment_empty.png',
+                                              'assets/images/appointment_empty.svg',
                                         )),
                                   ],
                                 );
@@ -110,7 +110,7 @@ class Home extends StatelessWidget {
                       height: 16,
                     ),
                     Container(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
                           color: Colors.white,
@@ -120,7 +120,7 @@ class Home extends StatelessWidget {
                       height: 16,
                     ),
                     Container(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
                           color: Colors.white,
