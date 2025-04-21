@@ -34,7 +34,7 @@ class Splashcontroller extends GetxController {
           btnColor: Colors.blue,
           onTap: () {
             Get.back(); // đóng dialog
-            Get.offAllNamed(Routes.login);
+            Get.offAllNamed(Routes.dashboard);
           },
           showCancel: false,
         ),

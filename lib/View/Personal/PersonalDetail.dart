@@ -21,125 +21,131 @@ class Personaldetail extends StatelessWidget {
         title: Text('details'.tr, style: const TextStyle(color: Colors.white)),
         leading: const BackButton(color: Colors.white),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: GestureDetector(
-                onTap: () {
-                  popupTakeImage(context: context, controller: controller);
-                },
-                child: Obx(
-                  () => Stack(
-                    children: [
-                      ClipRRect(
-                          borderRadius: BorderRadius.circular(70),
-                          child: controller.imageFile.value.path.isNotEmpty
-                              ? Image.file(
-                                  controller.imageFile.value,
-                                  width: 86,
-                                  height: 86,
-                                  fit: BoxFit.cover,
-                                )
-                              : Image.network(
-                                  controller2.avatar.value.isNotEmpty
-                                      ? controller2.avatar.value
-                                      : 'https://via.placeholder.com/150',
-                                  height: 38,
-                                  width: 38,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (BuildContext context,
-                                      Object exception,
-                                      StackTrace? stackTrace) {
-                                    return Container(
-                                      height: 38,
-                                      width: 38,
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.grey,
-                                      ),
-                                      child: const Icon(Icons.person,
-                                          color: Colors.white),
-                                    );
-                                  },
-                                )),
-                      const Positioned(
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        child: Icon(
-                          Icons.camera_alt,
-                          size: 30,
-                          color: Colors.white,
+      body: Obx(
+        () => controller.isLoading.value
+            ? const Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: GestureDetector(
+                        onTap: () {
+                          popupTakeImage(
+                              context: context, controller: controller);
+                        },
+                        child: Obx(
+                          () => Stack(
+                            children: [
+                              ClipRRect(
+                                  borderRadius: BorderRadius.circular(70),
+                                  child: controller
+                                          .imageFile.value.path.isNotEmpty
+                                      ? Image.file(
+                                          controller.imageFile.value,
+                                          width: 86,
+                                          height: 86,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Image.network(
+                                          controller2.avatar.value.isNotEmpty
+                                              ? controller2.avatar.value
+                                              : 'https://via.placeholder.com/150',
+                                          height: 38,
+                                          width: 38,
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (BuildContext context,
+                                              Object exception,
+                                              StackTrace? stackTrace) {
+                                            return Container(
+                                              height: 38,
+                                              width: 38,
+                                              decoration: const BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Colors.grey,
+                                              ),
+                                              child: const Icon(Icons.person,
+                                                  color: Colors.white),
+                                            );
+                                          },
+                                        )),
+                              const Positioned(
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
+                                child: Icon(
+                                  Icons.camera_alt,
+                                  size: 30,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 16),
+                    _buildSectionTitle(
+                      'personal_information'.tr,
+                    ),
+                    _buildTextField(
+                        icon: Icons.person,
+                        hintText: 'username'.tr,
+                        controller: controller.textUserName),
+                    _buildTextField(
+                        icon: Icons.person,
+                        hintText: 'full_name'.tr,
+                        controller: controller.textFullName),
+                    _buildDateField(
+                        icon: Icons.calendar_today,
+                        hintText: 'date_of_birth'.tr,
+                        controller: controller.textDateOfBirth,
+                        isDatePicker: true),
+                    _buildGenderSelection(),
+                    _buildTextField(
+                        icon: Icons.phone,
+                        hintText: 'phone_number'.tr,
+                        controller: controller.textPhone),
+                    _buildTextField(
+                        icon: Icons.email,
+                        hintText: 'email'.tr,
+                        controller: controller.textEmail),
+                    const SizedBox(height: 16),
+                    _buildSectionTitle('address'.tr),
+                    _buildTextField(
+                        icon: Icons.location_on,
+                        hintText: 'specific_address'.tr,
+                        controller: controller.textAddress),
+                    const SizedBox(height: 16),
+                    _buildSectionTitle('account_information'.tr),
+                    _buildTextFormField(
+                      icon: Icons.email,
+                      hintText: '',
+                      controller: controller.textEmail,
+                    ),
+                    _buildTextFormField(
+                        icon: Icons.admin_panel_settings,
+                        hintText: '',
+                        controller: controller.textRole),
+                    const SizedBox(height: 20),
+                    Center(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          minimumSize: const Size(double.infinity, 50),
+                        ),
+                        onPressed: () async {
+                          await controller.updateAccount();
+                        },
+                        child: Text('update'.tr,
+                            style: const TextStyle(color: Colors.white)),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            const SizedBox(height: 16),
-            _buildSectionTitle(
-              'personal_information'.tr,
-            ),
-            _buildTextField(
-                icon: Icons.person,
-                hintText: 'username'.tr,
-                controller: controller.textUserName),
-            _buildTextField(
-                icon: Icons.person,
-                hintText: 'full_name'.tr,
-                controller: controller.textFullName),
-            _buildDateField(
-                icon: Icons.calendar_today,
-                hintText: 'date_of_birth'.tr,
-                controller: controller.textDateOfBirth,
-                isDatePicker: true),
-            _buildGenderSelection(),
-            _buildTextField(
-                icon: Icons.phone,
-                hintText: 'phone_number'.tr,
-                controller: controller.textPhone),
-            _buildTextField(
-                icon: Icons.email,
-                hintText: 'email'.tr,
-                controller: controller.textEmail),
-            const SizedBox(height: 16),
-            _buildSectionTitle('address'.tr),
-            _buildTextField(
-                icon: Icons.location_on,
-                hintText: 'specific_address'.tr,
-                controller: controller.textAddress),
-            const SizedBox(height: 16),
-            _buildSectionTitle('account_information'.tr),
-            _buildTextFormField(
-              icon: Icons.email,
-              hintText: '',
-              controller: controller.textEmail,
-            ),
-            _buildTextFormField(
-                icon: Icons.admin_panel_settings,
-                hintText: '',
-                controller: controller.textRole),
-            const SizedBox(height: 20),
-            Center(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  minimumSize: const Size(double.infinity, 50),
-                ),
-                onPressed: () async {
-                  await controller.updateAccount();
-                },
-                child: Text('update'.tr,
-                    style: const TextStyle(color: Colors.white)),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

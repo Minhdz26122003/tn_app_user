@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 class APICaller {
   static APICaller _apiCaller = APICaller();
-  static String BASE_URL = "http://192.168.1.7/apihm/User/";
+  static String BASE_URL = "http://192.168.1.6/apihm/User/";
   // static String BASE_URL = "http://10.0.2.2/apihm/User/";
   // static late String BASE_URL;
 
@@ -292,9 +292,11 @@ class APICaller {
       Utils.showSnackBar(title: 'Thông báo', message: 'Đã hết phiên đăng nhập');
     }
     if (response.statusCode != 200) {
-      // Utils.showSnackBar(
-      //     title: TextByNation.getStringByKey('notification'),
-      //     message: response.body);
+      if (response.statusCode == 400) {
+        Utils.showSnackBar(
+            title: 'Thông báo',
+            message: jsonDecode(response.body)['error']['message']);
+      }
       return null;
     }
     if (jsonDecode(response.body)['error']['code'] != 0) {

@@ -24,6 +24,9 @@ abstract class Routes {
   static const appointmentplace = _Paths.appointmentplace;
   static const appointmenttime = _Paths.appointmenttime;
   static const appointmentconfirm = _Paths.appointmentconfirm;
+  static const car = _Paths.car;
+  static const addcar = _Paths.addcar;
+  static const editcar = _Paths.editcar;
   Routes._();
 }
 
@@ -52,4 +55,7 @@ abstract class _Paths {
   static const appointmentplace = '/appointmentplace';
   static const appointmenttime = '/appointmenttime';
   static const appointmentconfirm = '/appointmentconfirm';
+  static const car = '/car';
+  static const addcar = '/addcar';
+  static const editcar = '/editcar';
 }

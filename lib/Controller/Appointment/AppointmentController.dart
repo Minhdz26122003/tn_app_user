@@ -14,7 +14,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class Appointmentcontroller extends GetxController {
-  String emailAcc = "";
+  int uid = 0;
   RxList<bool> checkedValuesService = <bool>[].obs;
   RxInt currentStep = 1.obs;
   RxBool isLoading = false.obs;
@@ -56,7 +56,8 @@ class Appointmentcontroller extends GetxController {
 
   @override
   void onInit() async {
-    emailAcc = await Utils.getStringValueWithKey(Constant.EMAIL);
+    uid = await Utils.getIntValueWithKey(Constant.UUID_USER_ACC);
+
     isLoading.value = false;
     checkedValuesService.value = List<bool>.filled(serviceList.length, false);
     await GetServiceTypeList();
@@ -128,7 +129,7 @@ class Appointmentcontroller extends GetxController {
       "keyCert":
           Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
       "time": formattedTime,
-      "email": emailAcc,
+      "uid": uid,
     };
 
     try {
@@ -229,13 +230,14 @@ class Appointmentcontroller extends GetxController {
 
   GetCarList() async {
     carList.clear();
+    isLoading.value = true;
     try {
       String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
       var param = {
         "keyCert":
             Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
         "time": formattedTime,
-        "email": emailAcc,
+        "uid": uid,
       };
       var data = await APICaller.getInstance().post('Car/get_car.php', param);
       if (data != null) {
@@ -247,18 +249,21 @@ class Appointmentcontroller extends GetxController {
     } catch (e) {
       // debugPrint("Lỗi API: $e", wrapWidth: 1024);
       Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+    } finally {
+      isLoading.value = false;
     }
   }
 
   GetAppointmentList() async {
     appointmentList.clear();
+    isLoading.value = true;
     try {
       String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
       var param = {
         "keyCert":
             Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
         "time": formattedTime,
-        "email": emailAcc,
+        "uid": uid,
       };
       var data = await APICaller.getInstance()
           .post('Appointment/get_appointment.php', param);
@@ -270,8 +275,9 @@ class Appointmentcontroller extends GetxController {
         appointmentList.addAll(listItem);
       }
     } catch (e) {
-      // debugPrint("Lỗi API: $e", wrapWidth: 1024);
-      // Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+      debugPrint("Lỗi API: $e", wrapWidth: 1024);
+      print(uid);
+      //Utils.showSnackBar(title: 'notification'.tr, message: '$e');
     }
   }
 
@@ -293,7 +299,7 @@ class Appointmentcontroller extends GetxController {
         "keyCert":
             Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
         "time": formattedTime,
-        "email": emailAcc,
+        "uid": uid,
         "carr_id": selectedCar.value?.car_id,
         "gara_id": selectedAddress.value?.gara_id,
         "appointment_date": DateFormat('yyyy-MM-dd').format(selectedDate.value),

@@ -43,7 +43,9 @@ class Appointmentconfirm extends StatelessWidget {
             children: [
               StepBook(currentStep: controller.currentStep.value),
               const SizedBox(height: 20),
-              _buildTitle("BIỂN SỐ XE", onEdit: () {}),
+              _buildTitle("BIỂN SỐ XE", onEdit: () {
+                Get.toNamed(Routes.car);
+              }),
               _buildCarBox(controller),
               const SizedBox(height: 20),
               _buildTitle("LIÊN HỆ", onEdit: () async {

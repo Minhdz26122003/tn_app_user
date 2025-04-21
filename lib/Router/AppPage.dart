@@ -8,6 +8,9 @@ import 'package:app_hm/View/Appointment/AppointmentHistory.dart';
 import 'package:app_hm/View/Appointment/AppointmentPlace.dart';
 import 'package:app_hm/View/Appointment/AppointmentTime.dart';
 import 'package:app_hm/View/Appointment/ListAppointment.dart';
+import 'package:app_hm/View/Car/AddCar.dart';
+import 'package:app_hm/View/Car/Car.dart';
+import 'package:app_hm/View/Car/EditCar.dart';
 import 'package:app_hm/View/Login/Login.dart';
 import 'package:app_hm/View/Login/Onboarding.dart';
 import 'package:app_hm/View/Notification/Notification.dart';
@@ -113,6 +116,18 @@ class AppPages {
     GetPage(
       name: Routes.appointmentconfirm,
       page: () => const Appointmentconfirm(),
+    ),
+    GetPage(
+      name: Routes.car,
+      page: () => const Car(),
+    ),
+    GetPage(
+      name: Routes.addcar,
+      page: () => const AddCar(),
+    ),
+    GetPage(
+      name: Routes.editcar,
+      page: () => const EditCar(),
     ),
   ];
 }

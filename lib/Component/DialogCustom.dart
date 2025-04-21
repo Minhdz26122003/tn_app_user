@@ -45,7 +45,7 @@ class DialogCustom extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               title,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 7),
             Text(
@@ -58,7 +58,7 @@ class DialogCustom extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (showCancel) // Chỉ hiển thị nút cancel nếu showCancel là true
+                if (showCancel)
                   GestureDetector(
                     onTap: () {
                       Navigator.pop(context);

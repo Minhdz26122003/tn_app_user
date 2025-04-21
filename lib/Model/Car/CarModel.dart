@@ -1,27 +1,27 @@
 class CarModel {
-  String? car_id;
+  int? car_id;
   String? uid;
   String? license_plate;
-  String? color_car;
+  String? name;
   String? manufacturer;
-  String? year_manufacturer;
+  String? year_manufacture;
 
   CarModel({
     this.car_id,
     this.uid,
     this.license_plate,
-    this.color_car,
+    this.name,
     this.manufacturer,
-    this.year_manufacturer,
+    this.year_manufacture,
   });
 
   CarModel.fromJson(Map<String, dynamic> json) {
     car_id = json['car_id'];
     uid = json['uid'];
     license_plate = json['license_plate'];
-    color_car = json['color_car'];
+    name = json['name'];
     manufacturer = json['manufacturer'];
-    year_manufacturer = json['year_manufacturer'];
+    year_manufacture = json['year_manufacture'];
   }
 
   Map<String, dynamic> toJson() {
@@ -29,9 +29,9 @@ class CarModel {
     data['car_id'] = car_id;
     data['uid'] = uid;
     data['license_plate'] = license_plate;
-    data['color_car'] = color_car;
+    data['name'] = name;
     data['manufacturer'] = manufacturer;
-    data['year_manufacturer'] = year_manufacturer;
+    data['year_manufacture'] = year_manufacture;
 
     return data;
   }

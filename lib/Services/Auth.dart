@@ -105,7 +105,7 @@ class Auth {
           "email": user.email ?? '',
           "username": user.displayName ?? 'Unknown',
           "avatar": user.photoURL ?? '',
-          "keycert": keyCert,
+          "keyCert": keyCert,
           "time": formattedTime,
         };
 
@@ -123,7 +123,8 @@ class Auth {
             ..email.value = user.email ?? ''
             ..avatar.value = user.photoURL ?? ''
             ..phoneNumber.value = '';
-
+          final d = data['data'];
+          await Utils.saveIntWithKey(Constant.UUID_USER_ACC, d['uid'] ?? 0);
           await Utils.saveStringWithKey(
               Constant.USERNAME, controller.username.value);
           await Utils.saveStringWithKey(
@@ -133,10 +134,9 @@ class Auth {
               Constant.AVATAR_USER, controller.avatar.value);
           await Utils.saveStringWithKey(
               Constant.PHONENUM, controller.phoneNumber.value);
-
+          Get.offAllNamed(Routes.dashboard);
           Utils.showSnackBar(
               title: 'Thông báo', message: 'Đăng nhập thành công.');
-          Get.offAllNamed(Routes.dashboard);
         } else {
           Utils.showSnackBar(
               title: 'Lỗi',
@@ -173,7 +173,7 @@ class Auth {
       await Utils.saveStringWithKey(Constant.ACCESS_TOKEN, token);
       GlobalValue.getInstance().setToken('Bearer $token');
 
-      final newExpiry = timeNow.add(const Duration(minutes: 10));
+      final newExpiry = timeNow.add(const Duration(hours: 1));
       final formattedExpiry =
           DateFormat('MM/dd/yyyy HH:mm:ss').format(newExpiry);
       await Utils.saveStringWithKey(Constant.TOKEN_EXPIRY, formattedExpiry);
@@ -197,9 +197,8 @@ class Auth {
       dashboardCtrl
         ..isPhpLoggedIn.value = true
         ..updateIsLoggedIn();
-
-      Utils.showSnackBar(title: 'Thông báo', message: 'Đăng nhập thành công.');
       Get.offAllNamed(Routes.dashboard);
+      Utils.showSnackBar(title: 'Thông báo', message: 'Đăng nhập thành công.');
     } catch (e) {
       debugPrint("Lỗi API: $e", wrapWidth: 1024);
       Utils.showSnackBar(title: 'Lỗi đăng nhập', message: e.toString());

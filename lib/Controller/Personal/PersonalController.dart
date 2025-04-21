@@ -16,7 +16,7 @@ import 'package:intl/intl.dart';
 class Personalcontroller extends GetxController {
   RxBool isLoading = true.obs;
   DateTime timeNow = DateTime.now().toUtc();
-  int uidAcc = 0;
+  int uid = 0;
   String emailAcc = "";
   String UsernameAcc = "";
 
@@ -44,7 +44,7 @@ class Personalcontroller extends GetxController {
   @override
   Future<void> onInit() async {
     super.onInit();
-
+    uid = await Utils.getIntValueWithKey(Constant.UUID_USER_ACC);
     emailAcc = await Utils.getStringValueWithKey(Constant.EMAIL);
     UsernameAcc = await Utils.getStringValueWithKey(Constant.USERNAME);
     textEmail.text = emailAcc;
@@ -93,12 +93,13 @@ class Personalcontroller extends GetxController {
   }
 
   getAccount() async {
+    isLoading.value = true;
     String formattedTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(timeNow);
     var param = {
       "keyCert":
           Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
       "time": formattedTime,
-      "email": emailAcc,
+      "uid": uid,
     };
     try {
       var response = await APICaller.getInstance()
@@ -108,6 +109,8 @@ class Personalcontroller extends GetxController {
       }
     } catch (e) {
       debugPrint(" Lỗi API: $e", wrapWidth: 1024);
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -175,7 +178,7 @@ class Personalcontroller extends GetxController {
         "keyCert":
             Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
         "time": formattedTime,
-        "uid": uidAcc,
+        "uid": uid,
         "oldPassword": textPasswordOld.text.trim(),
         "newPassword": textPasswordConfirm.text.trim(),
         "confirmPassword": textPasswordConfirm.text.trim(),
@@ -235,7 +238,7 @@ class Personalcontroller extends GetxController {
         "keyCert":
             Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
         "time": formattedTime,
-        "uid": uidAcc ?? "",
+        "uid": uid,
         "username": textUserName.text.trim(),
         "avatar": cloudinaryImage,
         "fullname": textFullName.text.trim(),
