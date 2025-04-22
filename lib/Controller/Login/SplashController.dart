@@ -1,4 +1,5 @@
 import 'package:app_hm/Component/DialogCustom.dart';
+import 'package:app_hm/Controller/DashboardController.dart';
 import 'package:app_hm/Global/Constant.dart';
 import 'package:app_hm/Global/GlobalValue.dart';
 import 'package:app_hm/Router/AppPage.dart';
@@ -16,7 +17,6 @@ class Splashcontroller extends GetxController {
   }
 
   Future<void> _checkAuthAndRedirect() async {
-    // Kiểm tra token hợp lệ
     bool isValid = await Auth.checkLogin();
 
     if (isValid) {
@@ -32,8 +32,10 @@ class Splashcontroller extends GetxController {
           svg: 'assets/icons/info.svg',
           svgColor: Colors.red,
           btnColor: Colors.blue,
-          onTap: () {
+          onTap: () async {
+            await Auth.backLogin(true);
             Get.back(); // đóng dialog
+
             Get.offAllNamed(Routes.dashboard);
           },
           showCancel: false,

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:get/get.dart';
 
-class Appointmenthistory extends StatelessWidget {
-  const Appointmenthistory({Key? key}) : super(key: key);
+class Appoointmentdetail extends StatelessWidget {
+  const Appoointmentdetail({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class Appointmenthistory extends StatelessWidget {
       "Quyết toán",
       "Thanh toán",
     ];
-    final currentStep = model.currentStatusIndex; // 0-based
+    final currentStep = model.currentStatusIndex;
 
     return Scaffold(
       appBar: AppBar(

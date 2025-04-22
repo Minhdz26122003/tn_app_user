@@ -13,6 +13,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+class TimeSlot {
+  final String label;
+  final DateTime dateTime;
+  bool isSelected;
+
+  TimeSlot(this.label, this.dateTime, {this.isSelected = false});
+
+  /// Trả về true nếu dateTime < thời điểm hiện tại
+  bool get isPast {
+    // So sánh với thời gian local hiện tại
+    return dateTime.isBefore(DateTime.now());
+  }
+}
+
 class Appointmentcontroller extends GetxController {
   int uid = 0;
   RxList<bool> checkedValuesService = <bool>[].obs;
@@ -39,6 +53,7 @@ class Appointmentcontroller extends GetxController {
 
   RxString selectedSession = "Sáng".obs;
   RxString selectedTime = "".obs;
+  RxList<TimeSlot> slots = <TimeSlot>[].obs;
   List<String> morningTimes = ['08:00', '09:00', '10:00', '11:00', '12:00'];
   List<String> afternoonTimes = ['13:00', '14:00', '15:00', '16:00', '17:00'];
 
@@ -57,8 +72,10 @@ class Appointmentcontroller extends GetxController {
   @override
   void onInit() async {
     uid = await Utils.getIntValueWithKey(Constant.UUID_USER_ACC);
-
     isLoading.value = false;
+
+    everAll([selectedDate, selectedSession], (_) => buildSlots());
+    buildSlots();
     checkedValuesService.value = List<bool>.filled(serviceList.length, false);
     await GetServiceTypeList();
     await GetServiceList();
@@ -75,8 +92,33 @@ class Appointmentcontroller extends GetxController {
     super.onClose();
   }
 
-  void updateDate(DateTime newDate) {
-    selectedDate.value = newDate;
+  void updateDate(DateTime d) => selectedDate.value = d;
+
+// build slot thời gian , so sánh viwos thời gian hiện tại
+  void buildSlots() {
+    final labels =
+        selectedSession.value == 'Sáng' ? morningTimes : afternoonTimes;
+    final date = selectedDate.value;
+    final now = DateTime.now();
+
+    final tmp = labels.map((label) {
+      final parts = label.split(':');
+      final dt = DateTime(date.year, date.month, date.day, int.parse(parts[0]),
+          int.parse(parts[1]));
+
+      // Tạo slot, isPast sẽ tự động tính trong getter
+      final slot = TimeSlot(label, dt, isSelected: label == selectedTime.value);
+      return slot;
+    }).toList();
+
+    slots.value = tmp;
+  }
+
+  void pickTime(String label) {
+    final slot = slots.firstWhere((s) => s.label == label);
+    if (slot.isPast) return;
+    selectedTime.value = label;
+    buildSlots(); // cập nhật trạng thái isSelected
   }
 
   void nextStep() {
@@ -86,13 +128,8 @@ class Appointmentcontroller extends GetxController {
     } else {
       BookAppointment();
       Get.snackbar('Thông báo', 'Bạn đã hoàn tất quy trình đặt dịch vụ!');
-      Get.offAllNamed(Routes.home);
+      Get.offAllNamed(Routes.appointmentlist);
     }
-  }
-
-  void resetService() {
-    selectedType.value == null;
-    checkedValuesService.isEmpty;
   }
 
   void previousStep() {
@@ -102,6 +139,11 @@ class Appointmentcontroller extends GetxController {
     } else {
       Get.back();
     }
+  }
+
+  void resetService() {
+    selectedType.value == null;
+    checkedValuesService.isEmpty;
   }
 
   // Điều hướng đến màn hình tương ứng với bước
@@ -276,8 +318,10 @@ class Appointmentcontroller extends GetxController {
       }
     } catch (e) {
       debugPrint("Lỗi API: $e", wrapWidth: 1024);
-      print(uid);
+
       //Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -300,17 +344,19 @@ class Appointmentcontroller extends GetxController {
             Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
         "time": formattedTime,
         "uid": uid,
-        "carr_id": selectedCar.value?.car_id,
+        "car_id": selectedCar.value?.car_id,
         "gara_id": selectedAddress.value?.gara_id,
         "appointment_date": DateFormat('yyyy-MM-dd').format(selectedDate.value),
         "appointment_time": selectedTime.value,
         "description": description.value,
         "status": 0,
+        "reason": "",
         "serviceIds": serviceIds,
       };
 
       var data = await APICaller.getInstance()
           .post('Book/book_appointment.php', param);
+      print("data: $data");
       if (data != null && data['status'] == 'success') {
         String appointmentId = data['items']['appointment_id'].toString();
         Utils.showSnackBar(
@@ -322,13 +368,15 @@ class Appointmentcontroller extends GetxController {
         //   'appointmentId': appointmentId, // Truyền appointmentId nếu cần
         // });
       } else {
-        Utils.showSnackBar(
-          title: 'Thông báo',
-          message: data?['error']['message'] ?? 'Đặt lịch thất bại',
-        );
+        debugPrint("Lỗi API: " + data?['error']['message'], wrapWidth: 1024);
+        // Utils.showSnackBar(
+        //   title: 'Thông báo',
+        //   message: data?['error']['message'] ?? 'Đặt lịch thất bại',
+        // );
       }
     } catch (e) {
-      Utils.showSnackBar(title: 'Thông báo', message: 'Lỗi: $e');
+      debugPrint("Lỗi API: $e", wrapWidth: 1024);
+      //Utils.showSnackBar(title: 'Thông báo', message: 'Lỗi: $e');
     } finally {
       isLoading.value = false;
     }

@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
-class AppointmentBook extends StatelessWidget {
-  const AppointmentBook({super.key});
+class Appointmentbook extends StatelessWidget {
+  const Appointmentbook({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class AppointmentBook extends StatelessWidget {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Get.offAll(Dashboard());
+            Get.offAllNamed(Routes.dashboard);
           },
           child: const Icon(Icons.arrow_back, color: Colors.white),
         ),

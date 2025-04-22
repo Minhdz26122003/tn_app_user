@@ -76,7 +76,7 @@ class LoginController extends GetxController {
           startTimer();
           Utils.showSnackBar(
               title: 'notification'.tr, message: "Đã gửi mã OTP thành công");
-          Get.to(() => const Sentotp());
+          Get.toNamed(Routes.sendtopt);
         } else {
           Utils.showSnackBar(
               title: 'notification'.tr, message: response["error"]["message"]);
@@ -114,7 +114,7 @@ class LoginController extends GetxController {
         if (response != null && response["error"]["code"] == 0) {
           Utils.showSnackBar(
               title: 'notification'.tr, message: "Xác thực OTP thành công");
-          Get.to(() => const Createpassword());
+          Get.toNamed(Routes.createpassword);
         } else {
           Utils.showSnackBar(
               title: 'notification'.tr, message: response["error"]["message"]);

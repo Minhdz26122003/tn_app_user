@@ -64,21 +64,10 @@ class Appointmenttime extends StatelessWidget {
       lastDate: DateTime(2100),
       locale: const Locale("vi", "VN"),
     );
-
-    // if (picked != null) {
-    //   if (picked.isBefore(DateTime(now.year, now.month, now.day))) {
-    //     // Hiển thị thông báo nếu người dùng cố gắng chọn ngày trong quá khứ (phòng trường hợp lách giới hạn)
-    //     Get.snackbar(
-    //       "Lỗi",
-    //       "Không thể chọn ngày trong quá khứ.",
-    //       backgroundColor: Colors.redAccent,
-    //       colorText: Colors.white,
-    //       snackPosition: SnackPosition.TOP,
-    //     );
-    //   } else if (picked != controller.selectedDate.value) {
-    //     controller.updateDate(picked);
-    //   }
-    // }
+    if (picked != null) {
+      controller.updateDate(picked);
+      controller.selectedTime.value = '';
+    }
   }
 
   // Hiển thị ngày
@@ -169,60 +158,50 @@ class Appointmenttime extends StatelessWidget {
     );
   }
 
-  // Hiển thị thời gian
+  // Widget hiển thị thời gian
   Widget _ViewTimes(Appointmentcontroller controller) {
     return Obx(() {
-      final times = controller.selectedSession.value == 'Sáng'
-          ? controller.morningTimes
-          : controller.afternoonTimes;
       return Wrap(
         spacing: 16,
         runSpacing: 16,
-        children:
-            times.map((time) => _buildTimeSlot(time, controller)).toList(),
+        children: controller.slots
+            .map((slot) => _buildTimeSlot(slot, controller))
+            .toList(),
       );
     });
   }
 
-  // Widget thời gian
-  Widget _buildTimeSlot(String time, Appointmentcontroller controller) {
+  // Widget cho từng time slot
+  Widget _buildTimeSlot(TimeSlot slot, Appointmentcontroller controller) {
+    final bg = slot.isSelected
+        ? Colors.blue
+        : slot.isPast
+            ? Colors.grey.shade300
+            : Colors.white;
+    final fg = slot.isSelected
+        ? Colors.white
+        : slot.isPast
+            ? Colors.grey
+            : Colors.black87;
+
     return GestureDetector(
-      onTap: () => controller.selectedTime.value = time,
-      child: Obx(() {
-        final isSelected = controller.selectedTime.value == time;
-        return Container(
-          width: 80,
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          decoration: BoxDecoration(
-            color: isSelected
-                ? const Color(0xFF4A90E2)
-                : const Color.fromARGB(255, 231, 231, 231),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: isSelected ? const Color(0xFF4A90E2) : Colors.grey,
-              width: 1.5,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(isSelected ? 0.3 : 0.1),
-                spreadRadius: 1,
-                blurRadius: 4,
-                offset: const Offset(0, 2),
-              ),
-            ],
+      onTap: slot.isPast ? null : () => controller.pickTime(slot.label),
+      child: Container(
+        width: 80,
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: bg,
+          border:
+              Border.all(color: slot.isSelected ? Colors.blue : Colors.grey),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Center(
+          child: Text(
+            slot.label,
+            style: TextStyle(color: fg),
           ),
-          child: Center(
-            child: Text(
-              time,
-              style: TextStyle(
-                color: isSelected ? Colors.white : Colors.black87,
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
-              ),
-            ),
-          ),
-        );
-      }),
+        ),
+      ),
     );
   }
 

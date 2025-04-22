@@ -133,8 +133,7 @@ Widget _buildCarBox(Appointmentcontroller controller) {
           DropdownButtonFormField<CarModel>(
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
-              contentPadding:
-                  EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             ),
             value: controller.selectedCar.value,
             items: controller.carList.map((car) {
@@ -144,7 +143,8 @@ Widget _buildCarBox(Appointmentcontroller controller) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(car.license_plate ?? "---",
-                        style: const TextStyle(color: Colors.black)),
+                        style:
+                            const TextStyle(color: Colors.black, fontSize: 13)),
                   ],
                 ),
               );
@@ -272,9 +272,11 @@ Widget _buildAddressBox(Appointmentcontroller controller) {
   });
 }
 
-// Hiển thị thông tin thời gian
 Widget _buildTimeBox(Appointmentcontroller controller) {
   return Obx(() {
+    final hasTime = controller.selectedTime.value != null;
+    final hasDate = controller.selectedDate.value != null;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
@@ -282,26 +284,60 @@ Widget _buildTimeBox(Appointmentcontroller controller) {
         color: const Color.fromARGB(255, 231, 231, 231),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: controller.selectedTime.value == null
-          ? const Text('Chưa chọn thời gian',
-              style: TextStyle(color: Colors.grey))
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("Thời gian",
-                        style: TextStyle(
-                            fontSize: 11,
-                            color: Color.fromARGB(255, 75, 75, 75))),
-                    Text(controller.selectedTime.value ?? 'Chưa chọn thời gian',
-                        style:
-                            const TextStyle(fontSize: 13, color: Colors.black)),
-                  ],
-                ),
-              ],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // --- NGÀY ---
+          if (hasDate) ...[
+            const Text(
+              "Ngày",
+              style: TextStyle(
+                fontSize: 11,
+                color: Color.fromARGB(255, 75, 75, 75),
+              ),
             ),
+            Text(
+              // định dạng ngày: dd/MM/yyyy
+              DateFormat('dd/MM/yyyy').format(controller.selectedDate.value),
+              style: const TextStyle(
+                fontSize: 13,
+                color: Colors.black,
+              ),
+            ),
+            const SizedBox(height: 8),
+          ] else ...[
+            const Text(
+              "Chưa chọn ngày",
+              style: TextStyle(color: Colors.grey),
+            ),
+            const SizedBox(height: 8),
+          ],
+
+          // --- THỜI GIAN ---
+          if (hasTime) ...[
+            const Text(
+              "Thời gian",
+              style: TextStyle(
+                fontSize: 11,
+                color: Color.fromARGB(255, 75, 75, 75),
+              ),
+            ),
+            Text(
+              controller.selectedTime.value!,
+              style: const TextStyle(
+                fontSize: 13,
+                color: Colors.black,
+              ),
+            ),
+          ] else ...[
+            const Text(
+              "Chưa chọn thời gian",
+              style: TextStyle(color: Colors.grey),
+            ),
+          ],
+        ],
+      ),
     );
   });
 }

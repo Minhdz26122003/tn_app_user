@@ -1,4 +1,5 @@
 import 'package:app_hm/Controller/Login/LoginController.dart';
+import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Services/Auth.dart';
 import 'package:app_hm/View/Account/ForgotPassword.dart';
 import 'package:app_hm/View/Account/SendOTP.dart';
@@ -140,7 +141,7 @@ class Login extends StatelessWidget {
                                   alignment: Alignment.centerRight,
                                   child: GestureDetector(
                                     onTap: () {
-                                      Get.to(() => const Forgotpassword());
+                                      Get.toNamed(Routes.forgotPassword);
                                     },
                                     child: Text(
                                       'forgot_password'.tr,
@@ -155,7 +156,7 @@ class Login extends StatelessWidget {
                                 Align(
                                   alignment: Alignment.center,
                                   child: GestureDetector(
-                                    onTap: () => Get.to(const Signup()),
+                                    onTap: () => Get.toNamed(Routes.signup),
                                     child: RichText(
                                       textAlign: TextAlign.center,
                                       text: TextSpan(

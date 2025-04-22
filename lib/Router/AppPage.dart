@@ -4,6 +4,7 @@ import 'package:app_hm/View/Account/ForgotPassword.dart';
 import 'package:app_hm/View/Account/SendOTP.dart';
 import 'package:app_hm/View/Appointment/AppointmentBook.dart';
 import 'package:app_hm/View/Appointment/AppointmentConfirm.dart';
+import 'package:app_hm/View/Appointment/AppointmentDetail.dart';
 import 'package:app_hm/View/Appointment/AppointmentHistory.dart';
 import 'package:app_hm/View/Appointment/AppointmentPlace.dart';
 import 'package:app_hm/View/Appointment/AppointmentTime.dart';
@@ -36,98 +37,152 @@ class AppPages {
     GetPage(
       name: Routes.splash,
       page: () => const Splash(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
       name: Routes.onboarding,
       page: () => const Onboarding(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
       name: Routes.home,
       page: () => const Home(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
       name: Routes.login,
       page: () => const Login(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
       name: Routes.signup,
       page: () => const Signup(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
       name: Routes.sendtopt,
       page: () => const Sentotp(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
       name: Routes.dashboard,
       page: () => const Dashboard(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
       name: Routes.forgotPassword,
       page: () => const Forgotpassword(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
       name: Routes.notification,
       page: () => const Notification(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
       name: Routes.setting,
       page: () => const Setting(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
       name: Routes.language,
       page: () => const Language(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
       name: Routes.personaldetail,
       page: () => const Personaldetail(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
       name: Routes.createpassword,
       page: () => const Createpassword(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
       name: Routes.changepassword,
       page: () => const Changepassword(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
       name: Routes.appointmentlist,
-      page: () => const AppointmentList(),
+      page: () => const Appointmentlist(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
       name: Routes.servicecar,
       page: () => const ServiceCar(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
       name: Routes.appointmentbook,
-      page: () => const AppointmentBook(),
+      page: () => const Appointmentbook(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
       name: Routes.appointmenthistory,
       page: () => const Appointmenthistory(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
       name: Routes.appointmentplace,
       page: () => const Appointmentplace(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
       name: Routes.appointmenttime,
       page: () => const Appointmenttime(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
       name: Routes.appointmentconfirm,
       page: () => const Appointmentconfirm(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
+    ),
+    GetPage(
+      name: Routes.appoointmentdetail,
+      page: () => const Appoointmentdetail(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
       name: Routes.car,
       page: () => const Car(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
       name: Routes.addcar,
       page: () => const AddCar(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
       name: Routes.editcar,
       page: () => const EditCar(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
     ),
   ];
 }

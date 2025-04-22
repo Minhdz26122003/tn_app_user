@@ -189,7 +189,7 @@ class Personalcontroller extends GetxController {
         if (response != null) {
           textPasswordNew.clear();
           textPasswordConfirm.clear();
-          Get.offAllNamed(Routes.personal);
+          Get.to(Routes.personal);
           Utils.showSnackBar(
               title: 'notification'.tr,
               message: 'password_changed_successfully'.tr);

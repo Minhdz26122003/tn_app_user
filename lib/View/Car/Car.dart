@@ -1,5 +1,7 @@
+import 'package:app_hm/Component/DialogCustom.dart';
 import 'package:app_hm/Controller/Car/CarController.dart';
 import 'package:app_hm/Model/Car/CarModel.dart';
+import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/View/Car/AddCar.dart';
 import 'package:app_hm/View/Car/EditCar.dart';
 import 'package:flutter/material.dart';
@@ -113,7 +115,7 @@ class Car extends StatelessWidget {
                                       itemCount: controller.carList.length,
                                       itemBuilder: (context, index) {
                                         return _buildVehicleCard(
-                                            index, controller);
+                                            index, controller, context);
                                       },
                                     ),
                                   ),
@@ -124,7 +126,7 @@ class Car extends StatelessWidget {
                         bottom: 20.0,
                         right: 20.0,
                         child: GestureDetector(
-                          onTap: () => Get.to(() => const AddCar()),
+                          onTap: () => Get.toNamed(Routes.addcar),
                           child: const CircleAvatar(
                             radius: 30.0,
                             backgroundColor: Colors.blue,
@@ -138,7 +140,8 @@ class Car extends StatelessWidget {
     );
   }
 
-  Widget _buildVehicleCard(int index, Carcontroller controller) {
+  Widget _buildVehicleCard(
+      int index, Carcontroller controller, BuildContext context) {
     final car = controller.carList[index];
     return Card(
       margin: const EdgeInsets.only(top: 6, left: 2, right: 5, bottom: 6),
@@ -172,90 +175,26 @@ class Car extends StatelessWidget {
               icon: const Icon(Icons.edit, color: Colors.orange),
               onPressed: () {
                 final car = controller.carList[index];
-                Get.to(() => EditCar(), arguments: car);
+                Get.toNamed(Routes.editcar, arguments: car);
               },
             ),
 
             IconButton(
               icon: const Icon(Icons.delete, color: Colors.red),
               onPressed: () {
-                Get.dialog(
-                  Dialog(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    backgroundColor: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 20),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Xác nhận',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            'Bạn có chắc chắn muốn xóa chiếc xe này?',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.black54,
-                            ),
-                          ),
-                          const SizedBox(height: 24),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: OutlinedButton(
-                                  onPressed: () => Get.back(),
-                                  style: OutlinedButton.styleFrom(
-                                    side:
-                                        BorderSide(color: Colors.grey.shade300),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 14),
-                                  ),
-                                  child: Text(
-                                    'Hủy bỏ',
-                                    style: TextStyle(color: Colors.black87),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: ElevatedButton(
-                                  onPressed: () async {
-                                    Get.back();
-                                    await controller.deleteCar(
-                                        controller.carList[index].car_id!);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.red,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 14),
-                                  ),
-                                  child: const Text(
-                                    'Xóa',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                showDialog(
+                  context: context,
+                  builder: (_) => DialogCustom(
+                    title: 'Xác nhận',
+                    description: 'Bạn có chắc chắn muốn xóa chiếc xe này?',
+                    svg: 'assets/icons/info.svg',
+                    svgColor: Colors.red,
+                    btnColor: Colors.red,
+                    onTap: () async {
+                      Navigator.pop(context); // đóng dialog
+                      await controller
+                          .deleteCar(controller.carList[index].car_id!);
+                    },
                   ),
                 );
               },

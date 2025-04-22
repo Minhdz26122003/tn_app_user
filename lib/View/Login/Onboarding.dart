@@ -1,3 +1,4 @@
+import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/View/Login/Login.dart';
 import 'package:app_hm/View/dashboard.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +50,7 @@ class Onboarding extends StatelessWidget {
                     Center(
                       child: ElevatedButton(
                         onPressed: () {
-                          Get.offAll(const Dashboard());
+                          Get.offAllNamed(Routes.dashboard);
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.blue,
