@@ -1,4 +1,5 @@
 import 'package:app_hm/Controller/Appointment/AppointmentController.dart';
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Model/Appointment/ApointmentModel.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:flutter/material.dart';
@@ -14,27 +15,28 @@ class Appointmentlist extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Danh sách dịch vụ', style: TextStyle(color: Colors.white)),
-        backgroundColor: Color(0xFF2D74FF),
+        title: Text('list_appointment'.tr,
+            style: TextStyle(color: ColorHex.white)),
+        backgroundColor: ColorHex.total_color,
         centerTitle: false,
-        leading: BackButton(color: Colors.white),
+        leading: BackButton(color: ColorHex.white),
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
           return Center(child: CircularProgressIndicator());
         }
         if (controller.appointmentList.isEmpty) {
-          return Center(child: Text("Chưa có lịch hẹn nào"));
+          return Center(child: Text('book_service'.tr));
         }
         return ListView.builder(
-          padding:
-              EdgeInsets.only(top: 100), // Sửa lỗi cú pháp 'custom' thành 'top'
+          padding: EdgeInsets.only(top: 100),
           itemCount: controller.appointmentList.length,
           itemBuilder: (c, i) {
             final appt = controller.appointmentList[i];
             return appointmentCard(
               model: appt,
-              onTap: () => Get.toNamed('/detail', arguments: appt),
+              onTap: () =>
+                  Get.toNamed(Routes.appoointmentdetail, arguments: appt),
             );
           },
         );
@@ -46,22 +48,22 @@ class Appointmentlist extends StatelessWidget {
           children: [
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF2D74FF),
+                backgroundColor: ColorHex.total_color,
                 minimumSize: Size.fromHeight(48),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () => Get.toNamed('/book'),
-              child: Text("Đặt dịch vụ", style: TextStyle(fontSize: 16)),
+              onPressed: () => Get.toNamed(Routes.appointmentbook),
+              child: Text('book'.tr, style: TextStyle(fontSize: 16)),
             ),
             SizedBox(height: 8),
             GestureDetector(
               onTap: () => Get.toNamed(Routes.appointmenthistory),
               child: Text(
-                "Lịch sử dịch vụ",
+                'booking_history'.tr,
                 style: TextStyle(
-                  color: Color(0xFF2D74FF),
+                  color: ColorHex.total_color,
                   decoration: TextDecoration.underline,
                 ),
               ),
@@ -76,7 +78,6 @@ class Appointmentlist extends StatelessWidget {
     required AppointmentModel model,
     required VoidCallback onTap,
   }) {
-    // Xử lý an toàn việc phân tích ngày
     final date =
         DateTime.tryParse(model.appointment_time ?? '') ?? DateTime.now();
 
@@ -92,7 +93,7 @@ class Appointmentlist extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               decoration: BoxDecoration(
-                color: Color(0xFF2D74FF),
+                color: ColorHex.total_color,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(12),
                   bottomLeft: Radius.circular(12),
@@ -104,13 +105,13 @@ class Appointmentlist extends StatelessWidget {
                     '${date.day}',
                     style: TextStyle(
                       fontSize: 24,
-                      color: Colors.white,
+                      color: ColorHex.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
-                    'Tháng ${date.month}',
-                    style: TextStyle(fontSize: 12, color: Colors.white70),
+                    'month'.tr + '${date.month}',
+                    style: TextStyle(fontSize: 12, color: ColorHex.white),
                   ),
                 ],
               ),
@@ -123,14 +124,15 @@ class Appointmentlist extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      model.gara_name ?? 'Unknown Garage',
+                      model.gara_name ?? 'not_yet'.tr,
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 4),
                     Text(
-                      model.appointment_time ?? 'No Time',
-                      style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                      model.appointment_time ?? 'not_yet'.tr,
+                      style: TextStyle(
+                          fontSize: 14, color: ColorHex.grey_shade600),
                     ),
                   ],
                 ),

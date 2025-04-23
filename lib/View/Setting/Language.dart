@@ -1,3 +1,4 @@
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Services/TranslationService.dart';
 import 'package:app_hm/Utils/Utils.dart';
 import 'package:flutter/material.dart';
@@ -12,13 +13,14 @@ class Language extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('language'.tr, style: const TextStyle(color: Colors.white)),
+        title:
+            Text('language'.tr, style: const TextStyle(color: ColorHex.white)),
         backgroundColor: const Color(0xFF2D74FF),
         titleSpacing: 0,
-        leading: const BackButton(color: Colors.white),
+        leading: const BackButton(color: ColorHex.white),
       ),
       body: Container(
-        color: Colors.white,
+        color: ColorHex.white,
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
           children: [
@@ -64,7 +66,7 @@ class Language extends StatelessWidget {
           border: Border(
             bottom: BorderSide(
               width: 1,
-              color: Colors.grey.withOpacity(0.5),
+              color: ColorHex.grey.withOpacity(0.5),
             ),
           ),
         ),
@@ -84,7 +86,7 @@ class Language extends StatelessWidget {
                 ? const Icon(
                     Icons.done_rounded,
                     size: 22,
-                    color: Colors.green,
+                    color: ColorHex.border_5,
                   )
                 : const SizedBox(
                     height: 22,

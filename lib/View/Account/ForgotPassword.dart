@@ -1,4 +1,5 @@
 import 'package:app_hm/Controller/Login/LoginController.dart';
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/View/Account/SendOTP.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -36,7 +37,7 @@ class Forgotpassword extends StatelessWidget {
                   Text(
                     'forgot_password'.tr,
                     style: const TextStyle(
-                      color: Colors.blue,
+                      color: ColorHex.total_color,
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
@@ -45,7 +46,7 @@ class Forgotpassword extends StatelessWidget {
                   const SizedBox(height: 10),
                   Text(
                     'we_send_password'.tr,
-                    style: const TextStyle(color: Colors.black, fontSize: 13),
+                    style: const TextStyle(color: ColorHex.black, fontSize: 13),
                   ),
                   const SizedBox(height: 30),
                   Text(
@@ -61,8 +62,7 @@ class Forgotpassword extends StatelessWidget {
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.email),
                       hintText: 'email'.tr,
-                      hintStyle: const TextStyle(
-                          color: Color.fromRGBO(134, 133, 133, 1)),
+                      hintStyle: const TextStyle(color: ColorHex.grey),
                       contentPadding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 10),
                       border: const OutlineInputBorder(),
@@ -80,10 +80,10 @@ class Forgotpassword extends StatelessWidget {
                               controller.sendEmail();
                             },
                       style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
+                        foregroundColor: ColorHex.white,
                         backgroundColor: controller.isButtonDisabled.value
-                            ? const Color.fromARGB(255, 146, 192, 237)
-                            : Colors.blue,
+                            ? ColorHex.selectplace
+                            : ColorHex.total_color,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 100, vertical: 15),
                         shape: RoundedRectangleBorder(

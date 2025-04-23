@@ -1,4 +1,5 @@
 import 'package:app_hm/Controller/Home/HomeController.dart';
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,7 +12,7 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(HomeController());
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 238, 245, 250),
+      backgroundColor: ColorHex.grey_shade300,
       body: Obx(
         () => controller.isLoading.value
             ? const Center(
@@ -24,7 +25,7 @@ class Home extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 12),
-                      color: Colors.white,
+                      color: ColorHex.white,
                       width: Get.width,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
@@ -84,10 +85,8 @@ class Home extends StatelessWidget {
                                       fontWeight: FontWeight.w500,
                                       fontSize: 12,
                                       color: controller.isShowOverview.value
-                                          ? const Color.fromRGBO(
-                                              119, 126, 144, 1)
-                                          : const Color.fromRGBO(
-                                              45, 116, 255, 1)),
+                                          ? ColorHex.textContent
+                                          : ColorHex.total_color),
                                 ),
                                 const SizedBox(
                                   width: 6,
@@ -98,8 +97,8 @@ class Home extends StatelessWidget {
                                         : Icons.keyboard_arrow_right_rounded,
                                     size: 16,
                                     color: controller.isShowOverview.value
-                                        ? const Color.fromRGBO(119, 126, 144, 1)
-                                        : const Color.fromRGBO(45, 116, 255, 1))
+                                        ? ColorHex.textContent
+                                        : ColorHex.total_color)
                               ],
                             ),
                           )
@@ -113,7 +112,7 @@ class Home extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
-                          color: Colors.white,
+                          color: ColorHex.white,
                         ),
                         child: Text('are_transmitter'.tr)),
                     const SizedBox(
@@ -123,7 +122,7 @@ class Home extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
-                          color: Colors.white,
+                          color: ColorHex.white,
                         ),
                         child: Text('confirm_processing_successful'.tr)),
                   ],
@@ -140,10 +139,9 @@ class Home extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: ColorHex.white,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-              color: const Color.fromARGB(255, 236, 234, 234), width: 1)),
+          border: Border.all(color: ColorHex.grey_shade300, width: 1)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -156,7 +154,7 @@ class Home extends StatelessWidget {
             style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 12,
-                color: Color.fromRGBO(0, 0, 0, 1)),
+                color: ColorHex.black),
             textAlign: TextAlign.center,
           ),
         ],

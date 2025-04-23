@@ -1,4 +1,5 @@
 import 'package:app_hm/Controller/Login/LoginController.dart';
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/View/Account/CreatePassword.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -44,7 +45,8 @@ class Sentotp extends StatelessWidget {
                     textAlign: TextAlign.center,
                     text: TextSpan(
                       style: const TextStyle(
-                          color: Colors.black, fontSize: 13), // Định dạng chung
+                          color: ColorHex.black,
+                          fontSize: 13), // Định dạng chung
                       children: [
                         TextSpan(
                           text: 'we_send_password'.tr,
@@ -52,7 +54,8 @@ class Sentotp extends StatelessWidget {
                         TextSpan(
                           text: controller.textEmail.text,
                           style: const TextStyle(
-                              color: Colors.blue), // Màu cho phần email
+                              color:
+                                  ColorHex.total_color), // Màu cho phần email
                         ),
                       ],
                     ),
@@ -70,8 +73,7 @@ class Sentotp extends StatelessWidget {
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.shield_outlined),
                       hintText: 'otp_code'.tr,
-                      hintStyle: const TextStyle(
-                          color: Color.fromRGBO(134, 133, 133, 1)),
+                      hintStyle: const TextStyle(color: ColorHex.grey),
                       contentPadding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 10),
                       border: const OutlineInputBorder(),
@@ -91,8 +93,8 @@ class Sentotp extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
                         backgroundColor: controller.isButtonDisabled.value
-                            ? const Color.fromARGB(255, 146, 192, 237)
-                            : Colors.blue,
+                            ? ColorHex.selectplace
+                            : ColorHex.total_color,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 115, vertical: 15),
                         shape: RoundedRectangleBorder(

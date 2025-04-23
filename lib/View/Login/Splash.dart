@@ -1,4 +1,5 @@
 import 'package:app_hm/Controller/Login/SplashController.dart';
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -25,7 +26,7 @@ class Splash extends StatelessWidget {
           child: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF1D4ED8), Color(0xFF3B82F6)],
+                colors: [ColorHex.total_color, ColorHex.status_2],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 stops: [-0.1908, 0.9109],

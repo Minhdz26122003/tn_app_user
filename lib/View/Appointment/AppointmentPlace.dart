@@ -1,5 +1,6 @@
 import 'package:app_hm/Component/StepBook.dart';
 import 'package:app_hm/Controller/Appointment/AppointmentController.dart';
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,9 +18,9 @@ class Appointmentplace extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'book_service'.tr,
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle(color: ColorHex.white),
         ),
-        backgroundColor: const Color(0xFF2D74FF),
+        backgroundColor: ColorHex.total_color,
         automaticallyImplyLeading: false, // Ẩn nút quay lại
       ),
       body: Obx(() => Padding(
@@ -41,7 +42,7 @@ class Appointmentplace extends StatelessWidget {
                             controller.previousStep();
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.grey,
+                            backgroundColor: ColorHex.grey,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
@@ -50,7 +51,7 @@ class Appointmentplace extends StatelessWidget {
                           child: Text(
                             'cancel'.tr,
                             style: const TextStyle(
-                                fontSize: 16, color: Colors.white),
+                                fontSize: 16, color: ColorHex.white),
                           ),
                         ),
                       ),
@@ -66,16 +67,16 @@ class Appointmentplace extends StatelessWidget {
                                 }
                               : null,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
+                            backgroundColor: ColorHex.total_color,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(15),
                             ),
                             minimumSize: const Size(double.infinity, 45),
                           ),
                           child: Text(
                             'next'.tr,
                             style: const TextStyle(
-                                fontSize: 16, color: Colors.white),
+                                fontSize: 16, color: ColorHex.white),
                           ),
                         ),
                       ),
@@ -107,13 +108,12 @@ class Appointmentplace extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(vertical: 8),
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? Colors.blue.shade100
-                      : const Color.fromARGB(255, 228, 228, 228),
-                  borderRadius: BorderRadius.circular(16),
+                  color:
+                      isSelected ? ColorHex.selectplace : ColorHex.disableplace,
+                  borderRadius: BorderRadius.circular(15),
                   border: isSelected
-                      ? Border.all(color: Colors.blue, width: 2)
-                      : Border.all(color: Colors.grey, width: 2),
+                      ? Border.all(color: ColorHex.total_color, width: 2)
+                      : Border.all(color: ColorHex.grey, width: 2),
                 ),
                 child: Row(
                   children: [
@@ -133,7 +133,8 @@ class Appointmentplace extends StatelessWidget {
                       ),
                     ),
                     if (isSelected)
-                      const Icon(Icons.check_circle, color: Colors.blue),
+                      const Icon(Icons.check_circle,
+                          color: ColorHex.total_color),
                   ],
                 ),
               ),

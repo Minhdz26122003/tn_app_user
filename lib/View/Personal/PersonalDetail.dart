@@ -1,5 +1,6 @@
 import 'package:app_hm/Controller/DashboardController.dart';
 import 'package:app_hm/Controller/Personal/PersonalController.dart';
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Global/Constant.dart';
 import 'package:app_hm/Utils/Utils.dart';
 import 'package:flutter/material.dart';
@@ -15,11 +16,12 @@ class Personaldetail extends StatelessWidget {
     final controller = Get.put(Personalcontroller());
     final controller2 = Get.put(Dashboardcontroller());
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: ColorHex.white,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF2D74FF),
-        title: Text('details'.tr, style: const TextStyle(color: Colors.white)),
-        leading: const BackButton(color: Colors.white),
+        backgroundColor: ColorHex.total_color,
+        title:
+            Text('details'.tr, style: const TextStyle(color: ColorHex.white)),
+        leading: const BackButton(color: ColorHex.white),
       ),
       body: Obx(
         () => controller.isLoading.value
@@ -63,10 +65,10 @@ class Personaldetail extends StatelessWidget {
                                               width: 38,
                                               decoration: const BoxDecoration(
                                                 shape: BoxShape.circle,
-                                                color: Colors.grey,
+                                                color: ColorHex.grey,
                                               ),
                                               child: const Icon(Icons.person,
-                                                  color: Colors.white),
+                                                  color: ColorHex.white),
                                             );
                                           },
                                         )),
@@ -78,7 +80,7 @@ class Personaldetail extends StatelessWidget {
                                 child: Icon(
                                   Icons.camera_alt,
                                   size: 30,
-                                  color: Colors.white,
+                                  color: ColorHex.white,
                                 ),
                               ),
                             ],
@@ -133,14 +135,14 @@ class Personaldetail extends StatelessWidget {
                     Center(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
+                          backgroundColor: ColorHex.status_2,
                           minimumSize: const Size(double.infinity, 50),
                         ),
                         onPressed: () async {
                           await controller.updateAccount();
                         },
                         child: Text('update'.tr,
-                            style: const TextStyle(color: Colors.white)),
+                            style: const TextStyle(color: ColorHex.white)),
                       ),
                     ),
                   ],
@@ -156,7 +158,7 @@ class Personaldetail extends StatelessWidget {
       child: Text(
         title,
         style: const TextStyle(
-            fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+            fontSize: 16, fontWeight: FontWeight.bold, color: ColorHex.black),
       ),
     );
   }
@@ -175,7 +177,7 @@ class Personaldetail extends StatelessWidget {
           hintText: hintText,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           filled: true,
-          fillColor: Colors.white,
+          fillColor: ColorHex.white,
         ),
       ),
     );
@@ -196,7 +198,7 @@ class Personaldetail extends StatelessWidget {
           hintText: hintText,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           filled: true,
-          fillColor: Colors.white,
+          fillColor: ColorHex.white,
         ),
       ),
     );
@@ -232,7 +234,7 @@ class Personaldetail extends StatelessWidget {
           hintText: hintText,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           filled: true,
-          fillColor: Colors.white,
+          fillColor: ColorHex.white,
         ),
       ),
     );
@@ -258,9 +260,9 @@ class Personaldetail extends StatelessWidget {
                     onTap: (bool? value) {
                       controller.selectedGender.value = 'male'.tr;
                     },
-                    borderColor: Colors.grey,
+                    borderColor: ColorHex.grey,
                     size: 15,
-                    checkedColor: const Color.fromARGB(255, 0, 34, 255),
+                    checkedColor: ColorHex.applyColor,
                   )),
               const SizedBox(width: 5),
               Text('male'.tr, style: const TextStyle(fontSize: 13)),
@@ -272,7 +274,7 @@ class Personaldetail extends StatelessWidget {
                     },
                     borderColor: Colors.grey,
                     size: 15,
-                    checkedColor: const Color.fromARGB(255, 0, 34, 255),
+                    checkedColor: ColorHex.applyColor,
                   )),
               const SizedBox(width: 5),
               Text('female'.tr, style: const TextStyle(fontSize: 13)),
@@ -284,7 +286,7 @@ class Personaldetail extends StatelessWidget {
                     },
                     borderColor: Colors.grey,
                     size: 15,
-                    checkedColor: const Color.fromARGB(255, 0, 34, 255),
+                    checkedColor: ColorHex.applyColor,
                   )),
               const SizedBox(width: 5),
               Text('other'.tr, style: const TextStyle(fontSize: 13)),
@@ -346,7 +348,7 @@ class Personaldetail extends StatelessWidget {
                 Container(
                   height: 0.2,
                   width: double.infinity,
-                  color: const Color(0xff29303C),
+                  color: ColorHex.textContent,
                 ),
                 GestureDetector(
                   onTap: () {
@@ -354,12 +356,12 @@ class Personaldetail extends StatelessWidget {
                     controller.getImage(2);
                   },
                   child: Container(
-                    color: Colors.white,
+                    color: ColorHex.white,
                     padding: const EdgeInsets.all(20),
                     child: Row(
                       children: [
                         const Icon(Icons.photo_rounded,
-                            color: Color.fromRGBO(55, 114, 255, 1)),
+                            color: ColorHex.total_color),
                         const SizedBox(
                           width: 10,
                         ),

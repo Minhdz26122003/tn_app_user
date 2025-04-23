@@ -1,4 +1,5 @@
 import 'package:app_hm/Controller/DashboardController.dart';
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -13,18 +14,18 @@ class ServiceCar extends StatelessWidget {
     final controller = Get.put(Dashboardcontroller());
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: ColorHex.white,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildSectionTitle('DỊCH VỤ XE'),
+            _buildSectionTitle('car_service'.tr),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: [
                   _item(
-                    title: 'Đặt dịch vụ',
+                    title: 'book_service'.tr,
                     svg: 'assets/icons/appointment.svg',
                     onTap: () {
                       if (!controller.isLoggedIn.value) {
@@ -67,7 +68,7 @@ class ServiceCar extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
         decoration: BoxDecoration(
-          color: const Color.fromRGBO(244, 244, 244, 0.996),
+          color: ColorHex.disableplace,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
@@ -93,7 +94,7 @@ class ServiceCar extends StatelessWidget {
               const Icon(
                 Icons.arrow_forward_ios_rounded,
                 size: 16,
-                color: Color.fromRGBO(146, 154, 169, 1),
+                color: ColorHex.textContent,
               )
           ],
         ),
@@ -105,9 +106,9 @@ class ServiceCar extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 16, top: 20, bottom: 8),
       child: Text(
-        title,
+        title.toUpperCase(),
         style: const TextStyle(
-          color: Color.fromARGB(179, 0, 0, 0),
+          color: ColorHex.black,
           fontWeight: FontWeight.bold,
         ),
       ),

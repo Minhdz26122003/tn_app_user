@@ -1,6 +1,7 @@
 import 'package:app_hm/Component/DialogCustom.dart';
 import 'package:app_hm/Component/EmptyList.dart';
 import 'package:app_hm/Controller/Notification/NotificationController.dart';
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
@@ -15,12 +16,13 @@ class Notification extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'notification'.tr,
-          style: const TextStyle(fontSize: 14, color: Colors.white),
+          style: const TextStyle(fontSize: 14, color: ColorHex.white),
         ),
-        backgroundColor: const Color(0xFF2D74FF),
+        backgroundColor: ColorHex.total_color,
         titleSpacing: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_outlined, color: Colors.white),
+          icon:
+              const Icon(Icons.arrow_back_ios_outlined, color: ColorHex.white),
           onPressed: () => Get.back(),
           color: Colors.white,
         ),
@@ -75,13 +77,13 @@ class Notification extends StatelessWidget {
                             thickness: 0,
                             indent: 0,
                             endIndent: 0,
-                            color: Color.fromRGBO(244, 247, 250, 1)),
+                            color: ColorHex.grey_shade300),
                         itemBuilder: (context, index) {
                           if (index == controller.notificationList.length - 1 &&
                               controller.totalPage != controller.page) {
                             return const Center(
                               child: CircularProgressIndicator(
-                                backgroundColor: Colors.white,
+                                backgroundColor: ColorHex.white,
                               ),
                             );
                           }
@@ -92,8 +94,8 @@ class Notification extends StatelessWidget {
                             child: Container(
                               color:
                                   controller.notificationList[index].status == 0
-                                      ? const Color.fromRGBO(247, 251, 255, 1)
-                                      : Colors.white,
+                                      ? ColorHex.grey_shade300
+                                      : ColorHex.white,
                               padding: const EdgeInsets.symmetric(vertical: 15),
                               child: Row(
                                 children: [
@@ -105,9 +107,8 @@ class Notification extends StatelessWidget {
                                     color: controller.notificationList[index]
                                                 .status ==
                                             0
-                                        ? const Color.fromRGBO(45, 116, 255, 1)
-                                        : const Color.fromRGBO(
-                                            234, 238, 243, 1),
+                                        ? ColorHex.total_color
+                                        : ColorHex.grey_shade300,
                                     size: 10,
                                   ),
                                   const SizedBox(
@@ -133,8 +134,7 @@ class Notification extends StatelessWidget {
                                         children: [
                                           const Icon(
                                             Icons.schedule_rounded,
-                                            color: Color.fromRGBO(
-                                                153, 162, 179, 1),
+                                            color: ColorHex.textContent,
                                             size: 12,
                                           ),
                                           const SizedBox(
@@ -147,8 +147,7 @@ class Notification extends StatelessWidget {
                                             style: const TextStyle(
                                                 fontSize: 11,
                                                 fontWeight: FontWeight.w500,
-                                                color: Color.fromRGBO(
-                                                    153, 162, 179, 1)),
+                                                color: ColorHex.textContent),
                                           )
                                         ],
                                       ),

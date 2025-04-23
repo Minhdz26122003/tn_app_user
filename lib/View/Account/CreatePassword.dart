@@ -1,4 +1,5 @@
 import 'package:app_hm/Controller/Login/LoginController.dart';
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -41,7 +42,7 @@ class Createpassword extends StatelessWidget {
                   Text(
                     'create_new_password'.tr,
                     style: const TextStyle(
-                      color: Colors.blue,
+                      color: ColorHex.total_color,
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
@@ -51,7 +52,7 @@ class Createpassword extends StatelessWidget {
                   Text(
                     'validate_password'.tr,
                     style: const TextStyle(
-                      color: Colors.red,
+                      color: ColorHex.status_0,
                       fontSize: 12,
                       fontStyle: FontStyle.italic,
                     ),
@@ -75,8 +76,7 @@ class Createpassword extends StatelessWidget {
                           decoration: InputDecoration(
                             prefixIcon: const Icon(Icons.lock_outline),
                             hintText: 'new_password'.tr,
-                            hintStyle: const TextStyle(
-                                color: Color.fromRGBO(134, 133, 133, 1)),
+                            hintStyle: const TextStyle(color: ColorHex.grey),
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 10),
                             border: const OutlineInputBorder(),
@@ -114,8 +114,7 @@ class Createpassword extends StatelessWidget {
                           decoration: InputDecoration(
                             prefixIcon: const Icon(Icons.lock_outline),
                             hintText: 'confirm_password'.tr,
-                            hintStyle: const TextStyle(
-                                color: Color.fromRGBO(134, 133, 133, 1)),
+                            hintStyle: const TextStyle(color: ColorHex.grey),
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 10),
                             border: const OutlineInputBorder(),
@@ -150,8 +149,8 @@ class Createpassword extends StatelessWidget {
                               controller.createPassword();
                             },
                             style: ElevatedButton.styleFrom(
-                              foregroundColor: Colors.white,
-                              backgroundColor: Colors.blue,
+                              foregroundColor: ColorHex.white,
+                              backgroundColor: ColorHex.total_color,
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 100, vertical: 15),
                               shape: RoundedRectangleBorder(

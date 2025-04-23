@@ -1,4 +1,5 @@
 import 'package:app_hm/Controller/Login/LoginController.dart';
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Services/Auth.dart';
 import 'package:app_hm/View/Account/ForgotPassword.dart';
@@ -47,7 +48,7 @@ class Login extends StatelessWidget {
                             child: Text(
                               'welcome'.tr,
                               style: const TextStyle(
-                                color: Colors.blue,
+                                color: ColorHex.total_color,
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -60,7 +61,7 @@ class Login extends StatelessWidget {
                             child: Text(
                               'login'.tr,
                               style: const TextStyle(
-                                color: Colors.black,
+                                color: ColorHex.black,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20,
                               ),
@@ -84,8 +85,7 @@ class Login extends StatelessWidget {
                                   decoration: InputDecoration(
                                     hintText: 'account'.tr,
                                     hintStyle: const TextStyle(
-                                        color:
-                                            Color.fromRGBO(134, 133, 133, 1)),
+                                        color: ColorHex.grey_shade300),
                                     contentPadding: const EdgeInsets.symmetric(
                                         horizontal: 16, vertical: 10),
                                     border: const OutlineInputBorder(),
@@ -110,8 +110,7 @@ class Login extends StatelessWidget {
                                   decoration: InputDecoration(
                                     hintText: 'password'.tr,
                                     hintStyle: const TextStyle(
-                                        color:
-                                            Color.fromRGBO(134, 133, 133, 1)),
+                                        color: ColorHex.grey_shade300),
                                     contentPadding: const EdgeInsets.symmetric(
                                         horizontal: 16, vertical: 10),
                                     border: const OutlineInputBorder(),
@@ -146,7 +145,8 @@ class Login extends StatelessWidget {
                                     child: Text(
                                       'forgot_password'.tr,
                                       style: const TextStyle(
-                                          fontSize: 12, color: Colors.blue),
+                                          fontSize: 12,
+                                          color: ColorHex.total_color),
                                     ),
                                   ),
                                 ),
@@ -161,7 +161,8 @@ class Login extends StatelessWidget {
                                       textAlign: TextAlign.center,
                                       text: TextSpan(
                                         style: const TextStyle(
-                                            color: Colors.black, fontSize: 12),
+                                            color: ColorHex.black,
+                                            fontSize: 12),
                                         children: [
                                           TextSpan(
                                             text:
@@ -170,7 +171,7 @@ class Login extends StatelessWidget {
                                           TextSpan(
                                             text: 'sign_up'.tr,
                                             style: const TextStyle(
-                                                color: Colors.blue,
+                                                color: ColorHex.total_color,
                                                 fontSize: 13),
                                           ),
                                         ],
@@ -197,8 +198,8 @@ class Login extends StatelessWidget {
                                     },
                                     style: ElevatedButton.styleFrom(
                                       alignment: Alignment.center,
-                                      foregroundColor: Colors.white,
-                                      backgroundColor: Colors.blue,
+                                      foregroundColor: ColorHex.white,
+                                      backgroundColor: ColorHex.total_color,
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 110, vertical: 15),
                                       shape: RoundedRectangleBorder(

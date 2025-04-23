@@ -1,5 +1,6 @@
 import 'package:app_hm/Component/StepBook.dart';
 import 'package:app_hm/Controller/Appointment/AppointmentController.dart';
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,8 +16,8 @@ class Appointmenttime extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('book_service'.tr,
-            style: const TextStyle(color: Colors.white)),
-        backgroundColor: const Color(0xFF2D74FF),
+            style: const TextStyle(color: ColorHex.white)),
+        backgroundColor: ColorHex.total_color,
         elevation: 0,
         automaticallyImplyLeading: false, // Ẩn nút quay lại
       ),
@@ -27,13 +28,14 @@ class Appointmenttime extends StatelessWidget {
           children: [
             StepBook(currentStep: controller.currentStep.value),
             const SizedBox(height: 20),
-            _buildLabel("NGÀY*"),
+            _buildLabel('select_date'.tr),
+            const SizedBox(height: 8),
             _buildDateRow(context, controller),
             const SizedBox(height: 12),
-            const Text("Bạn cần đặt lịch hẹn trước 06 tiếng",
-                style: TextStyle(color: Colors.red, fontSize: 11)),
+            Text('book_6h_in_advance'.tr,
+                style: TextStyle(color: ColorHex.status_0, fontSize: 11)),
             const SizedBox(height: 12),
-            _buildLabel("THỜI GIAN BẮT ĐẦU*"),
+            _buildLabel('start_time'.tr),
             const SizedBox(height: 8),
             _ViewTabs(controller),
             const SizedBox(height: 12),
@@ -47,10 +49,23 @@ class Appointmenttime extends StatelessWidget {
   }
 
   Widget _buildLabel(String text) {
-    return Text(
-      text,
-      style: const TextStyle(
-          color: Color.fromARGB(255, 0, 0, 0), fontWeight: FontWeight.bold),
+    return RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(
+            text: text.toUpperCase(),
+            style: TextStyle(
+                fontSize: 16,
+                color: ColorHex.black,
+                fontWeight: FontWeight.bold),
+          ),
+          TextSpan(
+            text: ' *',
+            style: TextStyle(
+                fontWeight: FontWeight.bold, color: ColorHex.status_0),
+          ),
+        ],
+      ),
     );
   }
 
@@ -76,13 +91,12 @@ class Appointmenttime extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: const Color.fromARGB(255, 231, 231, 231),
-        border: Border.all(color: Colors.grey, width: 1),
+        color: ColorHex.grey_shade300,
+        border: Border.all(color: ColorHex.grey, width: 1),
       ),
       child: Row(
         children: [
-          const Icon(Icons.calendar_month_outlined,
-              color: Color.fromARGB(255, 0, 0, 0)),
+          const Icon(Icons.calendar_month_outlined, color: ColorHex.black),
           const SizedBox(width: 8),
           Expanded(
             child: Obx(() {
@@ -90,14 +104,13 @@ class Appointmenttime extends StatelessWidget {
                   .format(controller.selectedDate.value);
               return Text(
                 formattedDate,
-                style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                style: const TextStyle(color: ColorHex.black),
               );
             }),
           ),
           TextButton(
             onPressed: () => _selectDate(context, controller),
-            child: const Text("Sửa",
-                style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+            child: Text('edit'.tr, style: TextStyle(color: ColorHex.black)),
           ),
         ],
       ),
@@ -109,9 +122,9 @@ class Appointmenttime extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Flexible(child: _buildSessionTab("Sáng", controller)),
+        Flexible(child: _buildSessionTab('morning'.tr, controller)),
         const SizedBox(width: 20),
-        Flexible(child: _buildSessionTab("Chiều", controller)),
+        Flexible(child: _buildSessionTab('afternoon'.tr, controller)),
       ],
     );
   }
@@ -128,17 +141,16 @@ class Appointmenttime extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
           decoration: BoxDecoration(
-            color: isSelected
-                ? const Color(0xFF4A90E2)
-                : const Color.fromARGB(255, 231, 231, 231),
+            color: isSelected ? ColorHex.total_color : ColorHex.grey_shade300,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: isSelected ? const Color(0xFF4A90E2) : Colors.grey[300]!,
+              color:
+                  isSelected ? ColorHex.total_color : ColorHex.grey_shade300!,
               width: 1.5,
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(isSelected ? 0.3 : 0.1),
+                color: ColorHex.grey.withOpacity(isSelected ? 0.3 : 0.1),
                 spreadRadius: 1,
                 blurRadius: 4,
                 offset: const Offset(0, 2),
@@ -148,9 +160,9 @@ class Appointmenttime extends StatelessWidget {
           child: Text(
             session,
             style: TextStyle(
-              color: isSelected ? Colors.white : Colors.black87,
+              color: isSelected ? ColorHex.white : ColorHex.black,
               fontWeight: FontWeight.w600,
-              fontSize: 16,
+              fontSize: 15,
             ),
           ),
         );
@@ -174,15 +186,15 @@ class Appointmenttime extends StatelessWidget {
   // Widget cho từng time slot
   Widget _buildTimeSlot(TimeSlot slot, Appointmentcontroller controller) {
     final bg = slot.isSelected
-        ? Colors.blue
+        ? ColorHex.total_color
         : slot.isPast
-            ? Colors.grey.shade300
-            : Colors.white;
+            ? ColorHex.grey_shade300
+            : ColorHex.white;
     final fg = slot.isSelected
-        ? Colors.white
+        ? ColorHex.white
         : slot.isPast
-            ? Colors.grey
-            : Colors.black87;
+            ? ColorHex.grey
+            : ColorHex.black;
 
     return GestureDetector(
       onTap: slot.isPast ? null : () => controller.pickTime(slot.label),
@@ -191,8 +203,8 @@ class Appointmenttime extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: bg,
-          border:
-              Border.all(color: slot.isSelected ? Colors.blue : Colors.grey),
+          border: Border.all(
+              color: slot.isSelected ? ColorHex.total_color : ColorHex.grey),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Center(
@@ -216,13 +228,13 @@ class Appointmenttime extends StatelessWidget {
                 controller.previousStep();
               },
               style: OutlinedButton.styleFrom(
-                backgroundColor: Colors.grey,
+                backgroundColor: ColorHex.grey,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(15)),
               ),
               child: Text(
                 'cancel'.tr,
-                style: const TextStyle(fontSize: 16, color: Colors.white),
+                style: const TextStyle(fontSize: 16, color: ColorHex.white),
               ),
             ),
           ),
@@ -239,13 +251,13 @@ class Appointmenttime extends StatelessWidget {
                       }
                     : null,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: ColorHex.total_color,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
+                      borderRadius: BorderRadius.circular(15)),
                 ),
                 child: Text(
                   'next'.tr,
-                  style: const TextStyle(fontSize: 16, color: Colors.white),
+                  style: const TextStyle(fontSize: 16, color: ColorHex.white),
                 ),
               ),
             ),

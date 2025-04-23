@@ -1,4 +1,5 @@
 import 'package:app_hm/Controller/DashboardController.dart';
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,14 +13,14 @@ class Setting extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(Dashboardcontroller());
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: ColorHex.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: const Color(0xFF2D74FF),
-        title:
-            Text('setting_all'.tr, style: const TextStyle(color: Colors.white)),
+        backgroundColor: ColorHex.total_color,
+        title: Text('setting_all'.tr,
+            style: const TextStyle(color: ColorHex.white)),
         elevation: 0,
-        leading: const BackButton(color: Colors.white),
+        leading: const BackButton(color: ColorHex.white),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -78,7 +79,7 @@ class Setting extends StatelessWidget {
           horizontal: 10,
         ),
         decoration: BoxDecoration(
-          color: const Color.fromRGBO(244, 244, 244, 0.996),
+          color: ColorHex.disableplace,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
@@ -95,7 +96,7 @@ class Setting extends StatelessWidget {
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
-                  color: isLogout ? const Color.fromRGBO(248, 80, 80, 1) : null,
+                  color: isLogout ? ColorHex.status_0 : null,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -105,7 +106,7 @@ class Setting extends StatelessWidget {
               const Icon(
                 Icons.arrow_forward_ios_rounded,
                 size: 16,
-                color: Color.fromRGBO(146, 154, 169, 1),
+                color: ColorHex.textContent,
               )
           ],
         ),

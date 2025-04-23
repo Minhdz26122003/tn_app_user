@@ -1,4 +1,5 @@
 import 'package:app_hm/Controller/Car/CarController.dart';
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Model/Car/CarModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,11 +16,11 @@ class EditCar extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF2D74FF),
+        backgroundColor: ColorHex.total_color,
         title: const Text(
           'Chỉnh sửa xe',
           style: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+              fontWeight: FontWeight.bold, fontSize: 16, color: ColorHex.white),
         ),
         automaticallyImplyLeading: false,
         actions: [
@@ -32,7 +33,7 @@ class EditCar extends StatelessWidget {
               child: Text(
                 "Hủy",
                 style: TextStyle(
-                  color: Colors.white,
+                  color: ColorHex.white,
                   fontSize: 13,
                 ),
               ),
@@ -72,13 +73,13 @@ class EditCar extends StatelessWidget {
                     Get.back();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF068EFF),
+                    backgroundColor: ColorHex.total_color,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                   ),
                   child: const Text("Lưu lại",
-                      style: TextStyle(color: Colors.white)),
+                      style: TextStyle(color: ColorHex.white)),
                 ),
               ),
             )
@@ -94,7 +95,7 @@ class EditCar extends StatelessWidget {
       style: const TextStyle(
         fontWeight: FontWeight.w600,
         fontSize: 14,
-        color: Color(0xFF4B4B4B),
+        color: ColorHex.grey_shade600,
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:app_hm/Controller/DashboardController.dart';
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Services/Auth.dart';
 import 'package:app_hm/View/Account/CreatePassword.dart';
@@ -33,7 +34,7 @@ class Dashboard extends StatelessWidget {
               // ),
               appBar: AppBar(
                 automaticallyImplyLeading: false,
-                backgroundColor: const Color(0xFF2D74FF),
+                backgroundColor: ColorHex.total_color,
                 title: Obx(
                   () => controller.isLoggedIn.value
                       ? Row(
@@ -41,7 +42,7 @@ class Dashboard extends StatelessWidget {
                             Container(
                               padding: const EdgeInsets.all(1),
                               decoration: const BoxDecoration(
-                                  color: Color.fromARGB(255, 255, 255, 255),
+                                  color: ColorHex.white,
                                   shape: BoxShape.circle),
                               child: ClipOval(
                                 child: Image.network(
@@ -57,7 +58,7 @@ class Dashboard extends StatelessWidget {
                                       width: 38,
                                       decoration: const BoxDecoration(
                                           shape: BoxShape.circle,
-                                          color: Colors.grey),
+                                          color: ColorHex.grey),
                                     );
                                   },
                                 ),
@@ -75,7 +76,7 @@ class Dashboard extends StatelessWidget {
                                     style: const TextStyle(
                                         fontSize: 11,
                                         fontWeight: FontWeight.w600,
-                                        color: Colors.white),
+                                        color: ColorHex.white),
                                   ),
                                   const SizedBox(
                                     height: 4,
@@ -85,7 +86,7 @@ class Dashboard extends StatelessWidget {
                                     style: const TextStyle(
                                         fontSize: 13,
                                         fontWeight: FontWeight.w300,
-                                        color: Colors.white),
+                                        color: ColorHex.white),
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ],
@@ -142,7 +143,7 @@ class Dashboard extends StatelessWidget {
                         'assets/icons/home.svg',
                         colorFilter: controller.currentPageIndex.value == 0
                             ? const ColorFilter.mode(
-                                Color.fromRGBO(14, 93, 250, 1),
+                                ColorHex.total_color,
                                 BlendMode.srcIn,
                               )
                             : null,
@@ -154,7 +155,7 @@ class Dashboard extends StatelessWidget {
                         'assets/icons/service.svg',
                         colorFilter: controller.currentPageIndex.value == 1
                             ? const ColorFilter.mode(
-                                Color.fromRGBO(14, 93, 250, 1),
+                                ColorHex.total_color,
                                 BlendMode.srcIn,
                               )
                             : null,
@@ -168,7 +169,7 @@ class Dashboard extends StatelessWidget {
                         'assets/icons/setting.svg',
                         colorFilter: controller.currentPageIndex.value == 2
                             ? const ColorFilter.mode(
-                                Color.fromRGBO(14, 93, 250, 1),
+                                ColorHex.total_color,
                                 BlendMode.srcIn,
                               )
                             : null,
@@ -179,7 +180,7 @@ class Dashboard extends StatelessWidget {
                     ),
                   ],
                   currentIndex: controller.currentPageIndex.value,
-                  selectedItemColor: const Color.fromRGBO(45, 116, 255, 1),
+                  selectedItemColor: ColorHex.applyColor,
                   type: BottomNavigationBarType.fixed,
                   onTap: (value) => controller.changePage(value),
                 ),

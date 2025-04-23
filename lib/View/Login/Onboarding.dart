@@ -1,3 +1,4 @@
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/View/Login/Login.dart';
 import 'package:app_hm/View/dashboard.dart';
@@ -21,7 +22,7 @@ class Onboarding extends StatelessWidget {
           width: MediaQuery.of(context).size.width, // Chiều rộng màn hình
           height: MediaQuery.of(context).size.height, // Chiều cao màn hình
           decoration: const BoxDecoration(
-            color: Color.fromARGB(255, 92, 129, 233),
+            color: ColorHex.total_color,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -41,7 +42,7 @@ class Onboarding extends StatelessWidget {
                     Text(
                       'welcome_to_GaraTech'.tr,
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: ColorHex.white,
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
@@ -53,8 +54,8 @@ class Onboarding extends StatelessWidget {
                           Get.offAllNamed(Routes.dashboard);
                         },
                         style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.blue,
-                          backgroundColor: Colors.white,
+                          foregroundColor: ColorHex.total_color,
+                          backgroundColor: ColorHex.white,
                           padding: const EdgeInsets.symmetric(
                               horizontal: 100, vertical: 15),
                           shape: RoundedRectangleBorder(

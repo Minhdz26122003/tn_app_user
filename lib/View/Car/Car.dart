@@ -1,5 +1,6 @@
 import 'package:app_hm/Component/DialogCustom.dart';
 import 'package:app_hm/Controller/Car/CarController.dart';
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Model/Car/CarModel.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/View/Car/AddCar.dart';
@@ -17,16 +18,16 @@ class Car extends StatelessWidget {
     final controller = Get.put(Carcontroller());
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF2D74FF),
+        backgroundColor: ColorHex.total_color,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_outlined),
-          color: Colors.white,
+          color: ColorHex.white,
           onPressed: () => Get.back(),
         ),
         title: const Text(
           'Quản lý xe',
           style: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+              fontWeight: FontWeight.bold, fontSize: 16, color: ColorHex.white),
         ),
       ),
       body: Obx(
@@ -39,7 +40,7 @@ class Car extends StatelessWidget {
                       Column(
                         children: [
                           Container(
-                            color: const Color.fromARGB(255, 238, 238, 238),
+                            color: ColorHex.grey_shade300,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 20.0, horizontal: 20.0),
@@ -51,7 +52,7 @@ class Car extends StatelessWidget {
                                   hintText: "Nhập từ khóa tìm kiếm...",
                                   hintStyle: const TextStyle(fontSize: 14),
                                   filled: true,
-                                  fillColor: Colors.white,
+                                  fillColor: ColorHex.white,
                                   contentPadding: const EdgeInsets.symmetric(
                                       horizontal: 20.0),
                                   prefixIcon: const Icon(Icons.search),
@@ -77,7 +78,7 @@ class Car extends StatelessWidget {
                           ),
                           Container(
                             width: Get.width,
-                            color: const Color.fromARGB(255, 238, 238, 238),
+                            color: ColorHex.grey_shade300,
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 15.0),
                             child: Row(
@@ -93,7 +94,7 @@ class Car extends StatelessWidget {
                                   "${controller.carList.length}",
                                   style: const TextStyle(
                                       fontSize: 16,
-                                      color: Colors.blue,
+                                      color: ColorHex.total_color,
                                       fontWeight: FontWeight.bold),
                                 ),
                               ],
@@ -129,8 +130,8 @@ class Car extends StatelessWidget {
                           onTap: () => Get.toNamed(Routes.addcar),
                           child: const CircleAvatar(
                             radius: 30.0,
-                            backgroundColor: Colors.blue,
-                            child: Icon(Icons.add, color: Colors.white),
+                            backgroundColor: ColorHex.total_color,
+                            child: Icon(Icons.add, color: ColorHex.white),
                           ),
                         ),
                       ),
@@ -172,7 +173,7 @@ class Car extends StatelessWidget {
           children: [
             // Trong nút Edit
             IconButton(
-              icon: const Icon(Icons.edit, color: Colors.orange),
+              icon: const Icon(Icons.edit, color: ColorHex.status_1),
               onPressed: () {
                 final car = controller.carList[index];
                 Get.toNamed(Routes.editcar, arguments: car);
@@ -180,7 +181,7 @@ class Car extends StatelessWidget {
             ),
 
             IconButton(
-              icon: const Icon(Icons.delete, color: Colors.red),
+              icon: const Icon(Icons.delete, color: ColorHex.status_0),
               onPressed: () {
                 showDialog(
                   context: context,
@@ -188,8 +189,8 @@ class Car extends StatelessWidget {
                     title: 'Xác nhận',
                     description: 'Bạn có chắc chắn muốn xóa chiếc xe này?',
                     svg: 'assets/icons/info.svg',
-                    svgColor: Colors.red,
-                    btnColor: Colors.red,
+                    svgColor: ColorHex.status_0,
+                    btnColor: ColorHex.status_0,
                     onTap: () async {
                       Navigator.pop(context); // đóng dialog
                       await controller
@@ -227,7 +228,7 @@ class Car extends StatelessWidget {
           initialChildSize: 0.95,
           builder: (context, scrollController) {
             return Container(
-              color: Colors.white,
+              color: ColorHex.white,
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Obx(
@@ -293,10 +294,10 @@ class Car extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: ColorHex.white,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
+                            color: ColorHex.grey.withOpacity(0.5),
                             blurRadius: 10,
                           ),
                         ],

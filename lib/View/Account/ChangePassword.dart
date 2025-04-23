@@ -1,4 +1,5 @@
 import 'package:app_hm/Controller/Personal/PersonalController.dart';
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -40,7 +41,7 @@ class Changepassword extends StatelessWidget {
                   Text(
                     'change_password'.tr,
                     style: const TextStyle(
-                      color: Colors.blue,
+                      color: ColorHex.total_color,
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
@@ -50,7 +51,7 @@ class Changepassword extends StatelessWidget {
                   Text(
                     'validate_password'.tr,
                     style: const TextStyle(
-                      color: Colors.red,
+                      color: ColorHex.status_0,
                       fontSize: 12,
                       fontStyle: FontStyle.italic,
                     ),
@@ -74,8 +75,7 @@ class Changepassword extends StatelessWidget {
                           decoration: InputDecoration(
                             prefixIcon: const Icon(Icons.lock_outline),
                             hintText: 'old_password'.tr,
-                            hintStyle: const TextStyle(
-                                color: Color.fromRGBO(134, 133, 133, 1)),
+                            hintStyle: const TextStyle(color: ColorHex.grey),
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 10),
                             border: const OutlineInputBorder(),
@@ -112,8 +112,7 @@ class Changepassword extends StatelessWidget {
                           decoration: InputDecoration(
                             prefixIcon: const Icon(Icons.lock_outline),
                             hintText: 'new_password'.tr,
-                            hintStyle: const TextStyle(
-                                color: Color.fromRGBO(134, 133, 133, 1)),
+                            hintStyle: const TextStyle(color: ColorHex.grey),
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 10),
                             border: const OutlineInputBorder(),
@@ -151,8 +150,7 @@ class Changepassword extends StatelessWidget {
                           decoration: InputDecoration(
                             prefixIcon: const Icon(Icons.lock_outline),
                             hintText: 'confirm_password'.tr,
-                            hintStyle: const TextStyle(
-                                color: Color.fromRGBO(134, 133, 133, 1)),
+                            hintStyle: const TextStyle(color: ColorHex.grey),
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 10),
                             border: const OutlineInputBorder(),
@@ -187,8 +185,8 @@ class Changepassword extends StatelessWidget {
                               controller.changePassword();
                             },
                             style: ElevatedButton.styleFrom(
-                              foregroundColor: Colors.white,
-                              backgroundColor: Colors.blue,
+                              foregroundColor: ColorHex.white,
+                              backgroundColor: ColorHex.total_color,
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 110, vertical: 15),
                               shape: RoundedRectangleBorder(

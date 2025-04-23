@@ -1,4 +1,5 @@
 import 'package:app_hm/Controller/Car/CarController.dart';
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_check_box_rounded/flutter_check_box_rounded.dart';
@@ -15,11 +16,11 @@ class AddCar extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF2D74FF),
+        backgroundColor: ColorHex.total_color,
         title: Text(
           'Thêm xe ',
           style: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+              fontWeight: FontWeight.bold, fontSize: 16, color: ColorHex.white),
         ),
         automaticallyImplyLeading: false,
         actions: [
@@ -32,7 +33,7 @@ class AddCar extends StatelessWidget {
               child: Text(
                 'Cancel'.tr,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: ColorHex.white,
                   fontSize: 13,
                 ),
               ),
@@ -95,7 +96,7 @@ class AddCar extends StatelessWidget {
                         Get.back();
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 6, 142, 253),
+                        backgroundColor: ColorHex.total_color,
                         padding: const EdgeInsets.symmetric(
                             vertical: 15, horizontal: 130),
                         shape: RoundedRectangleBorder(
@@ -104,7 +105,7 @@ class AddCar extends StatelessWidget {
                       ),
                       child: const Text(
                         "Lưu lại",
-                        style: TextStyle(fontSize: 14, color: Colors.white),
+                        style: TextStyle(fontSize: 14, color: ColorHex.white),
                       ),
                     ),
                   ),
@@ -127,18 +128,17 @@ class AddCar extends StatelessWidget {
       children: [
         RichText(
           text: TextSpan(
-            style: const TextStyle(fontSize: 16, color: Colors.black),
+            style: const TextStyle(fontSize: 16, color: ColorHex.black),
             children: [
               TextSpan(
                 text: tittle,
-                style: const TextStyle(
-                    fontSize: 16, color: Color.fromARGB(255, 18, 18, 18)),
+                style: const TextStyle(fontSize: 16, color: ColorHex.black),
               ),
               const TextSpan(
                 text: '*',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.red,
+                  color: ColorHex.status_0,
                 ),
               ),
             ],
@@ -149,12 +149,11 @@ class AddCar extends StatelessWidget {
           controller: controller,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle:
-                const TextStyle(color: Color.fromARGB(255, 209, 208, 208)),
+            hintStyle: TextStyle(color: ColorHex.grey_shade300),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(
-                  color: Color.fromARGB(255, 211, 210, 210), width: 0),
+              borderSide:
+                  const BorderSide(color: ColorHex.grey_shade300, width: 0),
             ),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,

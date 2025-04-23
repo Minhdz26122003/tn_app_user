@@ -1,4 +1,5 @@
 import 'package:app_hm/Controller/Signup/SignupController.dart';
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Services/Auth.dart';
 import 'package:app_hm/Utils/Utils.dart';
@@ -39,7 +40,7 @@ class Signup extends StatelessWidget {
                     child: Text(
                       'Welcome'.tr,
                       style: const TextStyle(
-                        color: Colors.blue,
+                        color: ColorHex.status_2,
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
                       ),
@@ -52,7 +53,7 @@ class Signup extends StatelessWidget {
                     child: Text(
                       'sign_up'.tr,
                       style: const TextStyle(
-                        color: Colors.black,
+                        color: ColorHex.black,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
@@ -75,8 +76,7 @@ class Signup extends StatelessWidget {
                           onChanged: (value) {},
                           decoration: InputDecoration(
                             hintText: 'fullname'.tr,
-                            hintStyle: const TextStyle(
-                                color: Color.fromRGBO(134, 133, 133, 1)),
+                            hintStyle: const TextStyle(color: ColorHex.grey),
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 10),
                             border: const OutlineInputBorder(),
@@ -97,8 +97,7 @@ class Signup extends StatelessWidget {
                           onChanged: (value) {},
                           decoration: InputDecoration(
                             hintText: 'username'.tr,
-                            hintStyle: const TextStyle(
-                                color: Color.fromRGBO(134, 133, 133, 1)),
+                            hintStyle: const TextStyle(color: ColorHex.grey),
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 10),
                             border: const OutlineInputBorder(),
@@ -120,8 +119,7 @@ class Signup extends StatelessWidget {
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                             hintText: 'email'.tr,
-                            hintStyle: const TextStyle(
-                                color: Color.fromRGBO(134, 133, 133, 1)),
+                            hintStyle: const TextStyle(color: ColorHex.grey),
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 10),
                             border: const OutlineInputBorder(),
@@ -143,8 +141,7 @@ class Signup extends StatelessWidget {
                           keyboardType: TextInputType.phone,
                           decoration: InputDecoration(
                             hintText: 'phone_number'.tr,
-                            hintStyle: const TextStyle(
-                                color: Color.fromRGBO(134, 133, 133, 1)),
+                            hintStyle: const TextStyle(color: ColorHex.grey),
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 10),
                             border: const OutlineInputBorder(),
@@ -167,8 +164,7 @@ class Signup extends StatelessWidget {
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(
                             hintText: 'password'.tr,
-                            hintStyle: const TextStyle(
-                                color: Color.fromRGBO(134, 133, 133, 1)),
+                            hintStyle: const TextStyle(color: ColorHex.grey),
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 10),
                             border: const OutlineInputBorder(),
@@ -205,8 +201,7 @@ class Signup extends StatelessWidget {
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(
                             hintText: 'confirm_password'.tr,
-                            hintStyle: const TextStyle(
-                                color: Color.fromRGBO(134, 133, 133, 1)),
+                            hintStyle: const TextStyle(color: ColorHex.grey),
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 10),
                             border: const OutlineInputBorder(),
@@ -261,8 +256,8 @@ class Signup extends StatelessWidget {
                             },
                             style: ElevatedButton.styleFrom(
                               alignment: Alignment.center,
-                              foregroundColor: Colors.white,
-                              backgroundColor: Colors.blue,
+                              foregroundColor: ColorHex.white,
+                              backgroundColor: ColorHex.status_2,
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 120, vertical: 15),
                               shape: RoundedRectangleBorder(
@@ -272,7 +267,7 @@ class Signup extends StatelessWidget {
                             ),
                             child: controller.isLoading.value
                                 ? const CircularProgressIndicator(
-                                    color: Colors.white,
+                                    color: ColorHex.white,
                                   )
                                 : Text(
                                     'sign_up'.tr,
@@ -301,7 +296,7 @@ class Signup extends StatelessWidget {
                                 'login_now'.tr,
                                 style: const TextStyle(
                                   fontSize: 12,
-                                  color: Colors.blue,
+                                  color: ColorHex.status_2,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),

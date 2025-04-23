@@ -1,3 +1,4 @@
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,22 +9,25 @@ class StepBook extends StatelessWidget {
   const StepBook({
     super.key,
     required this.currentStep,
-    this.labels = const ["Dịch vụ", "Địa điểm", "Thời gian", "Xác nhận"],
+    this.labels = const ['service', 'address', 'time', 'confirm'],
   });
 
   @override
   Widget build(BuildContext context) {
+    // Dịch tại thời điểm build
+    final translatedLabels = labels.map((key) => key.tr).toList();
+
     // Chỉ các bước từ 1 đến currentStep được active
-    List<bool> steps =
-        List.generate(labels.length, (index) => currentStep >= (index + 1));
+    List<bool> steps = List.generate(
+        translatedLabels.length, (index) => currentStep >= (index + 1));
 
     return Row(
-      children: List.generate(labels.length * 2 - 1, (index) {
+      children: List.generate(translatedLabels.length * 2 - 1, (index) {
         if (index.isEven) {
           int stepIndex = index ~/ 2;
           return _StepCircle(
             number: (stepIndex + 1).toString(),
-            label: labels[stepIndex],
+            label: translatedLabels[stepIndex],
             isActive: steps[stepIndex],
           );
         } else {
@@ -34,8 +38,8 @@ class StepBook extends StatelessWidget {
               height: 5,
               margin: const EdgeInsets.only(bottom: 18),
               color: stepIndex < (currentStep - 1)
-                  ? Colors.blue
-                  : Colors.grey.shade300,
+                  ? ColorHex.total_color
+                  : ColorHex.grey_shade300,
             ),
           );
         }
@@ -62,11 +66,12 @@ class _StepCircle extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 14,
-          backgroundColor: isActive ? Colors.blue : Colors.grey.shade300,
+          backgroundColor:
+              isActive ? ColorHex.total_color : ColorHex.grey_shade300,
           child: Text(
             number,
             style: TextStyle(
-              color: isActive ? Colors.white : Colors.black,
+              color: isActive ? ColorHex.white : ColorHex.black,
               fontSize: 12,
               fontWeight: FontWeight.bold,
             ),

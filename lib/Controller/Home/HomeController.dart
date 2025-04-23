@@ -37,15 +37,15 @@ class HomeController extends GetxController {
     super.onClose();
   }
 
-  Color parseColor(String? colorString) {
-    if (colorString == null || colorString.isEmpty) {
-      return Colors.black; // Màu mặc định nếu null hoặc rỗng
-    }
-    if (colorString.startsWith('#')) {
-      return Color(int.parse(colorString.replaceFirst('#', '0xFF')));
-    }
-    return Colors.black; // Màu mặc định nếu không hợp lệ
-  }
+  // Color parseColor(String? colorString) {
+  //   if (colorString == null || colorString.isEmpty) {
+  //     return Colors.black;
+  //   }
+  //   if (colorString.startsWith('#')) {
+  //     return Color(int.parse(colorString.replaceFirst('#', '0xFF')));
+  //   }
+  //   return Colors.black;
+  // }
 
   String formatTime(int totalMinutes) {
     int hours = totalMinutes ~/ 60;

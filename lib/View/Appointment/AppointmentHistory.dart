@@ -1,4 +1,6 @@
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Model/Appointment/ApointmentModel.dart';
+import 'package:app_hm/Utils/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:get/get.dart';
@@ -9,20 +11,15 @@ class Appointmenthistory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppointmentModel model = Get.arguments;
-    final steps = [
-      "Đang xử lý yêu cầu",
-      "Báo giá",
-      "Sửa chữa",
-      "Quyết toán",
-      "Thanh toán",
-    ];
+
     final currentStep = model.currentStatusIndex; // 0-based
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Chi tiết dịch vụ", style: TextStyle(color: Colors.white)),
-        backgroundColor: Color(0xFF2D74FF),
-        leading: BackButton(color: Colors.white),
+        title:
+            Text("Chi tiết dịch vụ", style: TextStyle(color: ColorHex.white)),
+        backgroundColor: ColorHex.total_color,
+        leading: BackButton(color: ColorHex.white),
       ),
       body: SingleChildScrollView(
         child: Column(children: [
@@ -45,17 +42,17 @@ class Appointmenthistory extends StatelessWidget {
                     Text(model.gara_address!, style: TextStyle(fontSize: 14)),
                     SizedBox(height: 4),
                     Text("Mã dịch vụ: ${model.appointment_id!}",
-                        style:
-                            TextStyle(fontSize: 14, color: Colors.grey[600])),
+                        style: TextStyle(
+                            fontSize: 14, color: ColorHex.grey_shade600)),
                   ]),
             ),
           ),
 
           // Timeline
-          ...List.generate(steps.length, (i) {
+          ...List.generate(Utils.steps.length, (i) {
             return TimelineTile(
               isFirst: i == 0,
-              isLast: i == steps.length - 1,
+              isLast: i == Utils.steps.length - 1,
               indicatorStyle: IndicatorStyle(
                 width: 20,
                 color: i <= currentStep
@@ -77,7 +74,7 @@ class Appointmenthistory extends StatelessWidget {
               endChild: Padding(
                 padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
                 child: Text(
-                  steps[i],
+                  Utils.steps[i],
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight:

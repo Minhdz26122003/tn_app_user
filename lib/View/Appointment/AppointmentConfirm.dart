@@ -1,6 +1,7 @@
 import 'package:app_hm/Component/StepBook.dart';
 import 'package:app_hm/Controller/Appointment/AppointmentController.dart';
 import 'package:app_hm/Controller/DashboardController.dart';
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Model/Car/CarModel.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +18,9 @@ class Appointmentconfirm extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF2D74FF),
+        backgroundColor: ColorHex.total_color,
         title: Text('book_service'.tr,
-            style: const TextStyle(color: Colors.white)),
+            style: const TextStyle(color: ColorHex.white)),
         elevation: 0,
         automaticallyImplyLeading: false, // Ẩn nút quay lại
         actions: [
@@ -30,7 +31,7 @@ class Appointmentconfirm extends StatelessWidget {
                   style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white)),
+                      color: ColorHex.white)),
             ),
           ),
         ],
@@ -43,12 +44,12 @@ class Appointmentconfirm extends StatelessWidget {
             children: [
               StepBook(currentStep: controller.currentStep.value),
               const SizedBox(height: 20),
-              _buildTitle("BIỂN SỐ XE", onEdit: () {
+              _buildTitle('license_plate'.tr, onEdit: () {
                 Get.toNamed(Routes.car);
               }),
               _buildCarBox(controller),
               const SizedBox(height: 20),
-              _buildTitle("LIÊN HỆ", onEdit: () async {
+              _buildTitle('contact'.tr, onEdit: () async {
                 var result = await Get.toNamed(Routes.personaldetail);
                 if (result == true) {
                   controller.getAccount();
@@ -56,21 +57,21 @@ class Appointmentconfirm extends StatelessWidget {
               }),
               _buildContactBox(controller),
               const SizedBox(height: 20),
-              _buildTitle("DỊCH VỤ", editText: "Thay đổi", onEdit: () {
+              _buildTitle('service'.tr, onEdit: () {
                 controller.currentStep.value = 1;
                 controller.resetService();
                 controller.navigateToStep();
               }),
               _buildServiceBox(controller),
               const SizedBox(height: 20),
-              _buildTitle("Địa điểm", editText: "Thay đổi", onEdit: () {
+              _buildTitle('address'.tr, onEdit: () {
                 controller.currentStep.value = 2;
                 controller.resetService();
                 controller.navigateToStep();
               }),
               _buildAddressBox(controller),
               const SizedBox(height: 20),
-              _buildTitle("Thời gian", editText: "Thay đổi", onEdit: () {
+              _buildTitle('time'.tr, onEdit: () {
                 controller.currentStep.value = 3;
                 controller.resetService();
                 controller.navigateToStep();
@@ -87,18 +88,30 @@ class Appointmentconfirm extends StatelessWidget {
 }
 
 // Tiêu đề
-Widget _buildTitle(String title,
-    {VoidCallback? onEdit, String editText = "Sửa"}) {
+Widget _buildTitle(String title, {VoidCallback? onEdit}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      Text('${title.toUpperCase()}*',
-          style: const TextStyle(
-              color: Color.fromARGB(255, 0, 0, 0),
-              fontWeight: FontWeight.bold)),
+      RichText(
+        text: TextSpan(
+          style: TextStyle(fontSize: 16, color: ColorHex.black),
+          children: [
+            TextSpan(
+              text: title.toUpperCase(),
+              style: TextStyle(fontSize: 16, color: ColorHex.black),
+            ),
+            TextSpan(
+              text: ' *',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: ColorHex.status_0),
+            ),
+          ],
+        ),
+      ),
       TextButton(
         onPressed: onEdit,
-        child: Text(editText, style: const TextStyle(color: Colors.blue)),
+        child: Text('change'.tr,
+            style: const TextStyle(fontSize: 13, color: ColorHex.status_0)),
       ),
     ],
   );
@@ -113,14 +126,14 @@ Widget _buildCarBox(Appointmentcontroller controller) {
           width: double.infinity,
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 231, 231, 231),
+            color: ColorHex.grey_shade300,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(
             'no_car'.tr,
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey.shade600,
+            style: const TextStyle(
+              fontSize: 13,
+              color: ColorHex.textContent,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -143,8 +156,8 @@ Widget _buildCarBox(Appointmentcontroller controller) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(car.license_plate ?? "---",
-                        style:
-                            const TextStyle(color: Colors.black, fontSize: 13)),
+                        style: const TextStyle(
+                            color: ColorHex.black, fontSize: 13)),
                   ],
                 ),
               );
@@ -166,29 +179,35 @@ Widget _buildContactBox(Appointmentcontroller controller) {
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 231, 231, 231),
+        color: ColorHex.grey_shade300,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Tên",
-              style: TextStyle(
-                  fontSize: 11, color: Color.fromARGB(255, 75, 75, 75))),
-          Text(controller.account.value.fullname ?? "Chưa cập nhật",
-              style: const TextStyle(fontSize: 13, color: Colors.black)),
+          Text('full_name'.tr,
+              style: const TextStyle(
+                fontSize: 11,
+                color: ColorHex.grey_shade600,
+              )),
+          Text(controller.account.value.fullname ?? 'not_updated'.tr,
+              style: const TextStyle(fontSize: 13, color: ColorHex.black)),
           const SizedBox(height: 12),
-          const Text("Số điện thoại",
-              style: TextStyle(
-                  fontSize: 11, color: Color.fromARGB(255, 75, 75, 75))),
-          Text(controller.account.value.phonenum ?? "Chưa cập nhật",
-              style: const TextStyle(fontSize: 13, color: Colors.black)),
+          Text('phone_number'.tr,
+              style: const TextStyle(
+                fontSize: 11,
+                color: ColorHex.grey_shade600,
+              )),
+          Text(controller.account.value.phonenum ?? 'not_updated'.tr,
+              style: const TextStyle(fontSize: 13, color: ColorHex.black)),
           const SizedBox(height: 12),
-          const Text("Địa chỉ email",
-              style: TextStyle(
-                  fontSize: 11, color: Color.fromARGB(255, 75, 75, 75))),
-          Text(controller.account.value.email ?? "Chưa cập nhật",
-              style: const TextStyle(fontSize: 13, color: Colors.black)),
+          Text('email'.tr,
+              style: const TextStyle(
+                fontSize: 11,
+                color: ColorHex.grey_shade600,
+              )),
+          Text(controller.account.value.email ?? 'not_updated'.tr,
+              style: const TextStyle(fontSize: 13, color: ColorHex.black)),
         ],
       ),
     ),
@@ -199,14 +218,10 @@ Widget _buildContactBox(Appointmentcontroller controller) {
 Widget _buildServiceBox(Appointmentcontroller controller) {
   return Obx(() {
     if (controller.selectedServices.isEmpty) {
-      return const Text('Chưa có dịch vụ',
-          style: TextStyle(color: Colors.grey));
+      return Text('no_service'.tr,
+          style: TextStyle(color: ColorHex.textContent));
     }
-
-    // Lấy tên loại dịch vụ từ controller.selectedType
     final String typeName = controller.selectedType.value?.type_name ?? '---';
-
-    // Nối danh sách tên dịch vụ thành chuỗi, ngăn cách bởi dấu phẩy
     final String servicesText = controller.selectedServices
         .map((service) => service.service_name ?? '')
         .where((name) => name.isNotEmpty)
@@ -216,23 +231,21 @@ Widget _buildServiceBox(Appointmentcontroller controller) {
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 231, 231, 231),
+        color: ColorHex.grey_shade300,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Loại dịch vụ:",
-              style: TextStyle(
-                  fontSize: 11, color: Color.fromARGB(255, 75, 75, 75))),
+          Text('service_type'.tr,
+              style: TextStyle(fontSize: 11, color: ColorHex.grey_shade600)),
           Text(typeName,
-              style: const TextStyle(fontSize: 13, color: Colors.black)),
+              style: const TextStyle(fontSize: 13, color: ColorHex.black)),
           const SizedBox(height: 10),
-          const Text("Dịch vụ:",
-              style: TextStyle(
-                  fontSize: 11, color: Color.fromARGB(255, 75, 75, 75))),
+          Text('service'.tr,
+              style: TextStyle(fontSize: 11, color: ColorHex.grey_shade600)),
           Text(servicesText,
-              style: const TextStyle(fontSize: 13, color: Colors.black)),
+              style: const TextStyle(fontSize: 13, color: ColorHex.black)),
         ],
       ),
     );
@@ -247,24 +260,24 @@ Widget _buildAddressBox(Appointmentcontroller controller) {
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 231, 231, 231),
+        color: ColorHex.grey_shade300,
         borderRadius: BorderRadius.circular(12),
       ),
       child: center == null
-          ? const Text('Chưa có địa điểm', style: TextStyle(color: Colors.grey))
+          ? Text('no_address'.tr, style: TextStyle(color: ColorHex.textContent))
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Tên trung tâm",
-                    style: TextStyle(
-                        fontSize: 11, color: Color.fromARGB(255, 75, 75, 75))),
-                Text(center.gara_name ?? "Chưa có",
+                Text('center_name'.tr,
+                    style:
+                        TextStyle(fontSize: 11, color: ColorHex.grey_shade600)),
+                Text(center.gara_name ?? 'not_yet'.tr,
                     style: const TextStyle(fontSize: 13)),
                 const SizedBox(height: 8),
-                const Text("Địa chỉ",
-                    style: TextStyle(
-                        fontSize: 11, color: Color.fromARGB(255, 75, 75, 75))),
-                Text(center.gara_address ?? "Chưa có",
+                Text('address'.tr,
+                    style:
+                        TextStyle(fontSize: 11, color: ColorHex.grey_shade600)),
+                Text(center.gara_address ?? 'not_yet'.tr,
                     style: const TextStyle(fontSize: 13)),
               ],
             ),
@@ -281,7 +294,7 @@ Widget _buildTimeBox(Appointmentcontroller controller) {
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 231, 231, 231),
+        color: ColorHex.grey_shade300,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -290,50 +303,50 @@ Widget _buildTimeBox(Appointmentcontroller controller) {
         children: [
           // --- NGÀY ---
           if (hasDate) ...[
-            const Text(
-              "Ngày",
+            Text(
+              'date'.tr,
               style: TextStyle(
                 fontSize: 11,
-                color: Color.fromARGB(255, 75, 75, 75),
+                color: ColorHex.grey_shade600,
               ),
             ),
             Text(
-              // định dạng ngày: dd/MM/yyyy
+              //dd/MM/yyyy
               DateFormat('dd/MM/yyyy').format(controller.selectedDate.value),
               style: const TextStyle(
                 fontSize: 13,
-                color: Colors.black,
+                color: ColorHex.black,
               ),
             ),
             const SizedBox(height: 8),
           ] else ...[
-            const Text(
-              "Chưa chọn ngày",
-              style: TextStyle(color: Colors.grey),
+            Text(
+              'no_date_selected'.tr,
+              style: TextStyle(color: ColorHex.grey_shade300),
             ),
             const SizedBox(height: 8),
           ],
 
           // --- THỜI GIAN ---
           if (hasTime) ...[
-            const Text(
-              "Thời gian",
+            Text(
+              'time'.tr,
               style: TextStyle(
                 fontSize: 11,
-                color: Color.fromARGB(255, 75, 75, 75),
+                color: ColorHex.grey_shade600,
               ),
             ),
             Text(
               controller.selectedTime.value!,
               style: const TextStyle(
                 fontSize: 13,
-                color: Colors.black,
+                color: ColorHex.black,
               ),
             ),
           ] else ...[
-            const Text(
-              "Chưa chọn thời gian",
-              style: TextStyle(color: Colors.grey),
+            Text(
+              'no_time_selected'.tr,
+              style: TextStyle(color: ColorHex.grey),
             ),
           ],
         ],
@@ -354,14 +367,14 @@ Widget _buildButtons(Appointmentcontroller controller) {
               controller.previousStep();
             },
             style: OutlinedButton.styleFrom(
-              backgroundColor: Colors.grey,
+              backgroundColor: ColorHex.grey,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(15),
               ),
               minimumSize: const Size(double.infinity, 45),
             ),
-            child:
-                Text('cancel'.tr, style: const TextStyle(color: Colors.white)),
+            child: Text('cancel'.tr,
+                style: const TextStyle(color: ColorHex.white)),
           ),
         ),
       ),
@@ -376,92 +389,15 @@ Widget _buildButtons(Appointmentcontroller controller) {
                   }
                 : null,
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
+              backgroundColor: ColorHex.total_color,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(15),
               ),
             ),
-            child:
-                const Text("Đặt lịch", style: TextStyle(color: Colors.white)),
+            child: Text('book'.tr, style: TextStyle(color: ColorHex.white)),
           ),
         ),
       ),
     ],
   );
 }
-
-// Sửa thông tin liên hệ
-// void bottomSheetEditContact({
-//   required BuildContext context,
-//   required Dashboardcontroller controller,
-// }) {
-//   final nameController = TextEditingController(text: controller.fullname.value);
-//   final phoneController =
-//       TextEditingController(text: controller.phoneNumber.value);
-//   final emailController = TextEditingController(text: controller.email.value);
-
-//   showModalBottomSheet(
-//     context: context,
-//     isScrollControlled: true,
-//     shape: const RoundedRectangleBorder(
-//       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-//     ),
-//     builder: (context) {
-//       return Padding(
-//         padding: EdgeInsets.only(
-//           left: 20,
-//           right: 20,
-//           top: 20,
-//           bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-//         ),
-//         child: Column(
-//           mainAxisSize: MainAxisSize.min,
-//           children: [
-//             const Text("Chỉnh sửa thông tin liên hệ",
-//                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-//             const SizedBox(height: 16),
-//             TextField(
-//               controller: nameController,
-//               decoration: const InputDecoration(
-//                   labelText: "Tên", hintStyle: TextStyle(color: Colors.black)),
-//             ),
-//             const SizedBox(height: 12),
-//             TextField(
-//               controller: phoneController,
-//               decoration: const InputDecoration(
-//                   labelText: "Số điện thoại",
-//                   hintStyle: TextStyle(color: Colors.black)),
-//               keyboardType: TextInputType.phone,
-//             ),
-//             const SizedBox(height: 12),
-//             TextField(
-//               controller: emailController,
-//               decoration: const InputDecoration(
-//                   labelText: "Email",
-//                   hintStyle: TextStyle(color: Colors.black)),
-//               keyboardType: TextInputType.emailAddress,
-//             ),
-//             const SizedBox(height: 20),
-//             ElevatedButton(
-//               onPressed: () {
-//                 controller.fullname.value = nameController.text.trim();
-//                 controller.phoneNumber.value = phoneController.text.trim();
-//                 controller.email.value = emailController.text.trim();
-//                 Navigator.pop(context);
-//               },
-//               style: ElevatedButton.styleFrom(
-//                 backgroundColor: Colors.blue,
-//                 padding:
-//                     const EdgeInsets.symmetric(horizontal: 130, vertical: 12),
-//                 shape: RoundedRectangleBorder(
-//                   borderRadius: BorderRadius.circular(12),
-//                 ),
-//               ),
-//               child: const Text("Lưu", style: TextStyle(color: Colors.white)),
-//             ),
-//           ],
-//         ),
-//       );
-//     },
-//   );
-// }

@@ -1,4 +1,6 @@
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Model/Appointment/ApointmentModel.dart';
+import 'package:app_hm/Utils/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:get/get.dart';
@@ -9,20 +11,15 @@ class Appoointmentdetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppointmentModel model = Get.arguments;
-    final steps = [
-      "Đang xử lý yêu cầu",
-      "Báo giá",
-      "Sửa chữa",
-      "Quyết toán",
-      "Thanh toán",
-    ];
+
     final currentStep = model.currentStatusIndex;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Chi tiết dịch vụ", style: TextStyle(color: Colors.white)),
-        backgroundColor: Color(0xFF2D74FF),
-        leading: BackButton(color: Colors.white),
+        title:
+            Text('detail_service'.tr, style: TextStyle(color: ColorHex.white)),
+        backgroundColor: ColorHex.total_color,
+        leading: BackButton(color: ColorHex.white),
       ),
       body: SingleChildScrollView(
         child: Column(children: [
@@ -44,45 +41,45 @@ class Appoointmentdetail extends StatelessWidget {
                     SizedBox(height: 4),
                     Text(model.gara_address!, style: TextStyle(fontSize: 14)),
                     SizedBox(height: 4),
-                    Text("Mã dịch vụ: ${model.appointment_id!}",
-                        style:
-                            TextStyle(fontSize: 14, color: Colors.grey[600])),
+                    Text('code'.tr + ':${model.appointment_id!}',
+                        style: TextStyle(
+                            fontSize: 14, color: ColorHex.grey_shade600)),
                   ]),
             ),
           ),
 
           // Timeline
-          ...List.generate(steps.length, (i) {
+          ...List.generate(Utils.steps.length, (i) {
             return TimelineTile(
               isFirst: i == 0,
-              isLast: i == steps.length - 1,
+              isLast: i == Utils.steps.length - 1,
               indicatorStyle: IndicatorStyle(
                 width: 20,
                 color: i <= currentStep
-                    ? Color(0xFF2D74FF)
-                    : (Colors.grey[300] ?? Colors.grey),
+                    ? ColorHex.total_color
+                    : (ColorHex.grey_shade300 ?? ColorHex.grey),
               ),
               beforeLineStyle: LineStyle(
                 color: i <= currentStep - 1
-                    ? Color(0xFF2D74FF)
-                    : (Colors.grey[300] ?? Colors.grey),
+                    ? ColorHex.total_color
+                    : (ColorHex.grey_shade300 ?? ColorHex.grey),
                 thickness: 4,
               ),
               afterLineStyle: LineStyle(
                 color: i < currentStep
-                    ? Color(0xFF2D74FF)
-                    : (Colors.grey[300] ?? Colors.grey),
+                    ? ColorHex.total_color
+                    : (ColorHex.grey_shade300 ?? ColorHex.grey),
                 thickness: 4,
               ),
               endChild: Padding(
                 padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
                 child: Text(
-                  steps[i],
+                  Utils.steps[i],
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight:
                         i == currentStep ? FontWeight.bold : FontWeight.normal,
-                    color: i <= currentStep ? Colors.black : Colors.grey,
+                    color: i <= currentStep ? ColorHex.black : ColorHex.grey,
                   ),
                 ),
               ),
@@ -93,13 +90,13 @@ class Appoointmentdetail extends StatelessWidget {
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             OutlinedButton(
               onPressed: () {/* hủy */},
-              child: Text("Huỷ yêu cầu"),
+              child: Text('cancel_request'.tr),
             ),
             ElevatedButton(
-              style:
-                  ElevatedButton.styleFrom(backgroundColor: Color(0xFF2D74FF)),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: ColorHex.total_color),
               onPressed: () {/* đặt lại */},
-              child: Text("Đặt lại lịch"),
+              child: Text('reschedule_appt'.tr),
             ),
           ]),
           SizedBox(height: 24),

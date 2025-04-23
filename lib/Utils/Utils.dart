@@ -50,12 +50,12 @@ class Utils {
   static void showSnackBar(
       {required String title,
       required String message,
-      Color? colorText = Colors.white,
+      Color? colorText = ColorHex.white,
       Widget? icon,
       bool isDismissible = true,
       Duration duration = const Duration(seconds: 2),
       Duration animationDuration = const Duration(seconds: 1),
-      Color? backgroundColor = Colors.black,
+      Color? backgroundColor = ColorHex.black,
       SnackPosition? direction = SnackPosition.TOP,
       Curve? animation}) {
     Get.snackbar(
@@ -96,6 +96,13 @@ class Utils {
     return file;
   }
 
+  static final steps = [
+    'processing_request'.tr,
+    'price_quote'.tr,
+    'repair'.tr,
+    'final_settlement'.tr,
+    'pay'.tr,
+  ];
   static String getStatusString(int value) {
     switch (value) {
       case 2:

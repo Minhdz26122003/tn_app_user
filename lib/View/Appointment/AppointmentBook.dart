@@ -1,5 +1,6 @@
 import 'package:app_hm/Component/StepBook.dart';
 import 'package:app_hm/Controller/Appointment/AppointmentController.dart';
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Model/Service/TypeServiceModel.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/View/dashboard.dart';
@@ -14,17 +15,17 @@ class Appointmentbook extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(Appointmentcontroller());
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: ColorHex.white,
       appBar: AppBar(
         title: Text('book_service'.tr,
-            style: const TextStyle(color: Colors.white)),
-        backgroundColor: const Color(0xFF2D74FF),
+            style: const TextStyle(color: ColorHex.white)),
+        backgroundColor: ColorHex.total_color,
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
             Get.offAllNamed(Routes.dashboard);
           },
-          child: const Icon(Icons.arrow_back, color: Colors.white),
+          child: const Icon(Icons.arrow_back, color: ColorHex.white),
         ),
       ),
       body: Padding(
@@ -43,7 +44,7 @@ class Appointmentbook extends StatelessWidget {
                     'no_service_type'.tr,
                     style: TextStyle(
                       fontSize: 16,
-                      color: Colors.grey.shade600,
+                      color: ColorHex.grey_shade600,
                       fontWeight: FontWeight.bold,
                     ),
                   );
@@ -84,7 +85,8 @@ class Appointmentbook extends StatelessWidget {
               if (controller.selectedType.value == null) {
                 return Text(
                   'select_service_type_first'.tr,
-                  style: const TextStyle(fontSize: 14, color: Colors.red),
+                  style:
+                      const TextStyle(fontSize: 12, color: ColorHex.status_0),
                 );
               }
               final filteredServices = controller.serviceList
@@ -97,7 +99,7 @@ class Appointmentbook extends StatelessWidget {
                   'no_services_of_type'.tr,
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.grey.shade600,
+                    color: ColorHex.grey_shade600,
                     fontWeight: FontWeight.bold,
                   ),
                 );
@@ -112,12 +114,12 @@ class Appointmentbook extends StatelessWidget {
                       "${'selected'.tr}${controller.checkedValuesService.where((e) => e).length}",
                       style: const TextStyle(
                         fontSize: 14,
-                        color: Colors.blue,
+                        color: ColorHex.total_color,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  const Divider(height: 1, color: Colors.grey),
+                  const Divider(height: 1, color: ColorHex.grey),
                   ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -139,9 +141,9 @@ class Appointmentbook extends StatelessWidget {
                               style: const TextStyle(fontSize: 14),
                             ),
                             controlAffinity: ListTileControlAffinity.trailing,
-                            activeColor: Colors.blue,
+                            activeColor: ColorHex.total_color,
                           ),
-                          const Divider(height: 1, color: Colors.grey),
+                          const Divider(height: 1, color: ColorHex.grey),
                         ],
                       );
                     },
@@ -161,13 +163,13 @@ class Appointmentbook extends StatelessWidget {
                         }
                       : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: ColorHex.total_color,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(15)),
                   ),
                   child: Text(
                     'next'.tr,
-                    style: const TextStyle(fontSize: 16, color: Colors.white),
+                    style: const TextStyle(fontSize: 16, color: ColorHex.white),
                   ),
                 ),
               );
@@ -196,7 +198,7 @@ class Appointmentbook extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildTitle('detail_service'.tr),
+        _buildTitle('service_details'.tr),
         GestureDetector(
           onTap: () {
             _showDescriptionDialog(controller, context);
@@ -205,14 +207,14 @@ class Appointmentbook extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 14),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              color: const Color(0xFFF5F5F5),
-              border: Border.all(color: Colors.grey.shade300),
+              color: ColorHex.white,
+              border: Border.all(color: ColorHex.grey_shade300),
             ),
             child: Row(
               children: [
-                const Icon(Icons.add, color: Colors.blue),
+                const Icon(Icons.add, color: ColorHex.total_color),
                 Text('add_description'.tr,
-                    style: const TextStyle(color: Colors.blue)),
+                    style: const TextStyle(color: ColorHex.total_color)),
               ],
             ),
           ),

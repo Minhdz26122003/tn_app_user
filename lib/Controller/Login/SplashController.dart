@@ -1,5 +1,6 @@
 import 'package:app_hm/Component/DialogCustom.dart';
 import 'package:app_hm/Controller/DashboardController.dart';
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Global/Constant.dart';
 import 'package:app_hm/Global/GlobalValue.dart';
 import 'package:app_hm/Router/AppPage.dart';
@@ -30,8 +31,8 @@ class Splashcontroller extends GetxController {
           description:
               'Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại.',
           svg: 'assets/icons/info.svg',
-          svgColor: Colors.red,
-          btnColor: Colors.blue,
+          svgColor: ColorHex.status_0,
+          btnColor: ColorHex.total_color,
           onTap: () async {
             await Auth.backLogin(true);
             Get.back(); // đóng dialog

@@ -1,5 +1,6 @@
 import 'package:app_hm/Controller/DashboardController.dart';
 import 'package:app_hm/Controller/Personal/PersonalController.dart';
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Services/Auth.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class Personal extends StatelessWidget {
     final controller = Get.put(Dashboardcontroller());
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: ColorHex.white,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Obx(() {
@@ -35,11 +36,11 @@ class Personal extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 15),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: ColorHex.white,
                             borderRadius: BorderRadius.circular(15),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
+                                color: ColorHex.grey.withOpacity(0.5),
                                 spreadRadius: 1,
                                 blurRadius: 5,
                                 offset: const Offset(0, 3),
@@ -53,12 +54,12 @@ class Personal extends StatelessWidget {
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 child: CircleAvatar(
                                   radius: 24,
-                                  backgroundColor: Colors.grey[300],
+                                  backgroundColor: ColorHex.grey_shade300,
                                   child: controller.isLoggedIn.value &&
                                           controller.avatar.value.isNotEmpty
                                       ? Image.network(controller.avatar.value)
                                       : const Icon(Icons.person,
-                                          size: 24, color: Colors.white),
+                                          size: 24, color: ColorHex.white),
                                 ),
                               ),
                               const SizedBox(width: 5),
@@ -71,7 +72,7 @@ class Personal extends StatelessWidget {
                                           ? controller.username.value
                                           : 'login'.tr,
                                       style: const TextStyle(
-                                        color: Colors.black,
+                                        color: ColorHex.black,
                                         fontWeight: FontWeight.w600,
                                         fontSize: 14,
                                       ),
@@ -81,8 +82,7 @@ class Personal extends StatelessWidget {
                                       Text(
                                         controller.email.value,
                                         style: const TextStyle(
-                                          color:
-                                              Color.fromRGBO(119, 126, 144, 1),
+                                          color: ColorHex.textContent,
                                           fontWeight: FontWeight.w400,
                                           fontSize: 13,
                                         ),
@@ -193,7 +193,7 @@ class Personal extends StatelessWidget {
           title.toUpperCase(),
           textAlign: TextAlign.left,
           style: const TextStyle(
-            color: Color.fromARGB(179, 0, 0, 0),
+            color: ColorHex.black,
             fontWeight: FontWeight.bold,
             fontSize: 13,
           ),
@@ -213,7 +213,7 @@ class Personal extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
         decoration: BoxDecoration(
-          color: const Color.fromRGBO(244, 244, 244, 0.996),
+          color: ColorHex.disableplace,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
@@ -230,7 +230,7 @@ class Personal extends StatelessWidget {
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
-                  color: isLogout ? const Color.fromRGBO(248, 80, 80, 1) : null,
+                  color: isLogout ? ColorHex.status_0 : null,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -240,7 +240,7 @@ class Personal extends StatelessWidget {
               const Icon(
                 Icons.arrow_forward_ios_rounded,
                 size: 16,
-                color: Color.fromRGBO(146, 154, 169, 1),
+                color: ColorHex.textContent,
               )
           ],
         ),
