@@ -85,7 +85,7 @@ class Login extends StatelessWidget {
                                   decoration: InputDecoration(
                                     hintText: 'account'.tr,
                                     hintStyle: const TextStyle(
-                                        color: ColorHex.grey_shade300),
+                                        color: ColorHex.grey_shade600),
                                     contentPadding: const EdgeInsets.symmetric(
                                         horizontal: 16, vertical: 10),
                                     border: const OutlineInputBorder(),
@@ -109,8 +109,8 @@ class Login extends StatelessWidget {
                                   keyboardType: TextInputType.text,
                                   decoration: InputDecoration(
                                     hintText: 'password'.tr,
-                                    hintStyle: const TextStyle(
-                                        color: ColorHex.grey_shade300),
+                                    hintStyle:
+                                        const TextStyle(color: ColorHex.grey),
                                     contentPadding: const EdgeInsets.symmetric(
                                         horizontal: 16, vertical: 10),
                                     border: const OutlineInputBorder(),

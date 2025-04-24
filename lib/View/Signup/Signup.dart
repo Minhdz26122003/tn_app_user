@@ -38,7 +38,7 @@ class Signup extends StatelessWidget {
                   Align(
                     alignment: Alignment.center,
                     child: Text(
-                      'Welcome'.tr,
+                      'welcome'.tr,
                       style: const TextStyle(
                         color: ColorHex.status_2,
                         fontSize: 30,

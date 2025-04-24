@@ -12,6 +12,10 @@ class AppointmentModel {
   int? status;
   String? created_at;
 
+  double? quoteAmount; // Thêm cho báo giá
+  double? depositAmount; // Thêm cho đặt cọc
+  double? totalAmount;
+
   AppointmentModel({
     this.appointment_id,
     this.uid,
@@ -25,31 +29,17 @@ class AppointmentModel {
     this.reason,
     this.status,
     this.created_at,
+    this.quoteAmount,
+    this.depositAmount,
+    this.totalAmount,
   });
 
-  /// Trả về index để dùng trong Stepper/Timeline
+  // Trả về index để dùng trong Stepper/Timeline
   int get currentStatusIndex {
-    if (status != null && status! >= 0 && status! <= 4) {
+    if (status != null && status! >= 0 && status! <= 5) {
       return status!;
     } else {
-      return 0; // fallback nếu status không hợp lệ
-    }
-  }
-
-  String get statusText {
-    switch (status) {
-      case 0:
-        return "Đang xử lý yêu cầu";
-      case 1:
-        return "Báo giá";
-      case 2:
-        return "Sửa chữa";
-      case 3:
-        return "Quyết toán";
-      case 4:
-        return "Thanh toán";
-      default:
-        return "Không rõ trạng thái";
+      return 0;
     }
   }
 
@@ -66,6 +56,10 @@ class AppointmentModel {
     appointment_date = json['appointment_date'];
     status = json['status'];
     created_at = json['created_at'];
+
+    quoteAmount = json['quoteAmount'];
+    depositAmount = json['depositAmount'];
+    totalAmount = json['totalAmount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -82,6 +76,10 @@ class AppointmentModel {
     data['appointment_date'] = appointment_date;
     data['status'] = status;
     data['created_at'] = created_at;
+
+    data['quoteAmount'] = quoteAmount;
+    data['depositAmount'] = depositAmount;
+    data['totalAmount'] = totalAmount;
     return data;
   }
 }

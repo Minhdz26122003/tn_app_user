@@ -16,7 +16,7 @@ class Appointmentlist extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('list_appointment'.tr,
-            style: TextStyle(color: ColorHex.white)),
+            style: TextStyle(color: ColorHex.white, fontSize: 16)),
         backgroundColor: ColorHex.total_color,
         centerTitle: false,
         leading: BackButton(color: ColorHex.white),
@@ -29,14 +29,14 @@ class Appointmentlist extends StatelessWidget {
           return Center(child: Text('book_service'.tr));
         }
         return ListView.builder(
-          padding: EdgeInsets.only(top: 100),
+          padding: EdgeInsets.only(top: 5),
           itemCount: controller.appointmentList.length,
           itemBuilder: (c, i) {
             final appt = controller.appointmentList[i];
             return appointmentCard(
               model: appt,
-              onTap: () =>
-                  Get.toNamed(Routes.appoointmentdetail, arguments: appt),
+              onTap: () => Get.toNamed(Routes.appoointmentdetail,
+                  arguments: {'appointment_id': appt.appointment_id}),
             );
           },
         );
@@ -55,7 +55,8 @@ class Appointmentlist extends StatelessWidget {
                 ),
               ),
               onPressed: () => Get.toNamed(Routes.appointmentbook),
-              child: Text('book'.tr, style: TextStyle(fontSize: 16)),
+              child: Text('book'.tr,
+                  style: TextStyle(fontSize: 16, color: ColorHex.white)),
             ),
             SizedBox(height: 8),
             GestureDetector(
@@ -63,7 +64,7 @@ class Appointmentlist extends StatelessWidget {
               child: Text(
                 'booking_history'.tr,
                 style: TextStyle(
-                  color: ColorHex.total_color,
+                  color: ColorHex.status_0,
                   decoration: TextDecoration.underline,
                 ),
               ),
@@ -93,7 +94,7 @@ class Appointmentlist extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               decoration: BoxDecoration(
-                color: ColorHex.total_color,
+                color: ColorHex.border_5,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(12),
                   bottomLeft: Radius.circular(12),
@@ -105,13 +106,13 @@ class Appointmentlist extends StatelessWidget {
                     '${date.day}',
                     style: TextStyle(
                       fontSize: 24,
-                      color: ColorHex.white,
+                      color: ColorHex.disableplace,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     'month'.tr + '${date.month}',
-                    style: TextStyle(fontSize: 12, color: ColorHex.white),
+                    style: TextStyle(fontSize: 15, color: ColorHex.white),
                   ),
                 ],
               ),
@@ -119,7 +120,7 @@ class Appointmentlist extends StatelessWidget {
             // Nội dung bên phải
             Expanded(
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -129,10 +130,25 @@ class Appointmentlist extends StatelessWidget {
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 4),
+                    Row(
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/clock.svg',
+                          color: ColorHex.textContent,
+                          width: 16,
+                          height: 16,
+                        ),
+                        SizedBox(width: 4),
+                        Text(
+                          model.appointment_time ?? 'not_yet'.tr,
+                          style: TextStyle(
+                              fontSize: 14, color: ColorHex.grey_shade600),
+                        ),
+                      ],
+                    ),
                     Text(
-                      model.appointment_time ?? 'not_yet'.tr,
-                      style: TextStyle(
-                          fontSize: 14, color: ColorHex.grey_shade600),
+                      'ấn vào để xem chi tiết >',
+                      style: TextStyle(fontSize: 11, color: ColorHex.status_0),
                     ),
                   ],
                 ),

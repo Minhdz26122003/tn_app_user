@@ -99,10 +99,12 @@ class Utils {
   static final steps = [
     'processing_request'.tr,
     'price_quote'.tr,
+    'deposit'.tr,
     'repair'.tr,
     'final_settlement'.tr,
     'pay'.tr,
   ];
+
   static String getStatusString(int value) {
     switch (value) {
       case 2:

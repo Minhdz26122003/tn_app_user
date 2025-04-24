@@ -30,7 +30,8 @@ class ColorHex {
   static const grey = Color.fromRGBO(146, 146, 146, 1);
   static const applyColor = Color.fromRGBO(0, 81, 255, 1);
   static const grey_shade300 = Color.fromARGB(255, 230, 230, 230);
-  static const grey_shade600 = Color.fromRGBO(85, 85, 85, 1);
+  static const grey_shade600 = Color.fromRGBO(105, 105, 105, 1);
+  static const grey_shade400 = Color.fromRGBO(201, 201, 201, 1);
 
   static const status_update_vote_5 =
       Color.fromRGBO(44, 174, 57, 1); // Trạng thái 5
