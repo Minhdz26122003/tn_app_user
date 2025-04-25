@@ -1,4 +1,4 @@
-import 'package:app_hm/Controller/Appointment/AppointmentController.dart';
+import 'package:app_hm/Controller/Appointment/Appointmentcontroller.dart';
 import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Model/Appointment/ApointmentModel.dart';
 import 'package:app_hm/Router/AppPage.dart';
@@ -24,7 +24,7 @@ class Appoointmentdetail extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'detail_service'.tr,
-          style: const TextStyle(color: Colors.white, fontSize: 16),
+          style: const TextStyle(color: Colors.white, fontSize: 17),
         ),
         backgroundColor: ColorHex.total_color,
         leading: const BackButton(color: Colors.white),

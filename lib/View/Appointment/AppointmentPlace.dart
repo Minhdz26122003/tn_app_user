@@ -1,5 +1,5 @@
 import 'package:app_hm/Component/StepBook.dart';
-import 'package:app_hm/Controller/Appointment/AppointmentController.dart';
+import 'package:app_hm/Controller/Appointment/Appointmentcontroller.dart';
 import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +18,7 @@ class Appointmentplace extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'book_service'.tr,
-          style: const TextStyle(color: ColorHex.white),
+          style: const TextStyle(color: ColorHex.white, fontSize: 17),
         ),
         backgroundColor: ColorHex.total_color,
         automaticallyImplyLeading: false, // Ẩn nút quay lại

@@ -28,6 +28,7 @@ abstract class Routes {
   static const car = _Paths.car;
   static const addcar = _Paths.addcar;
   static const editcar = _Paths.editcar;
+  static const listservice = _Paths.listservice;
   Routes._();
 }
 
@@ -60,4 +61,5 @@ abstract class _Paths {
   static const car = '/car';
   static const addcar = '/addcar';
   static const editcar = '/editcar';
+  static const listservice = '/listservice';
 }

@@ -13,8 +13,8 @@ class Language extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text('language'.tr, style: const TextStyle(color: ColorHex.white)),
+        title: Text('language'.tr,
+            style: const TextStyle(color: ColorHex.white, fontSize: 17)),
         backgroundColor: const Color(0xFF2D74FF),
         titleSpacing: 0,
         leading: const BackButton(color: ColorHex.white),

@@ -16,7 +16,7 @@ class Notification extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'notification'.tr,
-          style: const TextStyle(fontSize: 14, color: ColorHex.white),
+          style: const TextStyle(fontSize: 17, color: ColorHex.white),
         ),
         backgroundColor: ColorHex.total_color,
         titleSpacing: 0,
@@ -89,7 +89,7 @@ class Notification extends StatelessWidget {
                           }
                           return GestureDetector(
                             onTap: () async {
-                              await controller.readOnly(index: index);
+                              // await controller.readOnly(index: index);
                             },
                             child: Container(
                               color:

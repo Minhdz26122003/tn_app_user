@@ -187,6 +187,7 @@ class Appointmentcontroller extends GetxController {
   }
 
   GetServiceTypeList() async {
+    isLoading.value = true;
     typeList.clear();
     try {
       String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
@@ -195,9 +196,10 @@ class Appointmentcontroller extends GetxController {
             Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
         "time": formattedTime,
       };
+
       var data = await APICaller.getInstance()
           .post('Book/get_type_service.php', param);
-      if (data != null) {
+      if (data != null && data['error']['code'] == 0) {
         List<dynamic> list = data['items'];
         var listItem = list
             .map((dynamic json) => TypeServiceModel.fromJson(json))
@@ -205,8 +207,10 @@ class Appointmentcontroller extends GetxController {
         typeList.addAll(listItem);
       }
     } catch (e) {
-      // debugPrint("Lỗi API: $e", wrapWidth: 1024);
-      Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+      debugPrint("Lỗi API: $e", wrapWidth: 1024);
+      //Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+    } finally {
+      isLoading.value = false;
     }
   }
 

@@ -28,7 +28,9 @@ class Auth {
       await FirebaseAuth.instance.signOut();
       await GoogleSignIn().signOut();
 
-      final controller = Get.find<Dashboardcontroller>();
+      final controller = Get.isRegistered<Dashboardcontroller>()
+          ? Get.find<Dashboardcontroller>()
+          : Get.put(Dashboardcontroller());
       controller
         ..username.value = ''
         ..email.value = ''
@@ -38,7 +40,8 @@ class Auth {
         ..isLoggedIn.value = false
         ..updateIsLoggedIn();
 
-      Utils.showSnackBar(title: 'Thông báo', message: 'log_out_success'.tr);
+      Utils.showSnackBar(
+          title: 'notification'.tr, message: 'log_out_success'.tr);
       Get.offAllNamed(Routes.dashboard);
     } catch (e) {
       print("Lỗi khi đăng xuất: $e");

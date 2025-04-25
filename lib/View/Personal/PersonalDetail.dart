@@ -19,8 +19,8 @@ class Personaldetail extends StatelessWidget {
       backgroundColor: ColorHex.white,
       appBar: AppBar(
         backgroundColor: ColorHex.total_color,
-        title:
-            Text('details'.tr, style: const TextStyle(color: ColorHex.white)),
+        title: Text('details'.tr,
+            style: const TextStyle(color: ColorHex.white, fontSize: 17)),
         leading: const BackButton(color: ColorHex.white),
       ),
       body: Obx(

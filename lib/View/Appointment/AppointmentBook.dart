@@ -1,5 +1,6 @@
 import 'package:app_hm/Component/StepBook.dart';
-import 'package:app_hm/Controller/Appointment/AppointmentController.dart';
+import 'package:app_hm/Controller/Appointment/Appointmentcontroller.dart';
+
 import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Model/Service/TypeServiceModel.dart';
 import 'package:app_hm/Router/AppPage.dart';
@@ -18,7 +19,7 @@ class Appointmentbook extends StatelessWidget {
       backgroundColor: ColorHex.white,
       appBar: AppBar(
         title: Text('book_service'.tr,
-            style: const TextStyle(color: ColorHex.white)),
+            style: const TextStyle(color: ColorHex.white, fontSize: 17)),
         backgroundColor: ColorHex.total_color,
         elevation: 0,
         leading: GestureDetector(

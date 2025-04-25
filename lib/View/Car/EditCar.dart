@@ -17,10 +17,9 @@ class EditCar extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorHex.total_color,
-        title: const Text(
-          'Chỉnh sửa xe',
-          style: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 16, color: ColorHex.white),
+        title: Text(
+          'edit_car'.tr,
+          style: TextStyle(fontSize: 17, color: ColorHex.white),
         ),
         automaticallyImplyLeading: false,
         actions: [
@@ -31,7 +30,7 @@ class EditCar extends StatelessWidget {
                 Get.back();
               },
               child: Text(
-                "Hủy",
+                'cancel'.tr,
                 style: TextStyle(
                   color: ColorHex.white,
                   fontSize: 13,
@@ -46,20 +45,20 @@ class EditCar extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildLabel('Biển số'),
+            _buildLabel('license_plate'.tr),
             _buildTextField(controller.textLicensePlate,
-                hint: 'Nhập biển số xe'),
+                hint: 'enter_license_plate'.tr),
             const SizedBox(height: 16),
-            _buildLabel('Tên xe'),
-            _buildTextField(controller.textName, hint: 'Nhập tên xe'),
+            _buildLabel('name_car'.tr),
+            _buildTextField(controller.textName, hint: 'enter_name_car'.tr),
             const SizedBox(height: 16),
-            _buildLabel('Hãng sản xuất'),
+            _buildLabel('manufacturer'.tr),
             _buildTextField(controller.textManufacturer,
-                hint: 'Nhập hãng sản xuất'),
+                hint: 'enter_manufacture'.tr),
             const SizedBox(height: 16),
-            _buildLabel('Năm sản xuất'),
+            _buildLabel('year_manufacture'.tr),
             _buildTextField(controller.textYearManufacturer,
-                hint: 'Nhập năm sản xuất'),
+                hint: 'enter_year_manufacture'.tr),
             const SizedBox(
               height: 12,
             ),
@@ -78,8 +77,8 @@ class EditCar extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                   ),
-                  child: const Text("Lưu lại",
-                      style: TextStyle(color: ColorHex.white)),
+                  child:
+                      Text('save'.tr, style: TextStyle(color: ColorHex.white)),
                 ),
               ),
             )

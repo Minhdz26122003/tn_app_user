@@ -19,8 +19,7 @@ class AddCar extends StatelessWidget {
         backgroundColor: ColorHex.total_color,
         title: Text(
           'Thêm xe ',
-          style: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 16, color: ColorHex.white),
+          style: TextStyle(fontSize: 17, color: ColorHex.white),
         ),
         automaticallyImplyLeading: false,
         actions: [

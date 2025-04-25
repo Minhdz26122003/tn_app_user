@@ -1,4 +1,4 @@
-import 'package:app_hm/Controller/Appointment/AppointmentController.dart';
+import 'package:app_hm/Controller/Appointment/Appointmentcontroller.dart';
 import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Model/Appointment/ApointmentModel.dart';
 import 'package:app_hm/Router/AppPage.dart';
@@ -16,7 +16,7 @@ class Appointmentlist extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('list_appointment'.tr,
-            style: TextStyle(color: ColorHex.white, fontSize: 16)),
+            style: TextStyle(color: ColorHex.white, fontSize: 17)),
         backgroundColor: ColorHex.total_color,
         centerTitle: false,
         leading: BackButton(color: ColorHex.white),

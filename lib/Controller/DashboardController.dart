@@ -25,6 +25,15 @@ class Dashboardcontroller extends GetxController {
   RxBool isLoggedIn = false.obs;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
+  TextEditingController textSearch = TextEditingController();
+  RxInt isState = (-1).obs;
+
+  final banners = <String>[
+    'assets/images/banner1.jpg',
+    'assets/images/banner2.jpg',
+    'assets/images/banner3.jpg',
+    'assets/images/banner4.jpg',
+  ];
   @override
   Future<void> onInit() async {
     super.onInit();

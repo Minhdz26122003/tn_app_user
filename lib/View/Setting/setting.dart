@@ -18,7 +18,7 @@ class Setting extends StatelessWidget {
         automaticallyImplyLeading: false,
         backgroundColor: ColorHex.total_color,
         title: Text('setting_all'.tr,
-            style: const TextStyle(color: ColorHex.white)),
+            style: const TextStyle(color: ColorHex.white, fontSize: 17)),
         elevation: 0,
         leading: const BackButton(color: ColorHex.white),
       ),

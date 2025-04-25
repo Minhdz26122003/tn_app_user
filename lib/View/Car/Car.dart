@@ -24,17 +24,18 @@ class Car extends StatelessWidget {
           color: ColorHex.white,
           onPressed: () => Get.back(),
         ),
-        title: const Text(
-          'Quản lý xe',
-          style: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 16, color: ColorHex.white),
+        title: Text(
+          'mycar'.tr,
+          style: TextStyle(fontSize: 16, color: ColorHex.white),
         ),
       ),
       body: Obx(
         () => (controller.isLoading.value)
             ? const Center(child: CircularProgressIndicator())
             : controller.carList == null // Kiểm tra null
-                ? const Center(child: Text("Dữ liệu không khả dụng"))
+                ? Center(
+                    child: Text('no_car'.tr),
+                  )
                 : Stack(
                     children: [
                       Column(
@@ -49,7 +50,7 @@ class Car extends StatelessWidget {
                                 onChanged: (value) =>
                                     controller.onSearchChanged(),
                                 decoration: InputDecoration(
-                                  hintText: "Nhập từ khóa tìm kiếm...",
+                                  hintText: 'search_keyword'.tr,
                                   hintStyle: const TextStyle(fontSize: 14),
                                   filled: true,
                                   fillColor: ColorHex.white,
@@ -84,8 +85,8 @@ class Car extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text(
-                                  "DANH SÁCH XE:",
+                                Text(
+                                  'car_list'.tr,
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400),
@@ -105,8 +106,7 @@ class Car extends StatelessWidget {
                                 ? Padding(
                                     padding:
                                         const EdgeInsets.symmetric(vertical: 8),
-                                    child: const Center(
-                                        child: Text("Không có dữ liệu")),
+                                    child: const Center(child: Text('no_car')),
                                   )
                                 : Expanded(
                                     child: ListView.builder(
@@ -162,9 +162,9 @@ class Car extends StatelessWidget {
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('${'loại_xe'.tr}: ${car.name}',
+            Text('${'name_car'.tr}: ${car.name}',
                 style: const TextStyle(fontSize: 12)),
-            Text('${'hãng_sx'.tr}: ${car.manufacturer}',
+            Text('${'manufacturer'.tr}: ${car.manufacturer}',
                 style: const TextStyle(fontSize: 12)),
           ],
         ),
@@ -186,8 +186,8 @@ class Car extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (_) => DialogCustom(
-                    title: 'Xác nhận',
-                    description: 'Bạn có chắc chắn muốn xóa chiếc xe này?',
+                    title: 'confirm'.tr,
+                    description: 'delete_car'.tr,
                     svg: 'assets/icons/info.svg',
                     svgColor: ColorHex.status_0,
                     btnColor: ColorHex.status_0,

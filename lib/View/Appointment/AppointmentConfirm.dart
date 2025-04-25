@@ -1,5 +1,5 @@
 import 'package:app_hm/Component/StepBook.dart';
-import 'package:app_hm/Controller/Appointment/AppointmentController.dart';
+import 'package:app_hm/Controller/Appointment/Appointmentcontroller.dart';
 import 'package:app_hm/Controller/DashboardController.dart';
 import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Model/Car/CarModel.dart';
@@ -20,9 +20,9 @@ class Appointmentconfirm extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: ColorHex.total_color,
         title: Text('book_service'.tr,
-            style: const TextStyle(color: ColorHex.white)),
+            style: const TextStyle(color: ColorHex.white, fontSize: 17)),
         elevation: 0,
-        automaticallyImplyLeading: false, // Ẩn nút quay lại
+        automaticallyImplyLeading: false,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
