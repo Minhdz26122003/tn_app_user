@@ -20,9 +20,7 @@ class TimeSlot {
 
   TimeSlot(this.label, this.dateTime, {this.isSelected = false});
 
-  /// Trả về true nếu dateTime < thời điểm hiện tại
   bool get isPast {
-    // So sánh với thời gian local hiện tại
     return dateTime.isBefore(DateTime.now());
   }
 }
@@ -166,23 +164,24 @@ class Appointmentcontroller extends GetxController {
 
   getAccount() async {
     String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
+    if (uid != 0) {
+      var param = {
+        "keyCert":
+            Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
+        "time": formattedTime,
+        "uid": uid,
+      };
 
-    var param = {
-      "keyCert":
-          Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
-      "time": formattedTime,
-      "uid": uid,
-    };
-
-    try {
-      var response = await APICaller.getInstance()
-          .post('/Account/account_detail.php', param);
-      if (response != null && response['data'] != null) {
-        account.value = AccountModel.fromJson(response['data']);
+      try {
+        var response = await APICaller.getInstance()
+            .post('Account/account_detail.php', param);
+        if (response != null && response['data'] != null) {
+          account.value = AccountModel.fromJson(response['data']);
+        }
+      } catch (e) {
+        debugPrint("Lỗi API: $e", wrapWidth: 1024);
+        //Utils.showSnackBar(title: 'notification'.tr, message: '$e');
       }
-    } catch (e) {
-      // debugPrint("Lỗi API: $e", wrapWidth: 1024);
-      Utils.showSnackBar(title: 'notification'.tr, message: '$e');
     }
   }
 
@@ -198,7 +197,7 @@ class Appointmentcontroller extends GetxController {
       };
 
       var data = await APICaller.getInstance()
-          .post('Book/get_type_service.php', param);
+          .post('Servicetype/get_type_service.php', param);
       if (data != null && data['error']['code'] == 0) {
         List<dynamic> list = data['items'];
         var listItem = list
@@ -224,7 +223,7 @@ class Appointmentcontroller extends GetxController {
         "time": formattedTime,
       };
       var data =
-          await APICaller.getInstance().post('Book/get_service.php', param);
+          await APICaller.getInstance().post('Service/get_service.php', param);
       if (data != null) {
         List<dynamic> list = data['items'];
         var listItem =
@@ -261,7 +260,7 @@ class Appointmentcontroller extends GetxController {
         "time": formattedTime,
       };
       var data =
-          await APICaller.getInstance().post('Book/get_center.php', param);
+          await APICaller.getInstance().post('Center/get_center.php', param);
       if (data != null) {
         List<dynamic> list = data['items'];
         var listItem =
@@ -276,56 +275,63 @@ class Appointmentcontroller extends GetxController {
 
   GetCarList() async {
     carList.clear();
-    isLoading.value = true;
-    try {
-      String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
-      var param = {
-        "keyCert":
-            Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
-        "time": formattedTime,
-        "uid": uid,
-      };
-      var data = await APICaller.getInstance().post('Car/get_car.php', param);
-      if (data != null) {
-        List<dynamic> list = data['items'];
-        var listItem =
-            list.map((dynamic json) => CarModel.fromJson(json)).toList();
-        carList.addAll(listItem);
+    if (uid != 0) {
+      isLoading.value = true;
+      try {
+        String formattedTime =
+            DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
+        var param = {
+          "keyCert":
+              Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
+          "time": formattedTime,
+          "uid": uid,
+        };
+        var data = await APICaller.getInstance().post('Car/get_car.php', param);
+        if (data != null) {
+          List<dynamic> list = data['items'];
+          var listItem =
+              list.map((dynamic json) => CarModel.fromJson(json)).toList();
+          carList.addAll(listItem);
+        }
+      } catch (e) {
+        // debugPrint("Lỗi API: $e", wrapWidth: 1024);
+        Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+      } finally {
+        isLoading.value = false;
       }
-    } catch (e) {
-      // debugPrint("Lỗi API: $e", wrapWidth: 1024);
-      Utils.showSnackBar(title: 'notification'.tr, message: '$e');
-    } finally {
-      isLoading.value = false;
     }
   }
 
   GetAppointmentList() async {
     appointmentList.clear();
-    isLoading.value = true;
-    try {
-      String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
-      var param = {
-        "keyCert":
-            Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
-        "time": formattedTime,
-        "uid": uid,
-      };
-      var data = await APICaller.getInstance()
-          .post('Appointment/get_appointment.php', param);
-      if (data != null) {
-        List<dynamic> list = data['items'];
-        var listItem = list
-            .map((dynamic json) => AppointmentModel.fromJson(json))
-            .toList();
-        appointmentList.addAll(listItem);
-      }
-    } catch (e) {
-      debugPrint("Lỗi API: $e", wrapWidth: 1024);
+    if (uid != 0) {
+      isLoading.value = true;
 
-      //Utils.showSnackBar(title: 'notification'.tr, message: '$e');
-    } finally {
-      isLoading.value = false;
+      try {
+        String formattedTime =
+            DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
+        var param = {
+          "keyCert":
+              Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
+          "time": formattedTime,
+          "uid": uid,
+        };
+        var data = await APICaller.getInstance()
+            .post('Appointment/get_appointment.php', param);
+        if (data != null) {
+          List<dynamic> list = data['items'];
+          var listItem = list
+              .map((dynamic json) => AppointmentModel.fromJson(json))
+              .toList();
+          appointmentList.addAll(listItem);
+        }
+      } catch (e) {
+        debugPrint("Lỗi API: $e", wrapWidth: 1024);
+
+        //Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+      } finally {
+        isLoading.value = false;
+      }
     }
   }
 

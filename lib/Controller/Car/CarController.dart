@@ -111,28 +111,31 @@ class Carcontroller extends GetxController {
   }
 
   Future<void> GetCarList() async {
-    isLoading.value = true;
     carList.clear();
-    try {
-      String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
-      var param = {
-        "keyCert":
-            Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
-        "time": formattedTime,
-        "uid": uid,
-      };
-      var data = await APICaller.getInstance().post('Car/get_car.php', param);
-      if (data != null) {
-        List<dynamic> list = data['items'];
-        var listItem =
-            list.map((dynamic json) => CarModel.fromJson(json)).toList();
-        carList.addAll(listItem);
+    if (uid != 0) {
+      isLoading.value = true;
+      try {
+        String formattedTime =
+            DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
+        var param = {
+          "keyCert":
+              Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
+          "time": formattedTime,
+          "uid": uid,
+        };
+        var data = await APICaller.getInstance().post('Car/get_car.php', param);
+        if (data != null) {
+          List<dynamic> list = data['items'];
+          var listItem =
+              list.map((dynamic json) => CarModel.fromJson(json)).toList();
+          carList.addAll(listItem);
+        }
+      } catch (e) {
+        //debugPrint("Lỗi API: $e", wrapWidth: 1024);
+        Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+      } finally {
+        isLoading.value = false;
       }
-    } catch (e) {
-      //debugPrint("Lỗi API: $e", wrapWidth: 1024);
-      Utils.showSnackBar(title: 'notification'.tr, message: '$e');
-    } finally {
-      isLoading.value = false;
     }
   }
 

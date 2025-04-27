@@ -16,8 +16,9 @@ import 'package:app_hm/View/Login/Login.dart';
 import 'package:app_hm/View/Login/Onboarding.dart';
 import 'package:app_hm/View/Notification/Notification.dart';
 import 'package:app_hm/View/Personal/PersonalDetail.dart';
-import 'package:app_hm/View/ServiceCar/ServiceCar.dart';
+import 'package:app_hm/View/Book/Servicebook.dart';
 import 'package:app_hm/View/ServiceType/Listservice.dart';
+import 'package:app_hm/View/ServiceType/Servicedetail.dart';
 import 'package:app_hm/View/Setting/Language.dart';
 import 'package:app_hm/View/Setting/setting.dart';
 import 'package:app_hm/View/Signup/Signup.dart';
@@ -126,8 +127,8 @@ class AppPages {
       transitionDuration: const Duration(milliseconds: 400),
     ),
     GetPage(
-      name: Routes.servicecar,
-      page: () => const ServiceCar(),
+      name: Routes.servicebook,
+      page: () => const Servicebook(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 400),
     ),
@@ -188,6 +189,12 @@ class AppPages {
     GetPage(
       name: Routes.listservice,
       page: () => const Listservice(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.servicedetail,
+      page: () => const Servicedetail(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 400),
     ),

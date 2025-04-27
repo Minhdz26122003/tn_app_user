@@ -15,7 +15,7 @@ class Home extends StatelessWidget {
     final Appointmentcontroller apptC = Get.put(Appointmentcontroller());
 
     return Scaffold(
-      backgroundColor: ColorHex.total_color,
+      backgroundColor: ColorHex.grey_shade300,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -106,8 +106,6 @@ class Home extends StatelessWidget {
                               if (services.length > preview.length)
                                 TextButton(
                                   onPressed: () {
-                                    print(
-                                        'type_id: ${type.type_id}, type_name: ${type.type_name}');
                                     Get.toNamed(
                                       Routes.listservice,
                                       arguments: {
@@ -132,7 +130,7 @@ class Home extends StatelessWidget {
 
                         // Grid preview
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: GridView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
@@ -140,38 +138,43 @@ class Home extends StatelessWidget {
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 3,
-                              mainAxisSpacing: 16,
-                              crossAxisSpacing: 16,
+                              mainAxisSpacing: 10,
+                              crossAxisSpacing: 10,
                               childAspectRatio: 0.9,
                             ),
-                            itemBuilder: (context, svcIdx) {
-                              final s = preview[svcIdx];
-                              return Column(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey.shade100,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    padding: const EdgeInsets.all(12),
-                                    child: Image.network(
-                                      s.service_img ?? '',
-                                      width: 28,
+                            itemBuilder: (context, i) {
+                              final s = preview[i];
+                              final url = (s.service_img ?? '').trim();
+                              return GestureDetector(
+                                onTap: () {
+                                  // Truyền nguyên ServiceModel
+                                  Get.toNamed(Routes.servicedetail,
+                                      arguments: s);
+                                },
+                                child: Column(
+                                  children: [
+                                    Image.network(
+                                      url,
+                                      fit: BoxFit.cover,
+                                      width: 40,
                                       height: 28,
-                                      color: Colors.orange,
-                                      errorBuilder: (_, __, ___) =>
-                                          const Icon(Icons.broken_image),
+                                      errorBuilder: (_, __, ___) => const Icon(
+                                          Icons.broken_image,
+                                          size: 28),
                                     ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    s.service_name ?? '',
-                                    style: const TextStyle(fontSize: 12),
-                                    textAlign: TextAlign.center,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
+                                    const SizedBox(height: 8),
+                                    SizedBox(
+                                      width: 60,
+                                      child: Text(
+                                        s.service_name ?? '',
+                                        style: const TextStyle(fontSize: 12),
+                                        textAlign: TextAlign.center,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               );
                             },
                           ),

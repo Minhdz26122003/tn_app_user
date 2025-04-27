@@ -93,24 +93,26 @@ class Personalcontroller extends GetxController {
   }
 
   getAccount() async {
-    isLoading.value = true;
-    String formattedTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(timeNow);
-    var param = {
-      "keyCert":
-          Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
-      "time": formattedTime,
-      "uid": uid,
-    };
-    try {
-      var response = await APICaller.getInstance()
-          .post('/Account/account_detail.php', param);
-      if (response != null) {
-        account = AccountModel.fromJson(response['data']);
+    if (uid != 0) {
+      isLoading.value = true;
+      String formattedTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(timeNow);
+      var param = {
+        "keyCert":
+            Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
+        "time": formattedTime,
+        "uid": uid,
+      };
+      try {
+        var response = await APICaller.getInstance()
+            .post('Account/account_detail.php', param);
+        if (response != null) {
+          account = AccountModel.fromJson(response['data']);
+        }
+      } catch (e) {
+        debugPrint(" Lỗi API: $e", wrapWidth: 1024);
+      } finally {
+        isLoading.value = false;
       }
-    } catch (e) {
-      debugPrint(" Lỗi API: $e", wrapWidth: 1024);
-    } finally {
-      isLoading.value = false;
     }
   }
 

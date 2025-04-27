@@ -37,7 +37,7 @@ class Service {
   String? type_id;
   String? description;
   String? service_img;
-  String? pirce;
+  String? price;
   String? time;
 
   Service(
@@ -46,7 +46,7 @@ class Service {
       this.type_id,
       this.description,
       this.service_img,
-      this.pirce,
+      this.price,
       this.time});
 
   Service.fromJson(Map<String, dynamic> json) {
@@ -55,7 +55,7 @@ class Service {
     type_id = json['type_id'];
     description = json['description'];
     service_img = json['service_img'];
-    pirce = json['pirce'];
+    price = json['price'];
     time = json['time'];
   }
 
@@ -66,7 +66,7 @@ class Service {
     data['type_id'] = type_id;
     data['description'] = description;
     data['service_img'] = service_img;
-    data['pirce'] = pirce;
+    data['price'] = price;
     data['time'] = time;
 
     return data;

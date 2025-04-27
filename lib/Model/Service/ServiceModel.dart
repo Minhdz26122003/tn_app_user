@@ -4,7 +4,7 @@ class ServiceModel {
   String? type_id;
   String? description;
   String? service_img;
-  String? pirce;
+  String? price;
   String? time;
 
   ServiceModel(
@@ -13,7 +13,7 @@ class ServiceModel {
       this.type_id,
       this.description,
       this.service_img,
-      this.pirce,
+      this.price,
       this.time});
 
   ServiceModel.fromJson(Map<String, dynamic> json) {
@@ -22,7 +22,7 @@ class ServiceModel {
     type_id = json['type_id'];
     description = json['description'];
     service_img = json['service_img'];
-    pirce = json['pirce'];
+    price = json['price'];
     time = json['time'];
   }
 
@@ -33,7 +33,7 @@ class ServiceModel {
     data['type_id'] = type_id;
     data['description'] = description;
     data['service_img'] = service_img;
-    data['pirce'] = pirce;
+    data['price'] = price;
     data['time'] = time;
 
     return data;

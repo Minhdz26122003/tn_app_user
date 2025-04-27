@@ -18,7 +18,7 @@ abstract class Routes {
   static const personal = _Paths.personal;
   static const personaldetail = _Paths.personaldetail;
   static const appointmentlist = _Paths.appointmentlist;
-  static const servicecar = _Paths.servicecar;
+  static const servicebook = _Paths.servicebook;
   static const appointmentbook = _Paths.appointmentbook;
   static const appointmenthistory = _Paths.appointmenthistory;
   static const appointmentplace = _Paths.appointmentplace;
@@ -29,6 +29,7 @@ abstract class Routes {
   static const addcar = _Paths.addcar;
   static const editcar = _Paths.editcar;
   static const listservice = _Paths.listservice;
+  static const servicedetail = _Paths.servicedetail;
   Routes._();
 }
 
@@ -51,7 +52,7 @@ abstract class _Paths {
   static const personal = '/personal';
   static const personaldetail = '/personaldetail';
   static const appointmentlist = '/appointmentlist';
-  static const servicecar = '/servicecar';
+  static const servicebook = '/servicebook';
   static const appointmentbook = '/appointmentbook';
   static const appointmenthistory = '/appointmenthistory';
   static const appointmentplace = '/appointmentplace';
@@ -62,4 +63,5 @@ abstract class _Paths {
   static const addcar = '/addcar';
   static const editcar = '/editcar';
   static const listservice = '/listservice';
+  static const servicedetail = '/servicedetail';
 }

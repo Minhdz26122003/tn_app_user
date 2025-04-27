@@ -49,24 +49,54 @@ class Auth {
   }
 
   static Future<bool> checkLogin() async {
-    // Kiểm tra toen
-    String? token = await Utils.getStringValueWithKey(Constant.ACCESS_TOKEN);
-    if (token == null || token.isEmpty) return false;
+    // Lấy phương thức đăng nhập từ bộ nhớ
+    String? loginMethodStr =
+        await Utils.getStringValueWithKey(Constant.LOGIN_METHOD);
 
-    // Kiểm tra tíme hết hạn rỗng
-    String timesaved = await Utils.getStringValueWithKey(Constant.TOKEN_EXPIRY);
-    if (timesaved.isEmpty) {
-      await Utils.removeKey(Constant.ACCESS_TOKEN);
+    if (loginMethodStr == 'php') {
+      // Kiểm tra đăng nhập bằng PHP
+      String? token = await Utils.getStringValueWithKey(Constant.ACCESS_TOKEN);
+      if (token == null || token.isEmpty) return false;
+
+      String timesaved =
+          await Utils.getStringValueWithKey(Constant.TOKEN_EXPIRY);
+      if (timesaved.isEmpty) {
+        await Utils.removeKey(Constant.ACCESS_TOKEN);
+        return false;
+      }
+
+      DateTime expiryTime = DateFormat('MM/dd/yyyy HH:mm:ss').parse(timesaved);
+      if (DateTime.now().toUtc().isAfter(expiryTime)) {
+        await Utils.removeKey(Constant.ACCESS_TOKEN);
+        await Utils.removeKey(Constant.TOKEN_EXPIRY);
+        return false;
+      }
+      return true;
+    } else if (loginMethodStr == 'firebase') {
+      // Kiểm tra đăng nhập bằng Firebase
+      return FirebaseAuth.instance.currentUser != null;
+
+      //   if (FirebaseAuth.instance.currentUser == null) return false;
+
+      // // Kiểm tra thời gian hết hạn
+      // String timesaved = await Utils.getStringValueWithKey(Constant.TOKEN_EXPIRY);
+      // if (timesaved.isEmpty) {
+      //   await FirebaseAuth.instance.signOut();
+      //   await GoogleSignIn().signOut();
+      //   return false;
+      // }
+
+      // DateTime expiryTime = DateFormat('MM/dd/yyyy HH:mm:ss').parse(timesaved);
+      // if (DateTime.now().toUtc().isAfter(expiryTime)) {
+      //   await FirebaseAuth.instance.signOut();
+      //   await GoogleSignIn().signOut();
+      //   await Utils.removeKey(Constant.TOKEN_EXPIRY);
+      //   return false;
+      // }
+      // return true;
+    } else {
       return false;
     }
-    // Kiểm tra time hết hạn đã quá chưachưa
-    DateTime expiryTime = DateFormat('MM/dd/yyyy HH:mm:ss').parse(timesaved);
-    if (timeNow.isAfter(expiryTime)) {
-      await Utils.removeKey(Constant.ACCESS_TOKEN);
-      await Utils.removeKey(Constant.TOKEN_EXPIRY);
-      return false;
-    }
-    return true;
   }
 
   static Future<void> loginWithFirebase() async {
@@ -127,6 +157,12 @@ class Auth {
             ..avatar.value = user.photoURL ?? ''
             ..phoneNumber.value = '';
           final d = data['data'];
+          // final timeNow = DateTime.now().toUtc();
+          // final newExpiry = timeNow.add(const Duration(hours: 1));
+          // final formattedExpiry = DateFormat('MM/dd/yyyy HH:mm:ss').format(newExpiry);
+          // await Utils.saveStringWithKey(Constant.TOKEN_EXPIRY, formattedExpiry);
+          // await Utils.saveStringWithKey(Constant.LOGIN_METHOD, 'firebase');
+          await Utils.saveStringWithKey(Constant.LOGIN_METHOD, 'firebase');
           await Utils.saveIntWithKey(Constant.UUID_USER_ACC, d['uid'] ?? 0);
           await Utils.saveStringWithKey(
               Constant.USERNAME, controller.username.value);
@@ -182,6 +218,7 @@ class Auth {
       await Utils.saveStringWithKey(Constant.TOKEN_EXPIRY, formattedExpiry);
 
       final d = data['data'];
+      await Utils.saveStringWithKey(Constant.LOGIN_METHOD, 'php');
       await Utils.saveIntWithKey(Constant.UUID_USER_ACC, d['uid'] ?? 0);
       await Utils.saveStringWithKey(Constant.USERNAME, d['username'] ?? '');
       await Utils.saveStringWithKey(Constant.FULL_NAME, d['fullname'] ?? '');

@@ -3,7 +3,7 @@ class Constant {
 
   static const String NEXT_PUBLIC_KEY_CERT = "minh8386";
   static const String NEXT_PUBLIC_KEY_PASS = "";
-
+  static const String LOGIN_METHOD = 'login_method';
   static const String USERNAME = "username";
   static const String PASSWORD = "password";
   static const String ACCESS_TOKEN = "accessToken";

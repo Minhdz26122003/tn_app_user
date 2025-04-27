@@ -4,6 +4,7 @@ import 'package:app_hm/Utils/Utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class Dashboardcontroller extends GetxController {
   RxInt currentPageIndex = 0.obs;
@@ -34,11 +35,19 @@ class Dashboardcontroller extends GetxController {
     'assets/images/banner3.jpg',
     'assets/images/banner4.jpg',
   ];
+
+  String formatCurrency(String? amount) {
+    if (amount == null) return 'N/A';
+    final price = double.tryParse(amount);
+    if (price == null) return 'N/A';
+    return NumberFormat.currency(locale: 'vi_VN', symbol: '₫').format(price);
+  }
+
   @override
   Future<void> onInit() async {
     super.onInit();
 
-    firebaseUser.bindStream(FirebaseAuth.instance.authStateChanges());
+    // firebaseUser.bindStream(FirebaseAuth.instance.authStateChanges());
     checkPhpToken();
     ever<User?>(firebaseUser, (_) => updateIsLoggedIn());
 

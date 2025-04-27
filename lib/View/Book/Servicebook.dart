@@ -6,8 +6,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
-class ServiceCar extends StatelessWidget {
-  const ServiceCar({super.key});
+class Servicebook extends StatelessWidget {
+  const Servicebook({super.key});
 
   @override
   Widget build(BuildContext context) {

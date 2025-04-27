@@ -6,7 +6,7 @@ import 'package:app_hm/View/Account/CreatePassword.dart';
 import 'package:app_hm/View/Appointment/ListAppointment.dart';
 import 'package:app_hm/View/Login/Login.dart';
 import 'package:app_hm/View/Personal/Personal.dart';
-import 'package:app_hm/View/ServiceCar/ServiceCar.dart';
+import 'package:app_hm/View/Book/Servicebook.dart';
 import 'package:app_hm/View/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -127,7 +127,7 @@ class Dashboard extends StatelessWidget {
                   case 0:
                     return const Home();
                   case 1:
-                    return const ServiceCar();
+                    return const Servicebook();
                   case 2:
                     return const Personal();
 
