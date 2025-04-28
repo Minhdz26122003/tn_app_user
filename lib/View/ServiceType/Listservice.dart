@@ -1,6 +1,6 @@
 import 'package:app_hm/Controller/Appointment/Appointmentcontroller.dart';
+import 'package:app_hm/Controller/ServiceControl/ServiceController.dart';
 import 'package:app_hm/Global/ColorHex.dart';
-import 'package:app_hm/Model/Service/ServiceModel.dart';
 import 'package:app_hm/Model/Service/TypeServiceModel.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +16,11 @@ class Listservice extends StatelessWidget {
     final String typeId = args['type_id'] as String;
     final String typeName = args['type_name'] as String? ?? 'Dịch vụ';
 
-    final controller = Get.find<Appointmentcontroller>();
+    final Servicecontroller controller = Get.put(Servicecontroller());
+    final Appointmentcontroller Appointcontroller =
+        Get.find<Appointmentcontroller>();
 
-    final type = controller.typeList.firstWhere(
+    final type = Appointcontroller.typeList.firstWhere(
       (t) => t.type_id == typeId,
       orElse: () =>
           TypeServiceModel(type_id: typeId, type_name: typeName, services: []),
@@ -29,9 +31,9 @@ class Listservice extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: ColorHex.total_color,
         elevation: 0,
-        leading: const BackButton(color: Colors.black),
+        leading: const BackButton(color: ColorHex.white),
         title: Text(typeName,
-            style: const TextStyle(color: Colors.black, fontSize: 17)),
+            style: const TextStyle(color: ColorHex.white, fontSize: 17)),
       ),
       body: services.isEmpty
           ? const Center(child: Text('Không có dịch vụ nào'))
@@ -41,19 +43,14 @@ class Listservice extends StatelessWidget {
               separatorBuilder: (_, __) => const SizedBox(height: 16),
               itemBuilder: (context, idx) {
                 final s = services[idx];
-                return _ServiceCard(service: s);
+                return _ServiceCard(context, s, controller);
               },
             ),
     );
   }
-}
 
-class _ServiceCard extends StatelessWidget {
-  final Service service;
-  const _ServiceCard({required this.service});
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _ServiceCard(
+      BuildContext context, Service service, Servicecontroller controller) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -61,6 +58,7 @@ class _ServiceCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // 1) Ảnh banner
           AspectRatio(
             aspectRatio: 12 / 5,
             child: Image.network(
@@ -70,47 +68,55 @@ class _ServiceCard extends StatelessWidget {
                   Container(color: Colors.grey.shade300),
             ),
           ),
+          // 2) Nội dung
           Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(
+                  width: 300,
+                  child: Text(
+                    service.service_name ?? '',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(
-                      child: Text(
-                        service.service_name ?? '',
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                    ),
                     Text(
-                      '${service.price ?? 'N/A'} đ', // Xử lý null cho price
+                      controller.formatCurrency(service.price),
                       style: const TextStyle(
-                          fontSize: 16,
+                          fontSize: 15,
                           color: Colors.red,
                           fontWeight: FontWeight.bold),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Get.toNamed(Routes.servicedetail,
-                          arguments: service.service_id);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
+                    const SizedBox(
+                      width: 8,
                     ),
-                    child: const Text('Book Now'),
-                  ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Get.toNamed(Routes.servicedetail, arguments: service);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
+                        ),
+                        child: Text(
+                          'book_service'.tr,
+                          style: TextStyle(color: ColorHex.white, fontSize: 13),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

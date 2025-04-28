@@ -16,6 +16,12 @@ class Personal extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: ColorHex.white,
+      // Thay container đỏ bằng AppBar
+      appBar: AppBar(
+        title: Text('Cá nhân'.tr),
+        backgroundColor: const Color(0xFFFF0000), // Màu đỏ
+        elevation: 0,
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Obx(() {
@@ -25,6 +31,7 @@ class Personal extends StatelessWidget {
                 )
               : Column(
                   children: [
+                    // Avatar và thông tin người dùng
                     Padding(
                       padding: const EdgeInsets.only(top: 30, left: 5),
                       child: GestureDetector(
@@ -58,8 +65,11 @@ class Personal extends StatelessWidget {
                                   child: controller.isLoggedIn.value &&
                                           controller.avatar.value.isNotEmpty
                                       ? Image.network(controller.avatar.value)
-                                      : const Icon(Icons.person,
-                                          size: 24, color: ColorHex.white),
+                                      : const Icon(
+                                          Icons.person,
+                                          size: 24,
+                                          color: ColorHex.white,
+                                        ),
                                 ),
                               ),
                               const SizedBox(width: 5),
@@ -70,7 +80,7 @@ class Personal extends StatelessWidget {
                                     Text(
                                       controller.isLoggedIn.value
                                           ? controller.username.value
-                                          : 'login'.tr,
+                                          : 'Đăng nhập'.tr,
                                       style: const TextStyle(
                                         color: ColorHex.black,
                                         fontWeight: FontWeight.w600,
@@ -98,13 +108,15 @@ class Personal extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 30),
+                    // Danh sách các mục
                     Expanded(
                       child: SingleChildScrollView(
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildSectionTitle('personal'.tr),
+                            _buildSectionTitle('Thông tin cá nhân'.tr),
                             _item(
-                              title: 'personal_information'.tr,
+                              title: 'Thông tin cá nhân'.tr,
                               svg: 'assets/icons/profile.svg',
                               onTap: () {
                                 if (!controller.isLoggedIn.value) {
@@ -116,7 +128,7 @@ class Personal extends StatelessWidget {
                             ),
                             const SizedBox(height: 5),
                             _item(
-                              title: 'mycar'.tr,
+                              title: 'Xe của tôi'.tr,
                               svg: 'assets/icons/car.svg',
                               onTap: () {
                                 if (!controller.isLoggedIn.value) {
@@ -128,9 +140,9 @@ class Personal extends StatelessWidget {
                             ),
                             const SizedBox(height: 5),
                             if (controller.loginMethod.value !=
-                                LoginMethod.firebase) ...[
+                                LoginMethod.firebase)
                               _item(
-                                title: 'change_password'.tr,
+                                title: 'Đổi mật khẩu'.tr,
                                 svg: 'assets/icons/security.svg',
                                 onTap: () {
                                   if (!controller.isLoggedIn.value) {
@@ -140,11 +152,10 @@ class Personal extends StatelessWidget {
                                   }
                                 },
                               ),
-                            ],
-                            _buildSectionTitle('appointment'.tr),
-                            const SizedBox(height: 5),
+                            const SizedBox(height: 20),
+                            _buildSectionTitle('Lịch hẹn'.tr),
                             _item(
-                              title: 'list_appointment'.tr,
+                              title: 'Danh sách lịch hẹn'.tr,
                               svg: 'assets/icons/appointment.svg',
                               onTap: () {
                                 if (!controller.isLoggedIn.value) {
@@ -154,10 +165,10 @@ class Personal extends StatelessWidget {
                                 }
                               },
                             ),
-                            _buildSectionTitle('setting_app'.tr),
-                            const SizedBox(height: 5),
+                            const SizedBox(height: 20),
+                            _buildSectionTitle('Cài đặt'.tr),
                             _item(
-                              title: 'setting_all'.tr,
+                              title: 'Cài đặt chung'.tr,
                               svg: 'assets/icons/setting.svg',
                               onTap: () {
                                 Get.toNamed(Routes.setting);
@@ -167,7 +178,7 @@ class Personal extends StatelessWidget {
                             if (controller.isLoggedIn.value)
                               _item(
                                 svg: 'assets/icons/logout.svg',
-                                title: 'log_out'.tr,
+                                title: 'Đăng xuất'.tr,
                                 isLogout: true,
                                 onTap: () {
                                   Auth.backLogin(true);

@@ -17,13 +17,13 @@ class Home extends StatelessWidget {
     return Scaffold(
       backgroundColor: ColorHex.grey_shade300,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: ColorHex.total_color,
         elevation: 0,
         title: Obx(() => Text(
               'welcome, ${dashC.username.value}',
               style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
+                  color: Colors.white,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold),
             )),
         actions: [
@@ -52,7 +52,6 @@ class Home extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // banner
               CarouselSlider(
                 items: dashC.banners.map((path) {
                   return ClipRRect(
@@ -137,34 +136,39 @@ class Home extends StatelessWidget {
                             itemCount: preview.length,
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              mainAxisSpacing: 10,
-                              crossAxisSpacing: 10,
-                              childAspectRatio: 0.9,
+                              crossAxisCount: 3, // 3 cột
+                              mainAxisSpacing: 16, // khoảng cách giữa các hàng
+                              crossAxisSpacing: 16, // khoảng cách giữa các cột
+                              childAspectRatio:
+                                  0.75, // cao hơn (0.75 = cao hơn 1.0)
                             ),
                             itemBuilder: (context, i) {
                               final s = preview[i];
                               final url = (s.service_img ?? '').trim();
                               return GestureDetector(
-                                onTap: () {
-                                  // Truyền nguyên ServiceModel
-                                  Get.toNamed(Routes.servicedetail,
-                                      arguments: s);
-                                },
+                                onTap: () => Get.toNamed(Routes.servicedetail,
+                                    arguments: s),
                                 child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Image.network(
-                                      url,
-                                      fit: BoxFit.cover,
-                                      width: 40,
-                                      height: 28,
-                                      errorBuilder: (_, __, ___) => const Icon(
-                                          Icons.broken_image,
-                                          size: 28),
+                                    // Tăng kích thước ảnh lên 60×60
+                                    SizedBox(
+                                      width: 60,
+                                      height: 60,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Image.network(
+                                          url,
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (_, __, ___) =>
+                                              Container(
+                                                  color: Colors.grey.shade300),
+                                        ),
+                                      ),
                                     ),
                                     const SizedBox(height: 8),
                                     SizedBox(
-                                      width: 60,
+                                      width: 80,
                                       child: Text(
                                         s.service_name ?? '',
                                         style: const TextStyle(fontSize: 12),
