@@ -18,7 +18,6 @@ class Servicedetail extends StatelessWidget {
           service.service_name ?? 'service_details'.tr,
           style: const TextStyle(fontSize: 17, color: ColorHex.white),
         ),
-        centerTitle: true,
         leading: const BackButton(color: Colors.white),
       ),
       body: Column(

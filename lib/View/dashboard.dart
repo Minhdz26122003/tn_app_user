@@ -27,101 +27,6 @@ class Dashboard extends StatelessWidget {
             )
           : Scaffold(
               key: controller.scaffoldKey,
-              // drawer: CustomDrawer(
-              //   avatar: controller.avatar.value,
-              //   fullName: controller.username.value,
-              //   email: controller.email.value,
-              // ),
-              // appBar: AppBar(
-              //   automaticallyImplyLeading: false,
-              //   backgroundColor: ColorHex.total_color,
-              //   title: Obx(
-              //     () => controller.isLoggedIn.value
-              //         ? Row(
-              //             children: [
-              //               Container(
-              //                 padding: const EdgeInsets.all(1),
-              //                 decoration: const BoxDecoration(
-              //                     color: ColorHex.white,
-              //                     shape: BoxShape.circle),
-              //                 child: ClipOval(
-              //                   child: Image.network(
-              //                     controller.avatar.value,
-              //                     height: 38,
-              //                     width: 38,
-              //                     fit: BoxFit.cover,
-              //                     errorBuilder: (BuildContext context,
-              //                         Object exception,
-              //                         StackTrace? stackTrace) {
-              //                       return Container(
-              //                         height: 38,
-              //                         width: 38,
-              //                         decoration: const BoxDecoration(
-              //                             shape: BoxShape.circle,
-              //                             color: ColorHex.grey),
-              //                       );
-              //                     },
-              //                   ),
-              //                 ),
-              //               ),
-              //               const SizedBox(
-              //                 width: 6,
-              //               ),
-              //               Flexible(
-              //                 child: Column(
-              //                   crossAxisAlignment: CrossAxisAlignment.start,
-              //                   children: [
-              //                     Text(
-              //                       'welcome'.tr,
-              //                       style: const TextStyle(
-              //                           fontSize: 11,
-              //                           fontWeight: FontWeight.w600,
-              //                           color: ColorHex.white),
-              //                     ),
-              //                     const SizedBox(
-              //                       height: 4,
-              //                     ),
-              //                     Text(
-              //                       controller.username.value,
-              //                       style: const TextStyle(
-              //                           fontSize: 13,
-              //                           fontWeight: FontWeight.w300,
-              //                           color: ColorHex.white),
-              //                       overflow: TextOverflow.ellipsis,
-              //                     ),
-              //                   ],
-              //                 ),
-              //               )
-              //             ],
-              //           )
-              //         : Row(
-              //             crossAxisAlignment: CrossAxisAlignment.start,
-              //             children: [
-              //               Text(
-              //                 'welcome'.tr,
-              //                 style: const TextStyle(
-              //                     fontSize: 15, fontWeight: FontWeight.w600),
-              //               ),
-              //               const SizedBox(width: 6),
-              //               Text(
-              //                 DateFormat('HH:mm:ss').format(
-              //                     DateTime.now()), // Hiển thị giờ hiện tại
-              //                 style: const TextStyle(
-              //                     fontSize: 15, fontWeight: FontWeight.w500),
-              //               ),
-              //             ],
-              //           ),
-              //   ),
-              //   actions: [
-              //     IconButton(
-              //       icon: const Icon(Icons.notifications_rounded),
-              //       tooltip: 'notification'.tr,
-              //       onPressed: () {
-              //         Get.toNamed(Routes.notification);
-              //       },
-              //     )
-              //   ],
-              // ),
               body: Obx(() {
                 switch (controller.currentPageIndex.value) {
                   case 0:
@@ -166,7 +71,7 @@ class Dashboard extends StatelessWidget {
                     ),
                     BottomNavigationBarItem(
                       icon: SvgPicture.asset(
-                        'assets/icons/setting.svg',
+                        'assets/icons/profile.svg',
                         colorFilter: controller.currentPageIndex.value == 2
                             ? const ColorFilter.mode(
                                 ColorHex.total_color,
@@ -176,7 +81,7 @@ class Dashboard extends StatelessWidget {
                         width: 24,
                         height: 24,
                       ),
-                      label: 'setting'.tr,
+                      label: 'personal'.tr,
                     ),
                   ],
                   currentIndex: controller.currentPageIndex.value,

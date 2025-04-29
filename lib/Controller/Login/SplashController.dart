@@ -47,10 +47,12 @@ class Splashcontroller extends GetxController {
       if (isValid) {
         Get.offAllNamed(Routes.dashboard);
       } else {
-        _showSessionExpiredDialog();
+        // _showSessionExpiredDialog();
+        Get.offAllNamed(Routes.dashboard);
       }
     } else {
-      _showSessionExpiredDialog();
+      // _showSessionExpiredDialog();
+      Get.offAllNamed(Routes.dashboard);
     }
   }
 

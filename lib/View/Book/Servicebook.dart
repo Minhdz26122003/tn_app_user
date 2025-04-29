@@ -12,42 +12,63 @@ class Servicebook extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(Dashboardcontroller());
-
     return Scaffold(
       backgroundColor: ColorHex.white,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildSectionTitle('car_service'.tr),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.only(
+                  left: 20, top: 40, right: 10, bottom: 20),
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xFF00C6FF), Color(0xFF0072FF)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(40),
+                  bottomRight: Radius.circular(40),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'car_service'.tr.toUpperCase(),
+                    style: const TextStyle(
+                      fontSize: 22,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Hãy đặt lịch dịch vụ cho xe của bạn một cách nhanh chóng!',
+                    style: TextStyle(color: Colors.white.withOpacity(0.9)),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
+            // Danh sách các lựa chọn
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: [
-                  _item(
+                  _itemCard(
                     title: 'book_service'.tr,
                     svg: 'assets/icons/appointment.svg',
+                    color: ColorHex.background,
                     onTap: () {
-                      if (!controller.isLoggedIn.value) {
-                        Get.toNamed(Routes.appointmentbook);
-                      } else {
-                        Get.toNamed(Routes.appointmentbook);
-                      }
+                      Get.toNamed(Routes.appointmentbook);
                     },
                   ),
-                  const SizedBox(height: 8),
-                  // _item(
-                  //   title: 'Đặt dịch vụ',
-                  //   svg: 'assets/icons/service.svg',
-                  //   onTap: () {
-                  //     if (!controller.isLoggedIn.value) {
-                  //       Get.toNamed(Routes.login);
-                  //     } else {
-                  //       Get.toNamed(Routes.home);
-                  //     }
-                  //   },
-                  // ),
-                  // const SizedBox(height: 8),
+                  // Thêm nhiều dịch vụ khác tại đây nếu cần
                 ],
               ),
             ),
@@ -57,46 +78,57 @@ class Servicebook extends StatelessWidget {
     );
   }
 
-  _item({
+  Widget _itemCard({
     required String title,
     required String svg,
     required GestureTapCallback onTap,
     bool isLogout = false,
+    Color color = Colors.white,
   }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-        decoration: BoxDecoration(
-          color: ColorHex.disableplace,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          children: [
-            SvgPicture.asset(
-              svg,
-              width: 24,
-              height: 24,
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 15,
-                  overflow: TextOverflow.ellipsis,
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.only(bottom: 16),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      color: color,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(color: Colors.black12, blurRadius: 4),
+                  ],
+                ),
+                child: SvgPicture.asset(
+                  svg,
+                  width: 28,
+                  height: 28,
                 ),
               ),
-            ),
-            const SizedBox(width: 10),
-            if (!isLogout)
-              const Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 16,
-                color: ColorHex.textContent,
-              )
-          ],
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              if (!isLogout)
+                const Icon(Icons.arrow_forward_ios_rounded,
+                    size: 16, color: ColorHex.textContent),
+            ],
+          ),
         ),
       ),
     );

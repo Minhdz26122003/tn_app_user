@@ -24,7 +24,7 @@ class Appointmentbook extends StatelessWidget {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Get.offAllNamed(Routes.dashboard);
+            Get.back();
           },
           child: const Icon(Icons.arrow_back, color: ColorHex.white),
         ),
