@@ -3,8 +3,6 @@ import 'package:app_hm/Global/Constant.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Services/APICaller.dart';
 import 'package:app_hm/Utils/Utils.dart';
-import 'package:app_hm/View/Account/CreatePassword.dart';
-import 'package:app_hm/View/Account/SendOTP.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -68,7 +66,7 @@ class LoginController extends GetxController {
       };
       try {
         var response =
-            await APICaller.getInstance().post('/Account/send_otp.php', param);
+            await APICaller.getInstance().post('Account/send_otp.php', param);
         // if (response != null) {
         //   startTimer();
         // }
@@ -108,8 +106,8 @@ class LoginController extends GetxController {
         "email": textEmail.text.trim()
       };
       try {
-        var response = await APICaller.getInstance()
-            .post('/Account/verify_otp.php', param);
+        var response =
+            await APICaller.getInstance().post('Account/verify_otp.php', param);
 
         if (response != null && response["error"]["code"] == 0) {
           Utils.showSnackBar(
@@ -155,7 +153,7 @@ class LoginController extends GetxController {
       };
       try {
         var response = await APICaller.getInstance()
-            .post('/Account/change_pass_forget.php', param);
+            .post('Account/change_pass_forget.php', param);
         if (response != null) {
           textEmail.clear();
           textOTP.clear();

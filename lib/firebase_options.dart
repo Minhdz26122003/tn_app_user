@@ -40,7 +40,7 @@ class DefaultFirebaseOptions {
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBwtPQ8qFibX0qjRDoqdewNq58l1w5fCk',
     appId: '1:414164341416:android:3f700f1bdd4da6c521a89d',
-    messagingSenderId: '57136751205',
+    messagingSenderId: '414164341416',
     projectId: 'demo1-4b8c1',
     storageBucket: 'demo1-4b8c1.firebasestorage.app',
   );
@@ -50,7 +50,7 @@ class DefaultFirebaseOptions {
     appId: '1:57136751205:ios:af30eaec87a28dffff5c8c',
     messagingSenderId: '57136751205',
     projectId: 'demo1-4b8c1',
-    storageBucket: 'esd-monitoring-2db90.appspot.com',
+    storageBucket: 'demo1-4b8c1.firebasestorage.app',
     // iosBundleId: 'com.avic.avicSmartfactory',
   );
 
@@ -69,6 +69,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '57136751205',
     projectId: 'esd-monitoring-2db90',
     authDomain: 'esd-monitoring-2db90.firebaseapp.com',
-    storageBucket: 'esd-monitoring-2db90.appspot.com',
+    storageBucket: 'demo1-4b8c1.firebasestorage.app',
   );
 }

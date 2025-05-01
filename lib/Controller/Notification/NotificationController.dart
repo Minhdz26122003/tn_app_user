@@ -100,31 +100,31 @@ class NotificationController extends GetxController {
     }
   }
 
-  // readOnly({required int index}) async {
-  //   String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
-  //   var param = {
-  //     "keyCert":
-  //         Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
-  //     "time": formattedTime,
-  //     "uuid": notificationList[index].uuid
-  //   };
-  //   try {
-  //     var response = await APICaller.getInstance()
-  //         .post('/Notify/update_notify_status', param);
-  //     if (response != null) {
-  //       notificationList[index].status = 1;
-  //       notificationList.refresh();
-  //       if (Get.isRegistered<Dashboardcontroller>()) {
-  //         Get.offAllNamed(Routes.dashboard);
-  //         final controller = Get.put(Dashboardcontroller());
-  //         controller.textSearch.text = notificationList[index].macNumber!;
-  //         controller.teamSelectList.add(notificationList[index].teamUuid!);
-  //       }
-  //     }
-  //   } catch (e) {
-  //     Utils.showSnackBar(title: 'notification'.tr, message: '$e');
-  //   }
-  // }
+  readOnly({required int index}) async {
+    String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
+    var param = {
+      "keyCert":
+          Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
+      "time": formattedTime,
+      "uuid": notificationList[index].uuid
+    };
+    try {
+      var response = await APICaller.getInstance()
+          .post('/Notify/update_notify_status', param);
+      if (response != null) {
+        notificationList[index].status = 1;
+        notificationList.refresh();
+        if (Get.isRegistered<Dashboardcontroller>()) {
+          Get.offAllNamed(Routes.dashboard);
+          final controller = Get.put(Dashboardcontroller());
+          controller.textSearch.text = notificationList[index].macNumber!;
+          // controller.teamSelectList.add(notificationList[index].teamUuid!);
+        }
+      }
+    } catch (e) {
+      Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+    }
+  }
 
   String timeAgo(String dateTimeString) {
     DateTime inputDate = DateTime.parse(dateTimeString);

@@ -2,6 +2,7 @@ import 'package:app_hm/Controller/Appointment/Appointmentcontroller.dart';
 import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Model/Appointment/ApointmentModel.dart';
 import 'package:app_hm/Router/AppPage.dart';
+import 'package:app_hm/View/Personal/Personal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -19,7 +20,12 @@ class Appointmentlist extends StatelessWidget {
             style: TextStyle(color: ColorHex.white, fontSize: 17)),
         backgroundColor: ColorHex.total_color,
         centerTitle: false,
-        leading: BackButton(color: ColorHex.white),
+        leading: GestureDetector(
+          onTap: () {
+            Get.offAllNamed(Routes.dashboard);
+          },
+          child: const Icon(Icons.arrow_back, color: ColorHex.white),
+        ),
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
@@ -79,8 +85,7 @@ class Appointmentlist extends StatelessWidget {
     required AppointmentModel model,
     required VoidCallback onTap,
   }) {
-    final date =
-        DateTime.tryParse(model.appointment_time ?? '') ?? DateTime.now();
+    final date = DateTime.tryParse(model.appointment_date!) ?? DateTime.now();
 
     return GestureDetector(
       onTap: onTap,

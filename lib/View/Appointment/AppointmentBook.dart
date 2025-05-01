@@ -1,10 +1,8 @@
 import 'package:app_hm/Component/StepBook.dart';
 import 'package:app_hm/Controller/Appointment/Appointmentcontroller.dart';
-
 import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Model/Service/TypeServiceModel.dart';
 import 'package:app_hm/Router/AppPage.dart';
-import 'package:app_hm/View/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -24,7 +22,7 @@ class Appointmentbook extends StatelessWidget {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Get.back();
+            Get.offAllNamed(Routes.dashboard);
           },
           child: const Icon(Icons.arrow_back, color: ColorHex.white),
         ),

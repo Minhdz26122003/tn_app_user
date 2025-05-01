@@ -1,17 +1,16 @@
-import 'dart:convert';
 import 'package:app_hm/Controller/DashboardController.dart';
 import 'package:app_hm/Controller/Login/LoginController.dart';
 import 'package:app_hm/Global/Constant.dart';
 import 'package:app_hm/Global/GlobalValue.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Services/APICaller.dart';
+import 'package:app_hm/Services/PushNotification.dart';
 import 'package:app_hm/Utils/Utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
-import 'package:crypto/crypto.dart';
 
 enum LoginMethod { firebase, php }
 
@@ -173,6 +172,7 @@ class Auth {
               Constant.AVATAR_USER, controller.avatar.value);
           await Utils.saveStringWithKey(
               Constant.PHONENUM, controller.phoneNumber.value);
+
           Get.offAllNamed(Routes.dashboard);
           Utils.showSnackBar(
               title: 'Thông báo', message: 'Đăng nhập thành công.');

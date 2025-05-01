@@ -8,6 +8,7 @@ import 'package:app_hm/Model/Service/ServiceModel.dart';
 import 'package:app_hm/Model/Service/TypeServiceModel.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Services/APICaller.dart';
+import 'package:app_hm/Services/PushNotification.dart';
 import 'package:app_hm/Utils/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -66,7 +67,7 @@ class Appointmentcontroller extends GetxController {
       account.value.address!.trim().isNotEmpty &&
       account.value.phonenum != null &&
       account.value.phonenum!.trim().isNotEmpty;
-
+  final pushNotifications = PushNotifications();
   @override
   void onInit() async {
     uid = await Utils.getIntValueWithKey(Constant.UUID_USER_ACC);
@@ -85,7 +86,7 @@ class Appointmentcontroller extends GetxController {
   }
 
   @override
-  void Close() {
+  void onClose() {
     print('on close second');
     super.onClose();
   }
@@ -97,7 +98,7 @@ class Appointmentcontroller extends GetxController {
     final labels =
         selectedSession.value == 'Sáng' ? morningTimes : afternoonTimes;
     final date = selectedDate.value;
-    final now = DateTime.now();
+    //final now = DateTime.now();
 
     final tmp = labels.map((label) {
       final parts = label.split(':');
@@ -125,8 +126,6 @@ class Appointmentcontroller extends GetxController {
       navigateToStep();
     } else {
       BookAppointment();
-      Get.snackbar('Thông báo', 'Bạn đã hoàn tất quy trình đặt dịch vụ!');
-      Get.offAllNamed(Routes.appointmentlist);
     }
   }
 
@@ -336,6 +335,7 @@ class Appointmentcontroller extends GetxController {
   }
 
   Future<void> BookAppointment() async {
+    savetoken();
     try {
       // Lấy danh sách serviceIds từ serviceList và checkedValuesService
       List<int> serviceIds = [];
@@ -364,31 +364,35 @@ class Appointmentcontroller extends GetxController {
         "serviceIds": serviceIds,
       };
 
-      var data = await APICaller.getInstance()
-          .post('Book/book_appointment.php', param);
-      print("data: $data");
+      var data =
+          await APICaller.getInstance().post('Book/bookandsen.php', param);
+      print("data lich hen: $data");
       if (data != null && data['status'] == 'success') {
         String appointmentId = data['items']['appointment_id'].toString();
-        Utils.showSnackBar(
-          title: 'notification'.tr,
-          message: "Đặt lịch thành công với ID: $appointmentId",
-        );
+        // Utils.showSnackBar(
+        //   title: 'notification'.tr,
+        //   message: "Đặt lịch thành công với ID: $appointmentId",
+        // );
         Get.offAllNamed(Routes.appointmentlist);
-        // Get.offAllNamed(Routes.appointmentlist, arguments: {
-        //   'appointmentId': appointmentId, // Truyền appointmentId nếu cần
-        // });
       } else {
         debugPrint("Lỗi API: " + data?['error']['message'], wrapWidth: 1024);
-        // Utils.showSnackBar(
-        //   title: 'Thông báo',
-        //   message: data?['error']['message'] ?? 'Đặt lịch thất bại',
-        // );
       }
     } catch (e) {
       debugPrint("Lỗi API: $e", wrapWidth: 1024);
       //Utils.showSnackBar(title: 'Thông báo', message: 'Lỗi: $e');
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  savetoken() async {
+    try {
+      int uid = await Utils.getIntValueWithKey(Constant.UUID_USER_ACC);
+      print('Generating token for uid = $uid');
+      await pushNotifications.saveFcmToken(uid.toString());
+    } catch (e, stack) {
+      debugPrint('EXCEPTION khi saveFcmToken: $e');
+      debugPrint('$stack');
     }
   }
 }

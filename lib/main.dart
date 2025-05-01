@@ -1,19 +1,21 @@
 import 'dart:io';
-
+import 'package:another_flushbar/flushbar.dart';
 import 'package:app_hm/Router/AppPage.dart';
-import 'package:app_hm/Services/APICaller.dart';
+import 'package:app_hm/Services/PushNotification.dart';
 import 'package:app_hm/Services/TranslationService.dart';
 import 'package:app_hm/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Locale savedLocale = await TranslationService.getSavedLocale();
-  runApp(MyApp(initialLocale: savedLocale));
+  runApp(MyApp(initialLocale: await TranslationService.getSavedLocale()));
   await FirebasePlatform();
+  await startNotification();
 }
 
 class MyApp extends StatelessWidget {
@@ -27,10 +29,9 @@ class MyApp extends StatelessWidget {
         appBarTheme: const AppBarTheme(
           titleSpacing: 20,
           elevation: 0,
-
-          // systemOverlayStyle: SystemUiOverlayStyle(
-          //   statusBarColor: Colors.transparent,
-          // ),
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+          ),
         ),
       ),
       localizationsDelegates: const [
@@ -55,7 +56,7 @@ class MyApp extends StatelessWidget {
 Future FirebasePlatform() async {
   if (Platform.isAndroid) {
     await Firebase.initializeApp(
-      name: "esd-monitoring",
+      name: "demo1-4b8c1",
       options: DefaultFirebaseOptions.currentPlatform,
     );
   } else {
@@ -63,4 +64,49 @@ Future FirebasePlatform() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
   }
+}
+
+Future firebaseBackgroundMessage(RemoteMessage message) async {
+  if (message.notification != null) {}
+}
+
+Future startNotification() async {
+  await PushNotifications.localNotiInit();
+  await PushNotifications.init();
+  FirebaseMessaging.onBackgroundMessage(firebaseBackgroundMessage);
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    if (message.notification != null) {
+      await PushNotifications.localNotiInit();
+      await PushNotifications.showSimpleNotification(
+        title: message.notification?.title ?? '',
+        body: message.notification?.body ?? '',
+      );
+      // Flushbar(
+      //   title: message.notification!.title ?? 'No Title',
+      //   message: message.notification!.body ?? 'No Body',
+      //   duration: const Duration(seconds: 5),
+      //   flushbarPosition: FlushbarPosition.TOP,
+      //   flushbarStyle: FlushbarStyle.GROUNDED,
+      //   reverseAnimationCurve: Curves.decelerate,
+      //   forwardAnimationCurve: Curves.elasticOut,
+      //   onTap: (flushbar) {
+      //     PushNotifications.navigationInNotification(message.data);
+      //     flushbar.dismiss();
+      //   },
+      // ).show(Get.context!);
+    }
+  });
+// Xử lý khi mở ứng dụng từ thông báo
+  FirebaseMessaging.onMessageOpenedApp.listen((message) async {
+    await PushNotifications.navigationInNotification(message.data);
+  });
+// Kiểm tra nếu ứng dụng khởi động từ thông báo
+  final RemoteMessage? message = await FirebaseMessaging.instance
+      .getInitialMessage(); // gọi hàm  này khi thông báo được nhấn vào từ trạng thái app đang đóng
+  if (message != null) {
+    PushNotifications.navigationInNotification(message.data);
+  }
+// Lắng nghe làm mới token
+  FirebaseMessaging.instance.onTokenRefresh.listen((event) {});
 }

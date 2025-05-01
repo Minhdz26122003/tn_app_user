@@ -4,7 +4,6 @@ import 'package:app_hm/Utils/Utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class Dashboardcontroller extends GetxController {
   RxInt currentPageIndex = 0.obs;
@@ -27,6 +26,7 @@ class Dashboardcontroller extends GetxController {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   TextEditingController textSearch = TextEditingController();
+  RxList<String> teamSelectList = RxList<String>();
   RxInt isState = (-1).obs;
 
   final banners = <String>[

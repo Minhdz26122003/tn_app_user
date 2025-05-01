@@ -6,10 +6,6 @@ import 'package:app_hm/Utils/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:get/get.dart';
-
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:timeline_tile/timeline_tile.dart';
 import 'package:intl/intl.dart';
 
 class Appoointmentdetail extends StatelessWidget {

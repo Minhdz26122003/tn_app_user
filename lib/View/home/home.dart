@@ -70,7 +70,14 @@ class Home extends StatelessWidget {
                                   ),
                                 )),
                           ),
-                          const Icon(Icons.notifications, color: Colors.white),
+                          IconButton(
+                            icon: const Icon(Icons.notifications_rounded),
+                            tooltip: 'notification'.tr,
+                            color: Colors.white,
+                            onPressed: () {
+                              Get.toNamed(Routes.notification);
+                            },
+                          )
                         ],
                       ),
 
@@ -117,7 +124,6 @@ class Home extends StatelessWidget {
                   autoPlayInterval: const Duration(seconds: 4),
                 ),
               ),
-              const SizedBox(height: 16),
 
               // Với mỗi type dịch vụ
               SafeArea(

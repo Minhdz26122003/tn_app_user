@@ -1,5 +1,4 @@
 import 'package:app_hm/Component/DialogCustom.dart';
-import 'package:app_hm/Controller/DashboardController.dart';
 import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Global/Constant.dart';
 import 'package:app_hm/Global/GlobalValue.dart';
@@ -7,7 +6,6 @@ import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Services/Auth.dart';
 import 'package:app_hm/Utils/Utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Splashcontroller extends GetxController {
@@ -47,12 +45,12 @@ class Splashcontroller extends GetxController {
       if (isValid) {
         Get.offAllNamed(Routes.dashboard);
       } else {
-        // _showSessionExpiredDialog();
-        Get.offAllNamed(Routes.dashboard);
+        _showSessionExpiredDialog();
+        //Get.offAllNamed(Routes.dashboard);
       }
     } else {
-      // _showSessionExpiredDialog();
-      Get.offAllNamed(Routes.dashboard);
+      _showSessionExpiredDialog();
+      //Get.offAllNamed(Routes.dashboard);
     }
   }
 
