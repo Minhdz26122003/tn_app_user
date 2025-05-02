@@ -1,40 +1,36 @@
 class NotificationModel {
-  String? uuid;
+  int? noti_id;
+  int? uid;
   String? title;
   String? body;
-  String? macNumber;
-  String? teamUuid;
   int? status;
-  String? timeCreated;
+  String? time_created;
 
   NotificationModel(
-      {this.uuid,
+      {this.noti_id,
+      this.uid,
       this.title,
       this.body,
-      this.macNumber,
-      this.teamUuid,
       this.status,
-      this.timeCreated});
+      this.time_created});
 
   NotificationModel.fromJson(Map<String, dynamic> json) {
-    uuid = json['uuid'];
+    noti_id = json['noti_id'];
+    uid = json['uid'];
     title = json['title'];
     body = json['body'];
-    macNumber = json['macNumber'];
-    teamUuid = json['teamUuid'];
     status = json['status'];
-    timeCreated = json['timeCreated'];
+    time_created = json['time_created'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['uuid'] = uuid;
+    data['noti_id'] = noti_id;
+    data['uid'] = uid;
     data['title'] = title;
     data['body'] = body;
-    data['macNumber'] = macNumber;
-    data['teamUuid'] = teamUuid;
     data['status'] = status;
-    data['timeCreated'] = timeCreated;
+    data['time_created'] = time_created;
     return data;
   }
 }

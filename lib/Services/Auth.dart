@@ -51,48 +51,44 @@ class Auth {
     // Lấy phương thức đăng nhập từ bộ nhớ
     String? loginMethodStr =
         await Utils.getStringValueWithKey(Constant.LOGIN_METHOD);
+    String timesaved = await Utils.getStringValueWithKey(Constant.TOKEN_EXPIRY);
+    final expiryUtc = DateTime.tryParse(timesaved)?.toUtc();
+    final nowUtc = DateTime.now().toUtc();
 
     if (loginMethodStr == 'php') {
       // Kiểm tra đăng nhập bằng PHP
       String? token = await Utils.getStringValueWithKey(Constant.ACCESS_TOKEN);
       if (token == null || token.isEmpty) return false;
-
-      String timesaved =
-          await Utils.getStringValueWithKey(Constant.TOKEN_EXPIRY);
       if (timesaved.isEmpty) {
         await Utils.removeKey(Constant.ACCESS_TOKEN);
         return false;
       }
-
-      DateTime expiryTime = DateFormat('MM/dd/yyyy HH:mm:ss').parse(timesaved);
-      if (DateTime.now().toUtc().isAfter(expiryTime)) {
+      if (expiryUtc == null || nowUtc.isAfter(expiryUtc)) {
+        // token đã hết hạn
         await Utils.removeKey(Constant.ACCESS_TOKEN);
         await Utils.removeKey(Constant.TOKEN_EXPIRY);
         return false;
       }
+
       return true;
     } else if (loginMethodStr == 'firebase') {
       // Kiểm tra đăng nhập bằng Firebase
-      return FirebaseAuth.instance.currentUser != null;
+      // return FirebaseAuth.instance.currentUser != null;
 
-      //   if (FirebaseAuth.instance.currentUser == null) return false;
-
-      // // Kiểm tra thời gian hết hạn
-      // String timesaved = await Utils.getStringValueWithKey(Constant.TOKEN_EXPIRY);
-      // if (timesaved.isEmpty) {
-      //   await FirebaseAuth.instance.signOut();
-      //   await GoogleSignIn().signOut();
-      //   return false;
-      // }
-
-      // DateTime expiryTime = DateFormat('MM/dd/yyyy HH:mm:ss').parse(timesaved);
-      // if (DateTime.now().toUtc().isAfter(expiryTime)) {
-      //   await FirebaseAuth.instance.signOut();
-      //   await GoogleSignIn().signOut();
-      //   await Utils.removeKey(Constant.TOKEN_EXPIRY);
-      //   return false;
-      // }
-      // return true;
+      if (FirebaseAuth.instance.currentUser == null) return false;
+      // Kiểm tra thời gian hết hạn
+      if (timesaved.isEmpty) {
+        await FirebaseAuth.instance.signOut();
+        await GoogleSignIn().signOut();
+        return false;
+      }
+      if (expiryUtc == null || nowUtc.isAfter(expiryUtc)) {
+        await FirebaseAuth.instance.signOut();
+        await GoogleSignIn().signOut();
+        await Utils.removeKey(Constant.TOKEN_EXPIRY);
+        return false;
+      }
+      return true;
     } else {
       return false;
     }
@@ -132,7 +128,6 @@ class Auth {
         final formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
         final keyCert =
             Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime);
-
         final param = {
           "email": user.email ?? '',
           "username": user.displayName ?? 'Unknown',
@@ -156,11 +151,15 @@ class Auth {
             ..avatar.value = user.photoURL ?? ''
             ..phoneNumber.value = '';
           final d = data['data'];
-          // final timeNow = DateTime.now().toUtc();
-          // final newExpiry = timeNow.add(const Duration(hours: 1));
-          // final formattedExpiry = DateFormat('MM/dd/yyyy HH:mm:ss').format(newExpiry);
-          // await Utils.saveStringWithKey(Constant.TOKEN_EXPIRY, formattedExpiry);
-          // await Utils.saveStringWithKey(Constant.LOGIN_METHOD, 'firebase');
+          // 1 giờ = 3600 giây
+          // 5'
+          final int tokenTTLSeconds = 3600;
+          // Tính thời điểm hết hạn
+          final DateTime expiryUtc =
+              timeNow.add(Duration(seconds: tokenTTLSeconds));
+
+          final String expiryString = expiryUtc.toIso8601String();
+          await Utils.saveStringWithKey(Constant.TOKEN_EXPIRY, expiryString);
           await Utils.saveStringWithKey(Constant.LOGIN_METHOD, 'firebase');
           await Utils.saveIntWithKey(Constant.UUID_USER_ACC, d['uid'] ?? 0);
           await Utils.saveStringWithKey(

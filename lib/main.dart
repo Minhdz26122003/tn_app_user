@@ -77,7 +77,6 @@ Future startNotification() async {
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
     if (message.notification != null) {
-      await PushNotifications.localNotiInit();
       await PushNotifications.showSimpleNotification(
         title: message.notification?.title ?? '',
         body: message.notification?.body ?? '',

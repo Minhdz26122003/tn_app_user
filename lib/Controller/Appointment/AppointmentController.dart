@@ -364,11 +364,11 @@ class Appointmentcontroller extends GetxController {
         "serviceIds": serviceIds,
       };
 
-      var data =
-          await APICaller.getInstance().post('Book/bookandsen.php', param);
+      var data = await APICaller.getInstance()
+          .post('Book/book_appointment.php', param);
       print("data lich hen: $data");
       if (data != null && data['status'] == 'success') {
-        String appointmentId = data['items']['appointment_id'].toString();
+        //String appointmentId = data['items']['appointment_id'].toString();
         // Utils.showSnackBar(
         //   title: 'notification'.tr,
         //   message: "Đặt lịch thành công với ID: $appointmentId",

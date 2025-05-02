@@ -89,7 +89,14 @@ class Notification extends StatelessWidget {
                           }
                           return GestureDetector(
                             onTap: () async {
-                              // await controller.readOnly(index: index);
+                              await controller.readOnly(index: index);
+                              final noti = controller.notificationList[index];
+                              showNotificationDetailsBottomSheet(
+                                context: context,
+                                title: noti.title ?? '',
+                                body: noti.body ?? '',
+                                timeCreated: noti.time_created ?? '',
+                              );
                             },
                             child: Container(
                               color:
@@ -109,7 +116,7 @@ class Notification extends StatelessWidget {
                                             0
                                         ? ColorHex.total_color
                                         : ColorHex.grey_shade300,
-                                    size: 10,
+                                    size: 20,
                                   ),
                                   const SizedBox(
                                     width: 12,
@@ -124,6 +131,7 @@ class Notification extends StatelessWidget {
                                           "body": Style(
                                             padding: HtmlPaddings.all(0),
                                             margin: Margins.all(0),
+                                            fontSize: FontSize(13),
                                           ),
                                         },
                                       ),
@@ -143,7 +151,7 @@ class Notification extends StatelessWidget {
                                           Text(
                                             controller.timeAgo(controller
                                                 .notificationList[index]
-                                                .timeCreated!),
+                                                .time_created!),
                                             style: const TextStyle(
                                                 fontSize: 11,
                                                 fontWeight: FontWeight.w500,
@@ -160,6 +168,73 @@ class Notification extends StatelessWidget {
                         },
                       ),
           )),
+    );
+  }
+
+  void showNotificationDetailsBottomSheet({
+    required BuildContext context,
+    required String title,
+    required String body,
+    required String timeCreated,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            left: 16,
+            right: 16,
+            top: 16,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Thanh kéo
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[400],
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                body,
+                style: const TextStyle(fontSize: 14),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  const Icon(Icons.schedule, size: 14, color: Colors.grey),
+                  const SizedBox(width: 6),
+                  Text(
+                    timeCreated,
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+            ],
+          ),
+        );
+      },
     );
   }
 }

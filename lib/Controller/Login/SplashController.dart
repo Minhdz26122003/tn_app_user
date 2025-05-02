@@ -22,7 +22,7 @@ class Splashcontroller extends GetxController {
     if (isValid) {
       String? loginMethod =
           await Utils.getStringValueWithKey(Constant.LOGIN_METHOD);
-
+      print('loginMethod: $loginMethod');
       if (loginMethod == 'php') {
         String? token =
             await Utils.getStringValueWithKey(Constant.ACCESS_TOKEN);
