@@ -13,7 +13,7 @@ import 'package:intl/intl.dart';
 
 class Personalcontroller extends GetxController {
   RxBool isLoading = true.obs;
-  DateTime timeNow = DateTime.now().toUtc();
+  DateTime timeNow = DateTime.now();
   int uid = 0;
   String emailAcc = "";
   String UsernameAcc = "";

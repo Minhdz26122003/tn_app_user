@@ -20,12 +20,7 @@ class Notification extends StatelessWidget {
         ),
         backgroundColor: ColorHex.total_color,
         titleSpacing: 0,
-        leading: IconButton(
-          icon:
-              const Icon(Icons.arrow_back_ios_outlined, color: ColorHex.white),
-          onPressed: () => Get.back(),
-          color: Colors.white,
-        ),
+        leading: const BackButton(color: Colors.white),
         actions: [
           IconButton(
             padding: const EdgeInsets.only(right: 20),
@@ -101,7 +96,7 @@ class Notification extends StatelessWidget {
                             child: Container(
                               color:
                                   controller.notificationList[index].status == 0
-                                      ? ColorHex.grey_shade300
+                                      ? ColorHex.noti
                                       : ColorHex.white,
                               padding: const EdgeInsets.symmetric(vertical: 15),
                               child: Row(

@@ -16,7 +16,7 @@ enum LoginMethod { firebase, php }
 
 class Auth {
   static String textemail = "";
-  static DateTime timeNow = DateTime.now().toUtc();
+  static DateTime timeNow = DateTime.now();
 
   static Future<void> backLogin(bool isRun) async {
     if (!isRun) return;
@@ -151,15 +151,13 @@ class Auth {
             ..avatar.value = user.photoURL ?? ''
             ..phoneNumber.value = '';
           final d = data['data'];
-          // 1 giờ = 3600 giây
-          // 5'
-          final int tokenTTLSeconds = 3600;
-          // Tính thời điểm hết hạn
-          final DateTime expiryUtc =
-              timeNow.add(Duration(seconds: tokenTTLSeconds));
+          // 1 giờ
 
-          final String expiryString = expiryUtc.toIso8601String();
-          await Utils.saveStringWithKey(Constant.TOKEN_EXPIRY, expiryString);
+          final idTokenResult = await user.getIdTokenResult();
+          final DateTime expiryUtc = idTokenResult.expirationTime!.toUtc();
+          await Utils.saveStringWithKey(
+              Constant.TOKEN_EXPIRY, expiryUtc.toIso8601String());
+
           await Utils.saveStringWithKey(Constant.LOGIN_METHOD, 'firebase');
           await Utils.saveIntWithKey(Constant.UUID_USER_ACC, d['uid'] ?? 0);
           await Utils.saveStringWithKey(
@@ -191,58 +189,68 @@ class Auth {
   static Future<void> loginWithPHP({String? userName, String? password}) async {
     final login = Get.find<LoginController>();
     login.isLoading.value = true;
+    if (login.textUserName.text.trim().isEmpty) {
+      Utils.showSnackBar(
+          title: 'notification'.tr, message: 'enter_username'.tr);
+    } else if (login.textPass.text.trim().isEmpty) {
+      Utils.showSnackBar(
+          title: 'notification'.tr, message: 'enter_current_password'.tr);
+    } else {
+      try {
+        final timeNow = DateTime.now().toUtc();
+        final formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
 
-    try {
-      final timeNow = DateTime.now().toUtc();
-      final formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
+        final param = {
+          "keyCert":
+              Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
+          "time": formattedTime,
+          "username": userName,
+          "password": password,
+        };
 
-      final param = {
-        "keyCert":
-            Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
-        "time": formattedTime,
-        "username": userName,
-        "password": password,
-      };
+        final data =
+            await APICaller.getInstance().post('Auth/login.php', param);
+        if (data == null) throw Exception('API trả về null');
 
-      final data = await APICaller.getInstance().post('Auth/login.php', param);
-      if (data == null) throw Exception('API trả về null');
+        final token = data['data']['token'];
+        await Utils.saveStringWithKey(Constant.ACCESS_TOKEN, token);
+        GlobalValue.getInstance().setToken('Bearer $token');
 
-      final token = data['data']['token'];
-      await Utils.saveStringWithKey(Constant.ACCESS_TOKEN, token);
-      GlobalValue.getInstance().setToken('Bearer $token');
+        final DateTime nowUtc = DateTime.now().toUtc();
+        final DateTime expiryUtc = nowUtc.add(const Duration(hours: 1));
+        final String expiryString = expiryUtc.toIso8601String();
+        await Utils.saveStringWithKey(Constant.TOKEN_EXPIRY, expiryString);
 
-      final newExpiry = timeNow.add(const Duration(hours: 1));
-      final formattedExpiry =
-          DateFormat('MM/dd/yyyy HH:mm:ss').format(newExpiry);
-      await Utils.saveStringWithKey(Constant.TOKEN_EXPIRY, formattedExpiry);
+        final d = data['data'];
+        await Utils.saveStringWithKey(Constant.LOGIN_METHOD, 'php');
+        await Utils.saveIntWithKey(Constant.UUID_USER_ACC, d['uid'] ?? 0);
+        await Utils.saveStringWithKey(Constant.USERNAME, d['username'] ?? '');
+        await Utils.saveStringWithKey(Constant.FULL_NAME, d['fullname'] ?? '');
+        await Utils.saveStringWithKey(Constant.EMAIL, d['email'] ?? '');
+        await Utils.saveStringWithKey(Constant.ADDRESS, d['address'] ?? '');
+        await Utils.saveStringWithKey(Constant.PHONENUM, d['phonenum'] ?? '');
+        await Utils.saveStringWithKey(Constant.BIRTHDAY, d['birthday'] ?? '');
+        await Utils.saveIntWithKey(Constant.GENDER, d['gender'] ?? 0);
+        await Utils.saveStringWithKey(Constant.AVATAR_USER, d['avatar'] ?? '');
+        await Utils.saveIntWithKey(Constant.STATUS, d['status'] ?? 0);
 
-      final d = data['data'];
-      await Utils.saveStringWithKey(Constant.LOGIN_METHOD, 'php');
-      await Utils.saveIntWithKey(Constant.UUID_USER_ACC, d['uid'] ?? 0);
-      await Utils.saveStringWithKey(Constant.USERNAME, d['username'] ?? '');
-      await Utils.saveStringWithKey(Constant.FULL_NAME, d['fullname'] ?? '');
-      await Utils.saveStringWithKey(Constant.EMAIL, d['email'] ?? '');
-      await Utils.saveStringWithKey(Constant.ADDRESS, d['address'] ?? '');
-      await Utils.saveStringWithKey(Constant.PHONENUM, d['phonenum'] ?? '');
-      await Utils.saveStringWithKey(Constant.BIRTHDAY, d['birthday'] ?? '');
-      await Utils.saveIntWithKey(Constant.GENDER, d['gender'] ?? 0);
-      await Utils.saveStringWithKey(Constant.AVATAR_USER, d['avatar'] ?? '');
-      await Utils.saveIntWithKey(Constant.STATUS, d['status'] ?? 0);
+        final dashboardCtrl = Get.isRegistered<Dashboardcontroller>()
+            ? Get.find<Dashboardcontroller>()
+            : Get.put(Dashboardcontroller());
 
-      final dashboardCtrl = Get.isRegistered<Dashboardcontroller>()
-          ? Get.find<Dashboardcontroller>()
-          : Get.put(Dashboardcontroller());
-
-      dashboardCtrl
-        ..isPhpLoggedIn.value = true
-        ..updateIsLoggedIn();
-      Get.offAllNamed(Routes.dashboard);
-      Utils.showSnackBar(title: 'Thông báo', message: 'Đăng nhập thành công.');
-    } catch (e) {
-      debugPrint("Lỗi API: $e", wrapWidth: 1024);
-      Utils.showSnackBar(title: 'Lỗi đăng nhập', message: e.toString());
-    } finally {
-      login.isLoading.value = false;
+        dashboardCtrl
+          ..isPhpLoggedIn.value = true
+          ..updateIsLoggedIn();
+        Get.offAllNamed(Routes.dashboard);
+        Utils.showSnackBar(
+            title: 'Thông báo', message: 'Đăng nhập thành công.');
+      } catch (e) {
+        //debugPrint("Lỗi API: $e", wrapWidth: 1024);
+        //Utils.showSnackBar(title: 'Lỗi đăng nhập', message: e.toString());
+        Utils.showSnackBar(title: 'notification'.tr, message: 'Error Login');
+      } finally {
+        login.isLoading.value = false;
+      }
     }
   }
 

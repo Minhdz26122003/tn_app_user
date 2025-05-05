@@ -1,3 +1,5 @@
+import 'package:app_hm/Model/Service/ServiceModel.dart';
+
 class AppointmentModel {
   int? appointment_id;
   int? uid;
@@ -12,9 +14,13 @@ class AppointmentModel {
   int? status;
   String? created_at;
 
-  double? quoteAmount; // Thêm cho báo giá
-  double? depositAmount; // Thêm cho đặt cọc
+  // Tạo tạm thời
+  double? quoteAmount;
+  double? depositAmount;
   double? totalAmount;
+
+  // Thêm trường này để chứa danh sách dịch vụ
+  List<ServiceDetail>? services;
 
   AppointmentModel({
     this.appointment_id,
@@ -32,11 +38,12 @@ class AppointmentModel {
     this.quoteAmount,
     this.depositAmount,
     this.totalAmount,
+    this.services, // Thêm vào constructor
   });
 
   // Trả về index để dùng trong Stepper/Timeline
   int get currentStatusIndex {
-    if (status != null && status! >= 0 && status! <= 5) {
+    if (status != null && status! >= 0 && status! <= 4) {
       return status!;
     } else {
       return 0;
@@ -56,10 +63,24 @@ class AppointmentModel {
     appointment_date = json['appointment_date'];
     status = json['status'];
     created_at = json['created_at'];
+    quoteAmount = json['quoteAmount'] != null
+        ? double.tryParse(json['quoteAmount'].toString())
+        : null;
+    depositAmount = json['depositAmount'] != null
+        ? double.tryParse(json['depositAmount'].toString())
+        : null;
+    totalAmount = json['totalAmount'] != null
+        ? double.tryParse(json['totalAmount'].toString())
+        : null;
 
-    quoteAmount = json['quoteAmount'];
-    depositAmount = json['depositAmount'];
-    totalAmount = json['totalAmount'];
+    // Xử lý danh sách dịch vụ nếu có
+    if (json['services'] != null && json['services'] is List) {
+      services = (json['services'] as List)
+          .map((item) => ServiceDetail.fromJson(item as Map<String, dynamic>))
+          .toList();
+    } else {
+      services = [];
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -76,10 +97,49 @@ class AppointmentModel {
     data['appointment_date'] = appointment_date;
     data['status'] = status;
     data['created_at'] = created_at;
-
     data['quoteAmount'] = quoteAmount;
     data['depositAmount'] = depositAmount;
     data['totalAmount'] = totalAmount;
+    if (services != null) {
+      data['services'] = services!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+// Model cho thông tin chi tiết dịch vụ
+class ServiceDetail {
+  int? service_id;
+  String? service_name;
+  String? service_img;
+  double? price;
+  String? time; // Hoặc có thể là int nếu thời gian là số phút
+
+  ServiceDetail({
+    this.service_id,
+    this.service_name,
+    this.service_img,
+    this.price,
+    this.time,
+  });
+
+  ServiceDetail.fromJson(Map<String, dynamic> json) {
+    service_id = json['service_id'];
+    service_name = json['service_name'];
+    service_img = json['service_img'];
+    price = json['price'] != null
+        ? double.tryParse(json['price'].toString())
+        : null;
+    time = json['time']?.toString(); // Đảm bảo là String
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['service_id'] = service_id;
+    data['service_name'] = service_name;
+    data['service_img'] = service_img;
+    data['price'] = price;
+    data['time'] = time;
     return data;
   }
 }

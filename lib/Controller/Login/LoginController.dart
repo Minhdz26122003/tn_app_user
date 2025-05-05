@@ -12,7 +12,7 @@ class LoginController extends GetxController {
   TextEditingController textPass = TextEditingController();
   RxBool isHidePassword = true.obs;
   RxBool isLoading = false.obs;
-  DateTime timeNow = DateTime.now().toUtc();
+  DateTime timeNow = DateTime.now();
 
   // Forgot password
   RxBool isOTP = false.obs;
@@ -29,9 +29,22 @@ class LoginController extends GetxController {
   TextEditingController textPasswordConfirm = TextEditingController();
 
   @override
+  void onInit() async {
+    refeshData();
+    super.onInit();
+  }
+
+  @override
   void onClose() {
     timer?.cancel();
     super.onClose();
+  }
+
+  void refeshData() {
+    textEmail.clear();
+    textOTP.clear();
+    textPasswordOld.clear();
+    textPasswordOld.clear();
   }
 
   startTimer() {
@@ -57,6 +70,7 @@ class LoginController extends GetxController {
       Utils.showSnackBar(
           title: 'notification'.tr, message: 'email_formatted'.tr);
     } else {
+      DateTime timeNow = DateTime.now(); // Di chuyển vào trong hàm
       String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
       var param = {
         "keyCert":
@@ -74,6 +88,7 @@ class LoginController extends GetxController {
           startTimer();
           Utils.showSnackBar(
               title: 'notification'.tr, message: "Đã gửi mã OTP thành công");
+          refeshData();
           Get.toNamed(Routes.sendtopt);
         } else {
           Utils.showSnackBar(
@@ -97,6 +112,7 @@ class LoginController extends GetxController {
     } else if (textOTP.text.trim().isEmpty) {
       Utils.showSnackBar(title: 'notification'.tr, message: 'enter_otp'.tr);
     } else {
+      DateTime timeNow = DateTime.now(); // Di chuyển vào trong hàm
       String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
       var param = {
         "keyCert":
@@ -112,6 +128,7 @@ class LoginController extends GetxController {
         if (response != null && response["error"]["code"] == 0) {
           Utils.showSnackBar(
               title: 'notification'.tr, message: "Xác thực OTP thành công");
+          refeshData();
           Get.toNamed(Routes.createpassword);
         } else {
           Utils.showSnackBar(
@@ -142,6 +159,7 @@ class LoginController extends GetxController {
       Utils.showSnackBar(
           title: 'notification'.tr, message: 'password_not_match'.tr);
     } else {
+      DateTime timeNow = DateTime.now();
       String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
       var param = {
         "keyCert":
@@ -155,10 +173,7 @@ class LoginController extends GetxController {
         var response = await APICaller.getInstance()
             .post('Account/change_pass_forget.php', param);
         if (response != null) {
-          textEmail.clear();
-          textOTP.clear();
-          textPasswordNew.clear();
-          textPasswordConfirm.clear();
+          refeshData();
           isOTP.value = !isOTP.value;
           Get.offAllNamed(Routes.login);
           Utils.showSnackBar(

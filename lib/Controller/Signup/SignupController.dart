@@ -58,7 +58,7 @@ class SignupController extends GetxController {
       Utils.showSnackBar(
           title: 'notification'.tr, message: 'password_not_match'.tr);
     } else {
-      DateTime timeNow = DateTime.now().toUtc();
+      DateTime timeNow = DateTime.now();
       String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
 
       var param = {

@@ -95,7 +95,7 @@ class Sentotp extends StatelessWidget {
                             ? ColorHex.selectplace
                             : ColorHex.total_color,
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 115, vertical: 15),
+                            horizontal: 105, vertical: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),

@@ -184,33 +184,53 @@ class Appointmenttime extends StatelessWidget {
 
   // Widget cho từng time slot
   Widget _buildTimeSlot(TimeSlot slot, Appointmentcontroller controller) {
-    final bg = slot.isSelected
-        ? ColorHex.total_color
-        : slot.isPast
-            ? ColorHex.grey_shade300
-            : ColorHex.white;
-    final fg = slot.isSelected
-        ? ColorHex.white
-        : slot.isPast
-            ? ColorHex.grey
-            : ColorHex.black;
+    final bool isEnabled = !slot.isPast && !slot.isBooked;
+    Color bg, fg, borderColor;
+
+    if (slot.isSelected) {
+      bg = ColorHex.total_color;
+      fg = Colors.white;
+      borderColor = ColorHex.total_color;
+    } else if (slot.isBooked) {
+      bg = ColorHex.grey_shade300;
+      fg = ColorHex.grey;
+      borderColor = ColorHex.grey;
+    } else if (slot.isPast) {
+      bg = ColorHex.grey;
+      fg = ColorHex.grey_shade600;
+      borderColor = ColorHex.grey_shade400;
+    } else {
+      bg = Colors.white;
+      fg = Colors.black;
+      borderColor = ColorHex.grey_shade400;
+    }
 
     return GestureDetector(
-      onTap: slot.isPast ? null : () => controller.pickTime(slot.label),
+      onTap: isEnabled ? () => controller.pickTime(slot.label) : null,
       child: Container(
         width: 80,
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
         decoration: BoxDecoration(
           color: bg,
-          border: Border.all(
-              color: slot.isSelected ? ColorHex.total_color : ColorHex.grey),
+          border: Border.all(color: borderColor),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Center(
-          child: Text(
-            slot.label,
-            style: TextStyle(color: fg),
-          ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              slot.label,
+              style: TextStyle(color: fg),
+            ),
+            if (slot.isBooked) ...[
+              const SizedBox(width: 4),
+              Icon(
+                Icons.lock,
+                size: 16,
+                color: fg,
+              ),
+            ],
+          ],
         ),
       ),
     );

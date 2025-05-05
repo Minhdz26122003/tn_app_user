@@ -99,7 +99,6 @@ class Utils {
   static final steps = [
     'processing_request'.tr,
     'price_quote'.tr,
-    'deposit'.tr,
     'repair'.tr,
     'final_settlement'.tr,
     'pay'.tr,

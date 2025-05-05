@@ -41,7 +41,8 @@ class Appoointmentdetail extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 16),
-              _buildCurrentStepCard(currentStep, appt),
+              _buildCurrentStepCard(
+                  currentStep, appt, controller, context, appointmentId),
               const SizedBox(height: 16),
               _buildTimeLine(currentStep),
               const SizedBox(height: 24),
@@ -97,26 +98,28 @@ class Appoointmentdetail extends StatelessWidget {
     );
   }
 
-  Widget _buildCurrentStepCard(int step, AppointmentModel m) {
+  Widget _buildCurrentStepCard(
+      int step,
+      AppointmentModel m,
+      Appointmentcontroller controller,
+      BuildContext context,
+      int appointmentId) {
     switch (step) {
       // Status 0: Đang xử lý yêu cầu
       case 0:
         return _processingCard(m);
       // Status 1: Báo giá
       case 1:
-        return _quoteCard(m);
-      // Status 2: Đặt cọc
+        return _quoteCard(m, controller, context, appointmentId);
+      // Status 2: Sửa chữa
       case 2:
-        return _depositCard(m);
-      // Status 3: Sửa chữa
-      case 3:
-        return _repairCard(m);
-      // Status 4: Thanh toán
-      case 4:
-        return _lostlostCard(m);
-      // Status 5: Thanh toán
-      case 5:
-        return _paymentCard(m);
+        return _repairCard(m, controller);
+      //Status 3: Thanh toán
+      // case 3:
+      //   return _invoiceCard(m);
+      // // Status 4: Thanh toán
+      //  case 4:
+      //    return _paymentAndSettlementSection(m);
       default:
         return const SizedBox.shrink();
     }
@@ -144,30 +147,51 @@ class Appoointmentdetail extends StatelessWidget {
                     color: ColorHex.black)),
             const SizedBox(height: 8),
             Text('${'date'.tr}: $dateStr',
-                style: const TextStyle(
-                    fontSize: 14, color: ColorHex.grey_shade600)),
+                style:
+                    const TextStyle(fontSize: 14, color: ColorHex.textContent)),
             const SizedBox(height: 4),
             Text('${'time'.tr}: $timeStr',
-                style: const TextStyle(
-                    fontSize: 14, color: ColorHex.grey_shade600)),
+                style:
+                    const TextStyle(fontSize: 14, color: ColorHex.textContent)),
             const SizedBox(height: 4),
             Text('${'address'.tr}: ${m.gara_address}',
-                style: const TextStyle(
-                    fontSize: 14, color: ColorHex.grey_shade600)),
+                style:
+                    const TextStyle(fontSize: 14, color: ColorHex.textContent)),
             const SizedBox(height: 4),
-            Text('${'code'.tr}: ${m.appointment_id}',
-                style: const TextStyle(
-                    fontSize: 14, color: ColorHex.grey_shade600)),
+            Text('${'code'.tr}: #${m.appointment_id}',
+                style:
+                    const TextStyle(fontSize: 14, color: ColorHex.textContent)),
           ],
         ),
       ),
     );
   }
 
+  int _parseDurationToMinutes(String duration) {
+    final parts = duration.split(':'); // ["HH", "MM", "SS"]
+    if (parts.length != 3) return 0;
+    final hours = int.tryParse(parts[0]) ?? 0;
+    final minutes = int.tryParse(parts[1]) ?? 0;
+    final seconds = int.tryParse(parts[2]) ?? 0;
+    // Chuyển thành phút (làm tròn xuống)
+    return hours * 60 + minutes + (seconds >= 30 ? 1 : 0);
+  }
+
   // báo giá
-  Widget _quoteCard(AppointmentModel m) {
-    final price = NumberFormat.currency(locale: 'vi_VN', symbol: 'đ')
-        .format(m.quoteAmount ?? 600000);
+  Widget _quoteCard(AppointmentModel m, Appointmentcontroller controller,
+      BuildContext context, int appointmentId) {
+    double totalPrice = 0;
+    if (m.services != null) {
+      for (var service in m.services!) {
+        totalPrice += service.price ?? 0;
+        //totalTime += _parseDurationToMinutes(service.time ?? '0:00:00');
+      }
+    }
+
+    final formattedPrice =
+        NumberFormat.currency(locale: 'vi_VN', symbol: '₫').format(totalPrice);
+    //final formattedTotalTime = '$totalTime phút'; // Định dạng tổng thời gian
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Card(
@@ -178,71 +202,95 @@ class Appoointmentdetail extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Báo giá: $price',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
+              // Danh sách từng service
+              ...m.services?.map((s) {
+                    final price = NumberFormat.currency(
+                            locale: 'vi_VN', symbol: '₫')
+                        .format(
+                            double.tryParse(s.price?.toString() ?? '0') ?? 0);
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                  child: Text(
+                                s.service_name ?? '',
+                                style: TextStyle(fontSize: 13),
+                              )),
+                              SizedBox(
+                                width: 8,
+                              ),
+                              Text(price,
+                                  style: const TextStyle(color: Colors.red)),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList() ??
+                  [],
+              const Divider(),
+
+              // Tổng tiền
+              Padding(
+                padding: const EdgeInsets.only(top: 8, bottom: 16),
+                child: Row(
+                  children: [
+                    const Text(
+                      'Tổng:',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      formattedPrice, // Sử dụng formattedPrice
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.red),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 8),
-              Text(
-                'Thời gian: ${m.appointment_time}',
-                style: const TextStyle(
-                    fontSize: 14, color: ColorHex.grey_shade600),
-              ),
-              const SizedBox(height: 4),
-              const Text(
-                'Xác nhận trong vòng 4 tiếng',
-                style: TextStyle(fontSize: 12, color: ColorHex.grey_shade600),
-              ),
-              const SizedBox(height: 12),
-              GestureDetector(
-                onTap: () {
-                  // TODO: Xem chi tiết báo giá
-                },
-                child: const Text(
-                  'Chi tiết báo giá',
-                  style: TextStyle(color: ColorHex.total_color),
-                ),
-              ),
-              const SizedBox(height: 16),
+
+              // Nút Hủy/Đồng ý
               Row(
                 children: [
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () {
-                        // TODO: Gọi API từ chối báo giá
+                        _showCancelDialog(controller, context, appointmentId);
                       },
                       style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: ColorHex.grey_shade600),
+                        side: const BorderSide(color: ColorHex.grey),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
                         ),
                       ),
-                      child: Text(
-                        'cancel'.tr,
-                        style: const TextStyle(color: ColorHex.black),
-                      ),
+                      child: Text('cancel'.tr,
+                          style: const TextStyle(color: ColorHex.black)),
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        // TODO: Gọi API đồng ý báo giá
+                        controller.AcceptAppoint(appointmentId);
+                        Get.back();
                       },
                       style: ElevatedButton.styleFrom(
+                        side: const BorderSide(color: ColorHex.grey),
                         backgroundColor: ColorHex.total_color,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
                         ),
                       ),
-                      child: Text(
-                        'next'.tr,
-                        style: const TextStyle(color: ColorHex.white),
-                      ),
+                      child: Text('accept'.tr,
+                          style: const TextStyle(color: ColorHex.white)),
                     ),
                   ),
                 ],
@@ -254,63 +302,23 @@ class Appoointmentdetail extends StatelessWidget {
     );
   }
 
-  // đặt cọc
-  Widget _depositCard(AppointmentModel m) {
-    final deposit = NumberFormat.currency(locale: 'vi_VN', symbol: 'đ')
-        .format(m.depositAmount ?? 200000);
+  // sửa chữa
+  Widget _repairCard(AppointmentModel m, Appointmentcontroller controller) {
+    double totalPrice = 0;
+    int totalTime = 0; // Giả sử thời gian là số phút
+
+    if (m.services != null) {
+      for (var service in m.services!) {
+        totalPrice += service.price ?? 0;
+        totalTime += _parseDurationToMinutes(service.time ?? '0:00:00');
+      }
+    }
+
+    final formattedPrice =
+        NumberFormat.currency(locale: 'vi_VN', symbol: '₫').format(totalPrice);
+    final formattedTotalTime = '$totalTime phút'; // Định dạng tổng thời gian
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        color: ColorHex.grey_shade300,
-        child: Padding(
-          padding: const EdgeInsets.all(15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Đặt cọc: $deposit',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: ColorHex.black,
-                ),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Hướng dẫn đặt cọc: Vui lòng chuyển khoản trước khi đến.',
-                style: TextStyle(fontSize: 12, color: ColorHex.grey_shade600),
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // TODO: Gọi API đặt cọc
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: ColorHex.total_color,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                  child: Text(
-                    'deposit'.tr,
-                    style: const TextStyle(color: ColorHex.white),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  // sửa chữa
-  Widget _repairCard(AppointmentModel m) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         color: ColorHex.grey_shade300,
@@ -329,7 +337,7 @@ class Appoointmentdetail extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'Thời gian: ${m.appointment_time}',
+                'Thời gian: ${formattedTotalTime}',
                 style: const TextStyle(
                     fontSize: 14, color: ColorHex.grey_shade600),
               ),
@@ -345,12 +353,16 @@ class Appoointmentdetail extends StatelessWidget {
     );
   }
 
-// thanh toan
-  Widget _paymentCard(AppointmentModel m) {
-    final total = NumberFormat.currency(locale: 'vi_VN', symbol: 'đ')
-        .format(m.totalAmount ?? 600000); // Giả sử totalAmount là int
+  // Card riêng cho từng hóa đơn
+  Widget _invoiceCard({
+    required String title,
+    required List<Map<String, String>> items,
+    required String total,
+    required VoidCallback onPay,
+    Color accentColor = ColorHex.total_color,
+  }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         color: ColorHex.grey_shade300,
@@ -359,35 +371,71 @@ class Appoointmentdetail extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Tiêu đề
               Text(
-                'Thanh toán: $total',
+                title,
                 style: const TextStyle(
-                  fontSize: 16,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: ColorHex.black,
                 ),
               ),
-              const SizedBox(height: 8),
-              const Text(
-                'Vui lòng thanh toán số tiền còn lại.',
-                style: TextStyle(fontSize: 12, color: ColorHex.grey_shade600),
+              const SizedBox(height: 12),
+
+              // Danh sách mục
+              ...items.map((it) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(it["label"]!, style: const TextStyle(fontSize: 14)),
+                      Text(it["amount"]!,
+                          style:
+                              const TextStyle(fontSize: 14, color: Colors.red)),
+                    ],
+                  ),
+                );
+              }).toList(),
+
+              const Divider(height: 24, thickness: 1),
+
+              // Tổng cộng
+              Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      "Tổng cộng",
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Text(
+                    total,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red,
+                    ),
+                  ),
+                ],
               ),
+
               const SizedBox(height: 16),
+
+              // Nút thanh toán
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    // TODO: Gọi API thanh toán
-                  },
+                  onPressed: onPay,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: ColorHex.total_color,
+                    backgroundColor: accentColor,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
+                        borderRadius: BorderRadius.circular(12)),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
                   child: Text(
-                    'pay'.tr,
-                    style: const TextStyle(color: ColorHex.white),
+                    "Thanh toán",
+                    style: const TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
               ),
@@ -398,57 +446,63 @@ class Appoointmentdetail extends StatelessWidget {
     );
   }
 
-  Widget _lostlostCard(AppointmentModel m) {
-    final total = NumberFormat.currency(locale: 'vi_VN', symbol: 'đ')
-        .format(m.totalAmount ?? 600000); // Giả sử totalAmount là int
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        color: ColorHex.grey_shade300,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'final_settlement: $total',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: ColorHex.black,
-                ),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Vui lòng thanh toán số tiền còn lại.',
-                style: TextStyle(fontSize: 12, color: ColorHex.grey_shade600),
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // TODO: Gọi API thanh toán
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: ColorHex.total_color,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                  child: Text(
-                    'pay'.tr,
-                    style: const TextStyle(color: ColorHex.white),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+//  Đưa vào trong AppoointmentDetail
+// Widget _paymentAndSettlementSection(AppointmentModel m,) {
+//   // giả sử bạn đã parse được m.serviceInvoice và m.partsInvoice
+//   // serviceInvoice = [{ "label": "...", "amount": "..." }, ...]
+//   // partsInvoice = [...]
+// // Tổng
+//   final serviceTotal = NumberFormat.currency(locale: 'vi_VN', symbol: '₫').format(
+//     m.services[index].price.fold<double>(
+//       0,
+//       (sum, item) => sum + (double.tryParse(item["amountClean"]!) ?? 0),
+//     ),
+//   );
+//   final partsTotal = NumberFormat.currency(locale: 'vi_VN', symbol: '₫').format(
+//     m.accessarys[index].price.fold<double>(
+//       0,
+//       (sum, item) => sum + (double.tryParse(item["amountClean"]!) ?? 0),
+//     ),
+//   );
+
+//   return Column(
+//     crossAxisAlignment: CrossAxisAlignment.stretch,
+//     children: [
+//       _invoiceCard(
+//         title: "Hóa đơn dịch vụ",
+//         items: m.serviceInvoice
+//             .map((i) => {
+//                   "label": i["label"]!,
+//                   "amount": NumberFormat.currency(
+//                           locale: 'vi_VN', symbol: '₫')
+//                       .format(double.tryParse(i["amountClean"]!) ?? 0),
+//                 })
+//             .toList(),
+//         total: serviceTotal,
+//         onPay: () {
+//           // TODO: gọi API thanh toán phần dịch vụ
+//         },
+//         accentColor: Colors.blueAccent,
+//       ),
+//       _invoiceCard(
+//         title: "Hóa đơn phụ tùng",
+//         items: m.partsInvoice
+//             .map((i) => {
+//                   "label": i["label"]!,
+//                   "amount": NumberFormat.currency(
+//                           locale: 'vi_VN', symbol: '₫')
+//                       .format(double.tryParse(i["amountClean"]!) ?? 0),
+//                 })
+//             .toList(),
+//         total: partsTotal,
+//         onPay: () {
+//           // TODO: gọi API thanh toán phần phụ tùng
+//         },
+//         accentColor: Colors.green,
+//       ),
+//     ],
+//   );
+// }
 
   Widget _buildButtons(Appointmentcontroller controller) {
     return Row(
@@ -491,6 +545,79 @@ class Appoointmentdetail extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  void _showCancelDialog(Appointmentcontroller controller, BuildContext context,
+      int appointmentId) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled:
+          true, // Cho phép bottom sheet cao hơn nửa màn hình nếu cần
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext bc) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context)
+                .viewInsets
+                .bottom, // Tránh keyboard che mất input
+          ),
+          child: Wrap(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'Lý do hủy hẹn',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: TextField(
+                  maxLines: 3,
+                  decoration: InputDecoration(
+                    hintText: 'Nhập lý do (tùy chọn)',
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    controller.cancelreason.value =
+                        TextEditingValue(text: value);
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context); // Đóng bottom sheet
+                      },
+                      child: Text('Đóng', style: TextStyle(color: Colors.grey)),
+                    ),
+                    SizedBox(width: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        controller.CancelAppoint(
+                            appointmentId, controller.cancelReason.value);
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.redAccent,
+                      ),
+                      child: Text('Xác nhận hủy',
+                          style: TextStyle(color: Colors.white)),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

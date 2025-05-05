@@ -29,6 +29,7 @@ class ColorHex {
   static const text_null = Color(0xff777E90);
   static const grey = Color.fromRGBO(146, 146, 146, 1);
   static const applyColor = Color.fromRGBO(0, 81, 255, 1);
+  static const noti = Color.fromARGB(255, 225, 243, 255);
   static const grey_shade300 = Color.fromARGB(255, 230, 230, 230);
   static const grey_shade600 = Color.fromRGBO(105, 105, 105, 1);
   static const grey_shade400 = Color.fromRGBO(201, 201, 201, 1);

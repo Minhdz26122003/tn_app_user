@@ -18,7 +18,7 @@ class NotificationController extends GetxController {
   int totalPage = 0;
   RxList<NotificationModel> notificationList = RxList<NotificationModel>();
   ScrollController scrollController = ScrollController();
-  DateTime timeNow = DateTime.now().toUtc();
+  DateTime timeNow = DateTime.now();
   int uid = 0;
 
   @override
@@ -46,11 +46,13 @@ class NotificationController extends GetxController {
   getNotification() async {
     if (uid != 0) {
       try {
+        DateTime timeNow = DateTime.now();
         String formattedTime =
             DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
         if (page == 1) {
           isLoading.value = true;
         }
+        print("time now: $timeNow");
         var param = {
           "keyCert":
               Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
@@ -70,6 +72,7 @@ class NotificationController extends GetxController {
               .map((dynamic json) => NotificationModel.fromJson(json))
               .toList();
           notificationList.addAll(listItem);
+
           if (page == 1) {
             isLoading.value = false;
           }
@@ -113,7 +116,7 @@ class NotificationController extends GetxController {
           Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
       "time": formattedTime,
       "uid": uid,
-      "noti_id": notificationList[index].uid
+      "noti_id": notificationList[index].noti_id
     };
     try {
       var response =
@@ -124,8 +127,8 @@ class NotificationController extends GetxController {
         notificationList.refresh();
       }
     } catch (e) {
-      debugPrint(" Lỗi API: $e", wrapWidth: 1024);
-      //Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+      //debugPrint(" Lỗi API: $e", wrapWidth: 1024);
+      Utils.showSnackBar(title: 'notification'.tr, message: '$e');
     }
   }
 

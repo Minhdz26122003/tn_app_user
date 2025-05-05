@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 class Carcontroller extends GetxController {
   int uid = 0;
   String emailAcc = "";
-  DateTime timeNow = DateTime.now().toUtc();
+  DateTime timeNow = DateTime.now();
   RxBool isLoading = false.obs;
   RxBool isShowOverview = false.obs;
   RxBool isChecked = false.obs;

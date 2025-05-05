@@ -71,7 +71,6 @@ class Appointmentlist extends StatelessWidget {
                 'booking_history'.tr,
                 style: TextStyle(
                   color: ColorHex.status_0,
-                  decoration: TextDecoration.underline,
                 ),
               ),
             ),

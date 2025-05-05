@@ -32,7 +32,7 @@ class Appointmenthistory extends StatelessWidget {
           return Center(child: Text('no_history'.tr));
         }
 
-        // 1) Nhóm theo month/year
+        // Nhóm theo month/year
         final Map<String, List<AppointmentModel>> groups = {};
         for (var appt in list) {
           final dt =

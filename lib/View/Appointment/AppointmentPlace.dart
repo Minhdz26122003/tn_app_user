@@ -43,7 +43,7 @@ class Appointmentplace extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: ColorHex.grey,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(15),
                             ),
                             minimumSize: const Size(double.infinity, 45),
                           ),

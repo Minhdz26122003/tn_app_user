@@ -15,74 +15,89 @@ class Appointmentconfirm extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(Appointmentcontroller());
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: ColorHex.total_color,
-        title: Text('book_service'.tr,
-            style: const TextStyle(color: ColorHex.white, fontSize: 17)),
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: Center(
-              child: Text(DateFormat('HH:mm:ss').format(DateTime.now()),
-                  style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: ColorHex.white)),
+    return Obx(() {
+      return Stack(
+        children: [
+          Scaffold(
+            appBar: AppBar(
+              backgroundColor: ColorHex.total_color,
+              title: Text('book_service'.tr,
+                  style: const TextStyle(color: ColorHex.white, fontSize: 17)),
+              elevation: 0,
+              automaticallyImplyLeading: false,
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: Center(
+                    child: Text(DateFormat('HH:mm:ss').format(DateTime.now()),
+                        style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: ColorHex.white)),
+                  ),
+                ),
+              ],
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    StepBook(currentStep: controller.currentStep.value),
+                    const SizedBox(height: 20),
+                    _buildTitle('license_plate'.tr, onEdit: () {
+                      Get.toNamed(Routes.car);
+                    }),
+                    _buildCarBox(controller),
+                    const SizedBox(height: 20),
+                    _buildTitle('contact'.tr, onEdit: () async {
+                      var result = await Get.toNamed(Routes.personaldetail);
+                      if (result == true) {
+                        controller.getAccount();
+                      }
+                    }),
+                    _buildContactBox(controller),
+                    const SizedBox(height: 20),
+                    _buildTitle('service'.tr, onEdit: () {
+                      controller.currentStep.value = 1;
+                      controller.resetService();
+                      controller.navigateToStep();
+                    }),
+                    _buildServiceBox(controller),
+                    const SizedBox(height: 20),
+                    _buildTitle('address'.tr, onEdit: () {
+                      controller.currentStep.value = 2;
+                      controller.resetService();
+                      controller.navigateToStep();
+                    }),
+                    _buildAddressBox(controller),
+                    const SizedBox(height: 20),
+                    _buildTitle('time'.tr, onEdit: () {
+                      controller.currentStep.value = 3;
+                      controller.resetService();
+                      controller.navigateToStep();
+                    }),
+                    _buildTimeBox(controller),
+                    const SizedBox(height: 20),
+                    _buildButtons(controller),
+                  ],
+                ),
+              ),
             ),
           ),
+          if (controller.isBooking.value)
+            Container(
+              color: Colors.black.withOpacity(0.4),
+              child: const Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              ),
+            ),
         ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              StepBook(currentStep: controller.currentStep.value),
-              const SizedBox(height: 20),
-              _buildTitle('license_plate'.tr, onEdit: () {
-                Get.toNamed(Routes.car);
-              }),
-              _buildCarBox(controller),
-              const SizedBox(height: 20),
-              _buildTitle('contact'.tr, onEdit: () async {
-                var result = await Get.toNamed(Routes.personaldetail);
-                if (result == true) {
-                  controller.getAccount();
-                }
-              }),
-              _buildContactBox(controller),
-              const SizedBox(height: 20),
-              _buildTitle('service'.tr, onEdit: () {
-                controller.currentStep.value = 1;
-                controller.resetService();
-                controller.navigateToStep();
-              }),
-              _buildServiceBox(controller),
-              const SizedBox(height: 20),
-              _buildTitle('address'.tr, onEdit: () {
-                controller.currentStep.value = 2;
-                controller.resetService();
-                controller.navigateToStep();
-              }),
-              _buildAddressBox(controller),
-              const SizedBox(height: 20),
-              _buildTitle('time'.tr, onEdit: () {
-                controller.currentStep.value = 3;
-                controller.resetService();
-                controller.navigateToStep();
-              }),
-              _buildTimeBox(controller),
-              const SizedBox(height: 20),
-              _buildButtons(controller),
-            ],
-          ),
-        ),
-      ),
-    );
+      );
+    });
   }
 }
 

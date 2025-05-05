@@ -39,7 +39,8 @@ class Dashboardcontroller extends GetxController {
   @override
   Future<void> onInit() async {
     super.onInit();
-
+    final idx = Get.arguments;
+    if (idx is int) currentPageIndex.value = idx;
     firebaseUser.bindStream(FirebaseAuth.instance.authStateChanges());
     checkPhpToken();
     ever<User?>(firebaseUser, (_) => updateIsLoggedIn());
