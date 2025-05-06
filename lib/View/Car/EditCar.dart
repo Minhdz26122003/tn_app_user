@@ -19,7 +19,7 @@ class EditCar extends StatelessWidget {
         backgroundColor: ColorHex.total_color,
         title: Text(
           'edit_car'.tr,
-          style: TextStyle(fontSize: 17, color: ColorHex.white),
+          style: const TextStyle(fontSize: 17, color: ColorHex.white),
         ),
         automaticallyImplyLeading: false,
         actions: [
@@ -31,7 +31,7 @@ class EditCar extends StatelessWidget {
               },
               child: Text(
                 'cancel'.tr,
-                style: TextStyle(
+                style: const TextStyle(
                   color: ColorHex.white,
                   fontSize: 13,
                 ),
@@ -77,8 +77,8 @@ class EditCar extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                   ),
-                  child:
-                      Text('save'.tr, style: TextStyle(color: ColorHex.white)),
+                  child: Text('save'.tr,
+                      style: const TextStyle(color: ColorHex.white)),
                 ),
               ),
             )

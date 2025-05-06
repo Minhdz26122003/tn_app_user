@@ -1,9 +1,11 @@
 import 'package:app_hm/Controller/Appointment/Appointmentcontroller.dart';
 import 'package:app_hm/Controller/DashboardController.dart';
+import 'package:app_hm/Controller/Notification/NotificationController.dart';
 import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Router/AppPage.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Badge;
 import 'package:get/get.dart';
+import 'package:badges/badges.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class Home extends StatelessWidget {
@@ -13,7 +15,7 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     final Dashboardcontroller dashC = Get.put(Dashboardcontroller());
     final Appointmentcontroller apptC = Get.put(Appointmentcontroller());
-
+    final nc = Get.put(NotificationController());
     return Scaffold(
       body: Obx(() {
         if (apptC.isLoading.value) {
@@ -29,14 +31,14 @@ class Home extends StatelessWidget {
                 child: Container(
                   height: 230,
                   width: double.infinity,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage('assets/images/header.jpeg'),
                       fit: BoxFit.cover,
                     ),
                   ),
-                  padding: EdgeInsets.only(
-                    top: 30,
+                  padding: const EdgeInsets.only(
+                    top: 40,
                     left: 16,
                     right: 16,
                     bottom: 16,
@@ -70,19 +72,43 @@ class Home extends StatelessWidget {
                                   ),
                                 )),
                           ),
-                          IconButton(
-                            icon: const Icon(Icons.notifications_rounded),
-                            tooltip: 'notification'.tr,
-                            color: Colors.white,
-                            onPressed: () {
-                              Get.toNamed(Routes.notification);
-                            },
-                          )
+
+                          Obx(() {
+                            final count = nc.unreadCount;
+                            return Badge(
+                              showBadge: count > 0,
+                              badgeContent: Text(
+                                '$count',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 10),
+                              ),
+                              position: BadgePosition.topEnd(top: -4, end: -4),
+                              badgeStyle: BadgeStyle(
+                                badgeColor: Colors.red,
+                              ),
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.notifications_rounded,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () =>
+                                    Get.toNamed(Routes.notification),
+                              ),
+                            );
+                          }),
+                          // IconButton(
+                          //   icon: const Icon(Icons.notifications_rounded),
+                          //   tooltip: 'notification'.tr,
+                          //   color: Colors.white,
+                          //   onPressed: () {
+                          //     Get.toNamed(Routes.notification);
+                          //   },
+                          // )
                         ],
                       ),
 
                       const SizedBox(
-                        height: 65,
+                        height: 50,
                       ),
 
                       // search bar
@@ -147,7 +173,7 @@ class Home extends StatelessWidget {
                                 Expanded(
                                   child: Text(
                                     type.type_name ?? '',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                       color: ColorHex.black,
@@ -165,9 +191,9 @@ class Home extends StatelessWidget {
                                         },
                                       );
                                     },
-                                    child: const Text(
-                                      'View All',
-                                      style: TextStyle(
+                                    child: Text(
+                                      'view_all'.tr,
+                                      style: const TextStyle(
                                         fontSize: 11,
                                         color: Colors.blue,
                                       ),

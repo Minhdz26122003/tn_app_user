@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class Appointmenthistory extends StatelessWidget {
-  const Appointmenthistory({Key? key}) : super(key: key);
+  const Appointmenthistory({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +105,7 @@ class Appointmenthistory extends StatelessWidget {
             : ColorHex.status_1;
 
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 2,
       color: ColorHex.grey_shade300,
@@ -119,8 +119,8 @@ class Appointmenthistory extends StatelessWidget {
           children: [
             // Date box
             Container(
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-              decoration: BoxDecoration(
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+              decoration: const BoxDecoration(
                 color: ColorHex.status_1,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(12),
@@ -132,15 +132,15 @@ class Appointmenthistory extends StatelessWidget {
                 children: [
                   Text(
                     '${date.day}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 24,
                       color: ColorHex.disableplace,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
-                    'month'.tr + '${date.month}',
-                    style: TextStyle(fontSize: 15, color: ColorHex.white),
+                    '${'month'.tr}${date.month}',
+                    style: const TextStyle(fontSize: 15, color: ColorHex.white),
                   ),
                 ],
               ),

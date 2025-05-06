@@ -1,8 +1,5 @@
-import 'package:app_hm/Controller/DashboardController.dart';
-
 import 'package:app_hm/Global/Constant.dart';
 import 'package:app_hm/Model/Notification/NotificationModel.dart';
-import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Services/APICaller.dart';
 import 'package:app_hm/Utils/Utils.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +17,8 @@ class NotificationController extends GetxController {
   ScrollController scrollController = ScrollController();
   DateTime timeNow = DateTime.now();
   int uid = 0;
-
+  // thông báo chưa đọc
+  int get unreadCount => notificationList.where((n) => n.status == 0).length;
   @override
   void onInit() async {
     scrollController.addListener(() {

@@ -101,7 +101,7 @@ class PushNotifications {
         notif.hashCode,
         notif.title,
         notif.body,
-        NotificationDetails(
+        const NotificationDetails(
           android: AndroidNotificationDetails(
             'appointments',
             'Appointments',

@@ -103,9 +103,9 @@ class Servicedetail extends StatelessWidget {
                             ),
 
                           const SizedBox(height: 16),
-                          Text(
+                          const Text(
                             'Đánh giá và bình luận',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.bold,
                             ),

@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class Appoointmentdetail extends StatelessWidget {
-  const Appoointmentdetail({Key? key}) : super(key: key);
+  const Appoointmentdetail({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class Appoointmentdetail extends StatelessWidget {
               const SizedBox(height: 16),
               _buildTimeLine(currentStep),
               const SizedBox(height: 24),
-              _buildButtons(controller),
+              _buildButtons(controller, context, appointmentId),
             ],
           ),
         );
@@ -202,6 +202,11 @@ class Appoointmentdetail extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(
+                'service'.tr + ':',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+              ),
+              const Divider(),
               // Danh sách từng service
               ...m.services?.map((s) {
                     final price = NumberFormat.currency(
@@ -219,9 +224,9 @@ class Appoointmentdetail extends StatelessWidget {
                               Expanded(
                                   child: Text(
                                 s.service_name ?? '',
-                                style: TextStyle(fontSize: 13),
+                                style: const TextStyle(fontSize: 13),
                               )),
-                              SizedBox(
+                              const SizedBox(
                                 width: 8,
                               ),
                               Text(price,
@@ -260,22 +265,22 @@ class Appoointmentdetail extends StatelessWidget {
               // Nút Hủy/Đồng ý
               Row(
                 children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () {
-                        _showCancelDialog(controller, context, appointmentId);
-                      },
-                      style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: ColorHex.grey),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                      ),
-                      child: Text('cancel'.tr,
-                          style: const TextStyle(color: ColorHex.black)),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
+                  // Expanded(
+                  //   child: OutlinedButton(
+                  //     onPressed: () {
+                  //       _showCancelDialog(controller, context, appointmentId);
+                  //     },
+                  //     style: OutlinedButton.styleFrom(
+                  //       side: const BorderSide(color: ColorHex.grey),
+                  //       shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(15),
+                  //       ),
+                  //     ),
+                  //     child: Text('cancel'.tr,
+                  //         style: const TextStyle(color: ColorHex.black)),
+                  //   ),
+                  // ),
+                  // const SizedBox(width: 12),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
@@ -337,7 +342,7 @@ class Appoointmentdetail extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'Thời gian: ${formattedTotalTime}',
+                'Thời gian: $formattedTotalTime',
                 style: const TextStyle(
                     fontSize: 14, color: ColorHex.grey_shade600),
               ),
@@ -395,7 +400,7 @@ class Appoointmentdetail extends StatelessWidget {
                     ],
                   ),
                 );
-              }).toList(),
+              }),
 
               const Divider(height: 24, thickness: 1),
 
@@ -433,9 +438,9 @@ class Appoointmentdetail extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12)),
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
-                  child: Text(
+                  child: const Text(
                     "Thanh toán",
-                    style: const TextStyle(fontSize: 16, color: Colors.white),
+                    style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
               ),
@@ -504,13 +509,26 @@ class Appoointmentdetail extends StatelessWidget {
 //   );
 // }
 
-  Widget _buildButtons(Appointmentcontroller controller) {
+  Widget _buildButtons(Appointmentcontroller controller, BuildContext context,
+      int appointmentId) {
     return Row(
       children: [
         Expanded(
           child: OutlinedButton(
             onPressed: () {
-              // TODO: gọi API hủy yêu cầu
+              print(
+                  'appointmentId trước khi gọi CancelAppoint: $appointmentId');
+              print('Lý do hủy: ${controller.cancelreason.value}');
+              if (appointmentId != null) {
+                _showCancelDialog(controller, context, appointmentId);
+                // controller.CancelAppoint(
+                //     appointmentId, controller.cancelReason.value);
+                // Navigator.pop(context);
+              } else {
+                // Xử lý trường hợp appointmentId là null.  Có thể hiển thị thông báo lỗi.
+                Utils.showSnackBar(
+                    title: 'Lỗi', message: 'Không tìm thấy ID lịch hẹn.');
+              }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: ColorHex.grey,
@@ -550,74 +568,48 @@ class Appoointmentdetail extends StatelessWidget {
 
   void _showCancelDialog(Appointmentcontroller controller, BuildContext context,
       int appointmentId) {
-    showModalBottomSheet(
+    showDialog(
       context: context,
-      isScrollControlled:
-          true, // Cho phép bottom sheet cao hơn nửa màn hình nếu cần
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      builder: (_) => SafeArea(
+        child: AlertDialog(
+          title: Text('Lý do hủy hẹn',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          content: TextField(
+            controller: controller.cancelreason,
+            maxLines: 3,
+            decoration: const InputDecoration(
+                hintText: 'Nhập lý do (tùy chọn)',
+                border: OutlineInputBorder()),
+            onChanged: (value) {
+              controller.cancelreason.text = value;
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Đóng'.tr),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                if (appointmentId != null) {
+                  controller.CancelAppoint(
+                      appointmentId, controller.cancelreason.text);
+                  Navigator.pop(context);
+                  Get.back();
+                } else {
+                  Utils.showSnackBar(
+                      title: 'Lỗi'.tr, message: 'Không tìm thấy ID lịch hẹn.');
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: ColorHex.total_color,
+              ),
+              child: Text('Xác nhận hủy'.tr,
+                  style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        ),
       ),
-      builder: (BuildContext bc) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context)
-                .viewInsets
-                .bottom, // Tránh keyboard che mất input
-          ),
-          child: Wrap(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Lý do hủy hẹn',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: TextField(
-                  maxLines: 3,
-                  decoration: InputDecoration(
-                    hintText: 'Nhập lý do (tùy chọn)',
-                    border: OutlineInputBorder(),
-                  ),
-                  onChanged: (value) {
-                    controller.cancelreason.value =
-                        TextEditingValue(text: value);
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context); // Đóng bottom sheet
-                      },
-                      child: Text('Đóng', style: TextStyle(color: Colors.grey)),
-                    ),
-                    SizedBox(width: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        controller.CancelAppoint(
-                            appointmentId, controller.cancelReason.value);
-                        Navigator.pop(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.redAccent,
-                      ),
-                      child: Text('Xác nhận hủy',
-                          style: TextStyle(color: Colors.white)),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }

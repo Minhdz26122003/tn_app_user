@@ -17,7 +17,7 @@ class AddCar extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorHex.total_color,
-        title: Text(
+        title: const Text(
           'Thêm xe ',
           style: TextStyle(fontSize: 17, color: ColorHex.white),
         ),
@@ -31,7 +31,7 @@ class AddCar extends StatelessWidget {
               },
               child: Text(
                 'Cancel'.tr,
-                style: TextStyle(
+                style: const TextStyle(
                   color: ColorHex.white,
                   fontSize: 13,
                 ),
@@ -148,7 +148,7 @@ class AddCar extends StatelessWidget {
           controller: controller,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: TextStyle(color: ColorHex.grey_shade300),
+            hintStyle: const TextStyle(color: ColorHex.grey_shade300),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide:

@@ -29,13 +29,13 @@ class Personal extends StatelessWidget {
                       child: Container(
                         height: 250,
                         width: double.infinity,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           image: DecorationImage(
                             image: AssetImage('assets/images/header2.jpg'),
                             fit: BoxFit.cover,
                           ),
                         ),
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                           top: 60,
                           left: 16,
                           right: 16,
@@ -131,7 +131,7 @@ class Personal extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Expanded(
                         child: SingleChildScrollView(
                           child: Column(

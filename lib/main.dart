@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:another_flushbar/flushbar.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Services/PushNotification.dart';
 import 'package:app_hm/Services/TranslationService.dart';

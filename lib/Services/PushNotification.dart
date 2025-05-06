@@ -79,7 +79,7 @@ class PushNotifications {
     const AndroidInitializationSettings androidInit =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     const DarwinInitializationSettings iosInit = DarwinInitializationSettings();
-    final InitializationSettings initSettings = InitializationSettings(
+    final InitializationSettings initSettings = const InitializationSettings(
       android: androidInit,
       iOS: iosInit,
     );

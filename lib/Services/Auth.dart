@@ -4,7 +4,6 @@ import 'package:app_hm/Global/Constant.dart';
 import 'package:app_hm/Global/GlobalValue.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Services/APICaller.dart';
-import 'package:app_hm/Services/PushNotification.dart';
 import 'package:app_hm/Utils/Utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

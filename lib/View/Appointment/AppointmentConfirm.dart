@@ -108,13 +108,13 @@ Widget _buildTitle(String title, {VoidCallback? onEdit}) {
     children: [
       RichText(
         text: TextSpan(
-          style: TextStyle(fontSize: 16, color: ColorHex.black),
+          style: const TextStyle(fontSize: 16, color: ColorHex.black),
           children: [
             TextSpan(
               text: title.toUpperCase(),
-              style: TextStyle(fontSize: 16, color: ColorHex.black),
+              style: const TextStyle(fontSize: 16, color: ColorHex.black),
             ),
-            TextSpan(
+            const TextSpan(
               text: ' *',
               style: TextStyle(
                   fontWeight: FontWeight.bold, color: ColorHex.status_0),
@@ -233,7 +233,7 @@ Widget _buildServiceBox(Appointmentcontroller controller) {
   return Obx(() {
     if (controller.selectedServices.isEmpty) {
       return Text('no_service'.tr,
-          style: TextStyle(color: ColorHex.textContent));
+          style: const TextStyle(color: ColorHex.textContent));
     }
     final String typeName = controller.selectedType.value?.type_name ?? '---';
     final String servicesText = controller.selectedServices
@@ -252,12 +252,14 @@ Widget _buildServiceBox(Appointmentcontroller controller) {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('service_type'.tr,
-              style: TextStyle(fontSize: 11, color: ColorHex.grey_shade600)),
+              style:
+                  const TextStyle(fontSize: 11, color: ColorHex.grey_shade600)),
           Text(typeName,
               style: const TextStyle(fontSize: 13, color: ColorHex.black)),
           const SizedBox(height: 10),
           Text('service'.tr,
-              style: TextStyle(fontSize: 11, color: ColorHex.grey_shade600)),
+              style:
+                  const TextStyle(fontSize: 11, color: ColorHex.grey_shade600)),
           Text(servicesText,
               style: const TextStyle(fontSize: 13, color: ColorHex.black)),
         ],
@@ -278,19 +280,20 @@ Widget _buildAddressBox(Appointmentcontroller controller) {
         borderRadius: BorderRadius.circular(12),
       ),
       child: center == null
-          ? Text('no_address'.tr, style: TextStyle(color: ColorHex.textContent))
+          ? Text('no_address'.tr,
+              style: const TextStyle(color: ColorHex.textContent))
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('center_name'.tr,
-                    style:
-                        TextStyle(fontSize: 11, color: ColorHex.grey_shade600)),
+                    style: const TextStyle(
+                        fontSize: 11, color: ColorHex.grey_shade600)),
                 Text(center.gara_name ?? 'not_yet'.tr,
                     style: const TextStyle(fontSize: 13)),
                 const SizedBox(height: 8),
                 Text('address'.tr,
-                    style:
-                        TextStyle(fontSize: 11, color: ColorHex.grey_shade600)),
+                    style: const TextStyle(
+                        fontSize: 11, color: ColorHex.grey_shade600)),
                 Text(center.gara_address ?? 'not_yet'.tr,
                     style: const TextStyle(fontSize: 13)),
               ],
@@ -319,7 +322,7 @@ Widget _buildTimeBox(Appointmentcontroller controller) {
           if (hasDate) ...[
             Text(
               'date'.tr,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 11,
                 color: ColorHex.grey_shade600,
               ),
@@ -336,7 +339,7 @@ Widget _buildTimeBox(Appointmentcontroller controller) {
           ] else ...[
             Text(
               'no_date_selected'.tr,
-              style: TextStyle(color: ColorHex.grey_shade300),
+              style: const TextStyle(color: ColorHex.grey_shade300),
             ),
             const SizedBox(height: 8),
           ],
@@ -345,13 +348,13 @@ Widget _buildTimeBox(Appointmentcontroller controller) {
           if (hasTime) ...[
             Text(
               'time'.tr,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 11,
                 color: ColorHex.grey_shade600,
               ),
             ),
             Text(
-              controller.selectedTime.value!,
+              controller.selectedTime.value,
               style: const TextStyle(
                 fontSize: 13,
                 color: ColorHex.black,
@@ -360,7 +363,7 @@ Widget _buildTimeBox(Appointmentcontroller controller) {
           ] else ...[
             Text(
               'no_time_selected'.tr,
-              style: TextStyle(color: ColorHex.grey),
+              style: const TextStyle(color: ColorHex.grey),
             ),
           ],
         ],
@@ -408,7 +411,8 @@ Widget _buildButtons(Appointmentcontroller controller) {
                 borderRadius: BorderRadius.circular(15),
               ),
             ),
-            child: Text('book'.tr, style: TextStyle(color: ColorHex.white)),
+            child:
+                Text('book'.tr, style: const TextStyle(color: ColorHex.white)),
           ),
         ),
       ),

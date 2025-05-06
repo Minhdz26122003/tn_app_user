@@ -32,7 +32,7 @@ class Appointmenttime extends StatelessWidget {
             _buildDateRow(context, controller),
             const SizedBox(height: 12),
             Text('book_6h_in_advance'.tr,
-                style: TextStyle(color: ColorHex.status_0, fontSize: 11)),
+                style: const TextStyle(color: ColorHex.status_0, fontSize: 11)),
             const SizedBox(height: 12),
             _buildLabel('start_time'.tr),
             const SizedBox(height: 8),
@@ -53,12 +53,12 @@ class Appointmenttime extends StatelessWidget {
         children: [
           TextSpan(
             text: text.toUpperCase(),
-            style: TextStyle(
+            style: const TextStyle(
                 fontSize: 16,
                 color: ColorHex.black,
                 fontWeight: FontWeight.bold),
           ),
-          TextSpan(
+          const TextSpan(
             text: ' *',
             style: TextStyle(
                 fontWeight: FontWeight.bold, color: ColorHex.status_0),
@@ -109,7 +109,8 @@ class Appointmenttime extends StatelessWidget {
           ),
           TextButton(
             onPressed: () => _selectDate(context, controller),
-            child: Text('edit'.tr, style: TextStyle(color: ColorHex.black)),
+            child:
+                Text('edit'.tr, style: const TextStyle(color: ColorHex.black)),
           ),
         ],
       ),
@@ -143,8 +144,7 @@ class Appointmenttime extends StatelessWidget {
             color: isSelected ? ColorHex.total_color : ColorHex.grey_shade300,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color:
-                  isSelected ? ColorHex.total_color : ColorHex.grey_shade300!,
+              color: isSelected ? ColorHex.total_color : ColorHex.grey_shade300,
               width: 1.5,
             ),
             boxShadow: [

@@ -2,11 +2,7 @@ import 'package:app_hm/Controller/Login/LoginController.dart';
 import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Services/Auth.dart';
-import 'package:app_hm/View/Account/ForgotPassword.dart';
-import 'package:app_hm/View/Account/SendOTP.dart';
-import 'package:app_hm/View/Signup/Signup.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 

@@ -54,10 +54,10 @@ class Appointmentcontroller extends GetxController {
   Rx<DateTime> selectedDate = DateTime.now().obs;
   DateTime timeNow = DateTime.now();
   var description = ''.obs;
+  var cancel = ''.obs;
   TextEditingController descriptionController = TextEditingController();
   TextEditingController cancelreason = TextEditingController();
 
-  RxString cancelReason = ''.obs;
   RxString selectedSession = "Sáng".obs;
   RxString selectedTime = "".obs;
   RxList<TimeSlot> slots = <TimeSlot>[].obs;
@@ -222,38 +222,41 @@ class Appointmentcontroller extends GetxController {
     }
   }
 
-  void CancelAppoint(int appoi_id, String reason) async {
+  void CancelAppoint(int appoiId, String reason) async {
     String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
     var param = {
       "keyCert":
           Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
       "time": formattedTime,
       "uid": uid,
-      "appointment_id": appoi_id,
+      "appointment_id": appoiId,
       "reason": reason
     };
+
     try {
       var response = await APICaller.getInstance()
           .post('Appointment/cancel_appointment.php', param);
+
       if (response != null && response['status'] == 'success') {
         Utils.showSnackBar(
           title: 'notification'.tr,
           message: response?['error']['message'] ?? 'Hủy lịch hẹn thành công ',
         );
+        await GetAppointmentList();
       }
     } catch (e) {
       Utils.showSnackBar(title: 'notification'.tr, message: '$e');
     }
   }
 
-  void AcceptAppoint(int appoi_id) async {
+  void AcceptAppoint(int appoiId) async {
     String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
     var param = {
       "keyCert":
           Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
       "time": formattedTime,
       "uid": uid,
-      "appointment_id": appoi_id,
+      "appointment_id": appoiId,
     };
     try {
       var response = await APICaller.getInstance()
@@ -412,7 +415,7 @@ class Appointmentcontroller extends GetxController {
 
   Future<void> GetAppointmentList() async {
     appointmentList.clear();
-    if (uid == null || uid == 0) return;
+    if (uid == 0) return;
 
     isLoading.value = true;
     try {

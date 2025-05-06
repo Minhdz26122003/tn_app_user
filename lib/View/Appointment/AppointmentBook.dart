@@ -41,7 +41,7 @@ class Appointmentbook extends StatelessWidget {
                 if (controller.typeList.isEmpty) {
                   return Text(
                     'no_service_type'.tr,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       color: ColorHex.grey_shade600,
                       fontWeight: FontWeight.bold,
@@ -96,7 +96,7 @@ class Appointmentbook extends StatelessWidget {
               if (filteredServices.isEmpty) {
                 return Text(
                   'no_services_of_type'.tr,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     color: ColorHex.grey_shade600,
                     fontWeight: FontWeight.bold,

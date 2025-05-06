@@ -26,7 +26,7 @@ class Car extends StatelessWidget {
         ),
         title: Text(
           'mycar'.tr,
-          style: TextStyle(fontSize: 16, color: ColorHex.white),
+          style: const TextStyle(fontSize: 16, color: ColorHex.white),
         ),
       ),
       body: Obx(
@@ -87,7 +87,7 @@ class Car extends StatelessWidget {
                               children: [
                                 Text(
                                   'car_list'.tr,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400),
                                 ),
@@ -103,10 +103,9 @@ class Car extends StatelessWidget {
                           ),
                           Obx(
                             () => (controller.carList.isEmpty)
-                                ? Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 8),
-                                    child: const Center(child: Text('no_car')),
+                                ? const Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 8),
+                                    child: Center(child: Text('no_car')),
                                   )
                                 : Expanded(
                                     child: ListView.builder(

@@ -1,5 +1,3 @@
-import 'package:app_hm/Model/Service/ServiceModel.dart';
-
 class AppointmentModel {
   int? appointment_id;
   int? uid;

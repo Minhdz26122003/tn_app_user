@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 class Listservice extends StatelessWidget {
-  const Listservice({Key? key}) : super(key: key);
+  const Listservice({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +112,8 @@ class Listservice extends StatelessWidget {
                         ),
                         child: Text(
                           'book_service'.tr,
-                          style: TextStyle(color: ColorHex.white, fontSize: 13),
+                          style: const TextStyle(
+                              color: ColorHex.white, fontSize: 13),
                         ),
                       ),
                     ),
