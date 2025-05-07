@@ -45,11 +45,13 @@ class Personal extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(
-                              height: 65,
+                              height: 60,
                             ),
                             // Card login
                             Padding(
-                              padding: const EdgeInsets.only(left: 5),
+                              padding: const EdgeInsets.only(
+                                left: 5,
+                              ),
                               child: GestureDetector(
                                 onTap: () {
                                   if (!controller.isLoggedIn.value) {
@@ -57,8 +59,9 @@ class Personal extends StatelessWidget {
                                   }
                                 },
                                 child: Container(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 10),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 15,
+                                  ),
                                   decoration: BoxDecoration(
                                     color: ColorHex.grey_shade300,
                                     borderRadius: BorderRadius.circular(15),
@@ -137,9 +140,9 @@ class Personal extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _buildSectionTitle('Thông tin cá nhân'.tr),
+                              _buildSectionTitle('personal_information'.tr),
                               _item(
-                                title: 'Thông tin cá nhân'.tr,
+                                title: 'personal_information'.tr,
                                 svg: 'assets/icons/profile.svg',
                                 onTap: () {
                                   if (!controller.isLoggedIn.value) {
@@ -151,7 +154,7 @@ class Personal extends StatelessWidget {
                               ),
                               const SizedBox(height: 5),
                               _item(
-                                title: 'Xe của tôi'.tr,
+                                title: 'mycar'.tr,
                                 svg: 'assets/icons/car.svg',
                                 onTap: () {
                                   if (!controller.isLoggedIn.value) {
@@ -165,7 +168,7 @@ class Personal extends StatelessWidget {
                               if (controller.loginMethod.value !=
                                   LoginMethod.firebase)
                                 _item(
-                                  title: 'Đổi mật khẩu'.tr,
+                                  title: 'change_password'.tr,
                                   svg: 'assets/icons/security.svg',
                                   onTap: () {
                                     if (!controller.isLoggedIn.value) {
@@ -176,9 +179,9 @@ class Personal extends StatelessWidget {
                                   },
                                 ),
                               const SizedBox(height: 20),
-                              _buildSectionTitle('Lịch hẹn'.tr),
+                              _buildSectionTitle('appointment'.tr),
                               _item(
-                                title: 'Danh sách lịch hẹn'.tr,
+                                title: 'list_appointment'.tr,
                                 svg: 'assets/icons/appointment.svg',
                                 onTap: () {
                                   if (!controller.isLoggedIn.value) {
@@ -189,9 +192,9 @@ class Personal extends StatelessWidget {
                                 },
                               ),
                               const SizedBox(height: 20),
-                              _buildSectionTitle('Cài đặt'.tr),
+                              _buildSectionTitle('setting'.tr),
                               _item(
-                                title: 'Cài đặt chung'.tr,
+                                title: 'setting'.tr,
                                 svg: 'assets/icons/setting.svg',
                                 onTap: () {
                                   Get.toNamed(Routes.setting);
@@ -201,7 +204,7 @@ class Personal extends StatelessWidget {
                               if (controller.isLoggedIn.value)
                                 _item(
                                   svg: 'assets/icons/logout.svg',
-                                  title: 'Đăng xuất'.tr,
+                                  title: 'log_out'.tr,
                                   isLogout: true,
                                   onTap: () {
                                     Auth.backLogin(true);

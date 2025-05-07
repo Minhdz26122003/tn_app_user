@@ -14,7 +14,13 @@ class Appoointmentdetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Appointmentcontroller controller = Get.put(Appointmentcontroller());
-    final appointmentId = Get.arguments['appointment_id'] as int;
+    final dynamic receivedAppointmentId = Get.arguments['appointment_id'];
+    final int? appointmentId =
+        receivedAppointmentId is int ? receivedAppointmentId : null;
+
+    if (appointmentId == null) {
+      return const Center(child: Text('Lỗi: Không tìm thấy ID cuộc hẹn'));
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -27,12 +33,11 @@ class Appoointmentdetail extends StatelessWidget {
       ),
       backgroundColor: ColorHex.background,
       body: Obx(() {
-        final appt = controller.appointmentList.firstWhere(
+        final appt = controller.appointmentList.firstWhereOrNull(
           (a) => a.appointment_id == appointmentId,
-          orElse: () => AppointmentModel(),
         );
         if (appt == null) {
-          return Center(child: Text('Appointment not found'));
+          return Center(child: Text('Lịch hẹn không tồn tại hoặc đã bị hủy'));
         }
         final currentStep = appt.currentStatusIndex;
         return SingleChildScrollView(
@@ -46,7 +51,8 @@ class Appoointmentdetail extends StatelessWidget {
               const SizedBox(height: 16),
               _buildTimeLine(currentStep),
               const SizedBox(height: 24),
-              _buildButtons(controller, context, appointmentId),
+              if (currentStep <= 1)
+                _buildButtons(controller, context, appointmentId),
             ],
           ),
         );
@@ -114,12 +120,12 @@ class Appoointmentdetail extends StatelessWidget {
       // Status 2: Sửa chữa
       case 2:
         return _repairCard(m, controller);
-      //Status 3: Thanh toán
-      // case 3:
-      //   return _invoiceCard(m);
-      // // Status 4: Thanh toán
-      //  case 4:
-      //    return _paymentAndSettlementSection(m);
+      // Status 3: Quyết toán
+      case 3:
+        return _settlementCard(m); // Thêm widget cho trạng thái Quyết toán
+      // Status 4: Thanh toán
+      case 4:
+        return _paymentCard(m); // Thêm widget cho trạng thái Thanh toán
       default:
         return const SizedBox.shrink();
     }
@@ -358,16 +364,10 @@ class Appoointmentdetail extends StatelessWidget {
     );
   }
 
-  // Card riêng cho từng hóa đơn
-  Widget _invoiceCard({
-    required String title,
-    required List<Map<String, String>> items,
-    required String total,
-    required VoidCallback onPay,
-    Color accentColor = ColorHex.total_color,
-  }) {
+  // Quyết toán
+  Widget _settlementCard(AppointmentModel m) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         color: ColorHex.grey_shade300,
@@ -376,71 +376,25 @@ class Appoointmentdetail extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Tiêu đề
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 18,
+              const Text(
+                'Quyết toán',
+                style: TextStyle(
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
+                  color: ColorHex.black,
                 ),
               ),
-              const SizedBox(height: 12),
-
-              // Danh sách mục
-              ...items.map((it) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(it["label"]!, style: const TextStyle(fontSize: 14)),
-                      Text(it["amount"]!,
-                          style:
-                              const TextStyle(fontSize: 14, color: Colors.red)),
-                    ],
-                  ),
-                );
-              }),
-
-              const Divider(height: 24, thickness: 1),
-
-              // Tổng cộng
-              Row(
-                children: [
-                  const Expanded(
-                    child: Text(
-                      "Tổng cộng",
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Text(
-                    total,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red,
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 16),
-
-              // Nút thanh toán
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: onPay,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: accentColor,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                  ),
-                  child: const Text(
-                    "Thanh toán",
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+              const SizedBox(height: 8),
+              GestureDetector(
+                onTap: () {
+                  // TODO: Implement view settlement details
+                },
+                child: const Text(
+                  'Xem quyết toán',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.blue, // Or your link color
+                    decoration: TextDecoration.underline,
                   ),
                 ),
               ),
@@ -451,63 +405,55 @@ class Appoointmentdetail extends StatelessWidget {
     );
   }
 
-//  Đưa vào trong AppoointmentDetail
-// Widget _paymentAndSettlementSection(AppointmentModel m,) {
-//   // giả sử bạn đã parse được m.serviceInvoice và m.partsInvoice
-//   // serviceInvoice = [{ "label": "...", "amount": "..." }, ...]
-//   // partsInvoice = [...]
-// // Tổng
-//   final serviceTotal = NumberFormat.currency(locale: 'vi_VN', symbol: '₫').format(
-//     m.services[index].price.fold<double>(
-//       0,
-//       (sum, item) => sum + (double.tryParse(item["amountClean"]!) ?? 0),
-//     ),
-//   );
-//   final partsTotal = NumberFormat.currency(locale: 'vi_VN', symbol: '₫').format(
-//     m.accessarys[index].price.fold<double>(
-//       0,
-//       (sum, item) => sum + (double.tryParse(item["amountClean"]!) ?? 0),
-//     ),
-//   );
+  // Thanh toán
+  Widget _paymentCard(AppointmentModel m) {
+    double totalPrice = 0;
+    if (m.services != null) {
+      for (var service in m.services!) {
+        totalPrice += service.price ?? 0;
+      }
+    }
+    final formattedPrice =
+        NumberFormat.currency(locale: 'vi_VN', symbol: '₫').format(totalPrice);
 
-//   return Column(
-//     crossAxisAlignment: CrossAxisAlignment.stretch,
-//     children: [
-//       _invoiceCard(
-//         title: "Hóa đơn dịch vụ",
-//         items: m.serviceInvoice
-//             .map((i) => {
-//                   "label": i["label"]!,
-//                   "amount": NumberFormat.currency(
-//                           locale: 'vi_VN', symbol: '₫')
-//                       .format(double.tryParse(i["amountClean"]!) ?? 0),
-//                 })
-//             .toList(),
-//         total: serviceTotal,
-//         onPay: () {
-//           // TODO: gọi API thanh toán phần dịch vụ
-//         },
-//         accentColor: Colors.blueAccent,
-//       ),
-//       _invoiceCard(
-//         title: "Hóa đơn phụ tùng",
-//         items: m.partsInvoice
-//             .map((i) => {
-//                   "label": i["label"]!,
-//                   "amount": NumberFormat.currency(
-//                           locale: 'vi_VN', symbol: '₫')
-//                       .format(double.tryParse(i["amountClean"]!) ?? 0),
-//                 })
-//             .toList(),
-//         total: partsTotal,
-//         onPay: () {
-//           // TODO: gọi API thanh toán phần phụ tùng
-//         },
-//         accentColor: Colors.green,
-//       ),
-//     ],
-//   );
-// }
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        color: ColorHex.grey_shade300,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Hoàn tất thanh toán: $formattedPrice',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: ColorHex.black,
+                ),
+              ),
+              const SizedBox(height: 8),
+              GestureDetector(
+                onTap: () {
+                  // TODO: Implement view electronic invoice
+                },
+                child: const Text(
+                  'Xem Hoá đơn điện tử',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.blue, // Or your link color
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget _buildButtons(Appointmentcontroller controller, BuildContext context,
       int appointmentId) {
@@ -516,50 +462,34 @@ class Appoointmentdetail extends StatelessWidget {
         Expanded(
           child: OutlinedButton(
             onPressed: () {
-              print(
-                  'appointmentId trước khi gọi CancelAppoint: $appointmentId');
-              print('Lý do hủy: ${controller.cancelreason.value}');
-              if (appointmentId != null) {
-                _showCancelDialog(controller, context, appointmentId);
-                // controller.CancelAppoint(
-                //     appointmentId, controller.cancelReason.value);
-                // Navigator.pop(context);
-              } else {
-                // Xử lý trường hợp appointmentId là null.  Có thể hiển thị thông báo lỗi.
-                Utils.showSnackBar(
-                    title: 'Lỗi', message: 'Không tìm thấy ID lịch hẹn.');
-              }
+              _showCancelDialog(controller, context, appointmentId);
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: ColorHex.grey,
+            style: OutlinedButton.styleFrom(
+              side: const BorderSide(color: ColorHex.grey),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
-              minimumSize: const Size(double.infinity, 45),
             ),
-            child: Text(
-              'cancel_request'.tr,
-              style: const TextStyle(fontSize: 14, color: ColorHex.white),
-            ),
+            child: Text('cancel'.tr,
+                style: const TextStyle(color: ColorHex.black)),
           ),
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: 12),
         Expanded(
           child: ElevatedButton(
             onPressed: () {
-              Get.toNamed(Routes.appointmentbook);
+              controller.AcceptAppoint(appointmentId);
+              Get.back();
             },
             style: ElevatedButton.styleFrom(
+              side: const BorderSide(color: ColorHex.grey),
               backgroundColor: ColorHex.total_color,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
-              minimumSize: const Size(double.infinity, 45),
             ),
-            child: Text(
-              'reschedule_appt'.tr,
-              style: const TextStyle(fontSize: 14, color: ColorHex.white),
-            ),
+            child: Text('accept'.tr,
+                style: const TextStyle(color: ColorHex.white)),
           ),
         ),
       ],
@@ -572,40 +502,70 @@ class Appoointmentdetail extends StatelessWidget {
       context: context,
       builder: (_) => SafeArea(
         child: AlertDialog(
-          title: Text('Lý do hủy hẹn',
+          title: Text('Xác nhận hủy'.tr,
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          content: TextField(
-            controller: controller.cancelreason,
-            maxLines: 3,
-            decoration: const InputDecoration(
-                hintText: 'Nhập lý do (tùy chọn)',
-                border: OutlineInputBorder()),
-            onChanged: (value) {
-              controller.cancelreason.text = value;
-            },
-          ),
+          content: Text('Bạn có chắc chắn muốn hủy lịch hẹn này?'.tr),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Đóng'.tr),
+              child: Text('Không'.tr),
             ),
             ElevatedButton(
-              onPressed: () async {
-                if (appointmentId != null) {
-                  controller.CancelAppoint(
-                      appointmentId, controller.cancelreason.text);
-                  Navigator.pop(context);
-                  Get.back();
-                } else {
-                  Utils.showSnackBar(
-                      title: 'Lỗi'.tr, message: 'Không tìm thấy ID lịch hẹn.');
-                }
+              onPressed: () {
+                Navigator.pop(context);
+
+                showDialog(
+                  context: context,
+                  builder: (_) => SafeArea(
+                    child: AlertDialog(
+                      title: Text('Lý do hủy hẹn'.tr,
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      content: TextField(
+                        controller: controller.cancelreason,
+                        maxLines: 3,
+                        decoration: const InputDecoration(
+                            hintText: 'Nhập lý do (tùy chọn)',
+                            border: OutlineInputBorder()),
+                        onChanged: (value) {
+                          controller.cancelreason.text = value;
+                        },
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text('Đóng'.tr),
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            if (appointmentId != null) {
+                              print(
+                                  "nhap ly do: ${controller.cancelreason.text}");
+                              controller.CancelAppoint(
+                                  appointmentId, controller.cancelreason.text);
+
+                              Get.back();
+                            } else {
+                              Utils.showSnackBar(
+                                  title: 'Lỗi'.tr,
+                                  message: 'Không tìm thấy ID lịch hẹn.');
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: ColorHex.total_color,
+                          ),
+                          child: Text('Xác nhận hủy'.tr,
+                              style: TextStyle(color: Colors.white)),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: ColorHex.total_color,
+                backgroundColor: Colors.redAccent,
               ),
-              child: Text('Xác nhận hủy'.tr,
-                  style: TextStyle(color: Colors.white)),
+              child: Text('Có, hủy'.tr, style: TextStyle(color: Colors.white)),
             ),
           ],
         ),

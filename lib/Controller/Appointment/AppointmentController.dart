@@ -54,7 +54,7 @@ class Appointmentcontroller extends GetxController {
   Rx<DateTime> selectedDate = DateTime.now().obs;
   DateTime timeNow = DateTime.now();
   var description = ''.obs;
-  var cancel = ''.obs;
+
   TextEditingController descriptionController = TextEditingController();
   TextEditingController cancelreason = TextEditingController();
 
@@ -223,6 +223,9 @@ class Appointmentcontroller extends GetxController {
   }
 
   void CancelAppoint(int appoiId, String reason) async {
+    if (cancelreason.text.trim().isEmpty) {
+      Utils.showSnackBar(title: 'notification'.tr, message: 'Hãy nhập lý do');
+    }
     String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
     var param = {
       "keyCert":
@@ -236,7 +239,7 @@ class Appointmentcontroller extends GetxController {
     try {
       var response = await APICaller.getInstance()
           .post('Appointment/cancel_appointment.php', param);
-
+      //print("data huy: $param");
       if (response != null && response['status'] == 'success') {
         Utils.showSnackBar(
           title: 'notification'.tr,

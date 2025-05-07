@@ -50,7 +50,7 @@ class NotificationController extends GetxController {
         if (page == 1) {
           isLoading.value = true;
         }
-        print("time now: $timeNow");
+        //print("time now: $timeNow");
         var param = {
           "keyCert":
               Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),

@@ -110,7 +110,7 @@ class Appointmentbook extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 6.0),
                     child: Text(
-                      "${'selected'.tr}${controller.checkedValuesService.where((e) => e).length}",
+                      "${'selected'.tr} ${controller.checkedValuesService.where((e) => e).length}",
                       style: const TextStyle(
                         fontSize: 14,
                         color: ColorHex.total_color,
@@ -237,16 +237,22 @@ class Appointmentbook extends StatelessWidget {
       context: context,
       builder: (_) => SafeArea(
         child: AlertDialog(
-          title: Text('add_description'.tr),
+          title: Text('add_description'.tr,
+              style: TextStyle(fontSize: 16, color: ColorHex.black)),
           content: TextField(
             controller: controller.descriptionController,
             maxLines: 1,
-            decoration: InputDecoration(hintText: 'enter_description'.tr),
+            decoration: InputDecoration(
+                hintText: 'enter_description'.tr,
+                hintStyle: TextStyle(fontSize: 13, color: ColorHex.black)),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('cancel'.tr),
+              child: Text(
+                'cancel'.tr,
+                style: TextStyle(fontSize: 13, color: ColorHex.black),
+              ),
             ),
             ElevatedButton(
               onPressed: () {
@@ -254,7 +260,11 @@ class Appointmentbook extends StatelessWidget {
                     controller.descriptionController.text;
                 Navigator.pop(context);
               },
-              child: Text('confirm'.tr),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: ColorHex.total_color,
+              ),
+              child: Text('confirm'.tr,
+                  style: TextStyle(fontSize: 13, color: ColorHex.white)),
             ),
           ],
         ),

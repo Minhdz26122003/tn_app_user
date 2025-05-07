@@ -39,14 +39,67 @@ class AppointmentModel {
     this.services, // Thêm vào constructor
   });
 
-  // Trả về index để dùng trong Stepper/Timeline
+  //Trả về index để dùng trong Stepper/Timeline
   int get currentStatusIndex {
-    if (status != null && status! >= 0 && status! <= 4) {
+    if (status != null && status! >= 0 && status! <= 5) {
       return status!;
     } else {
       return 0;
     }
   }
+
+  // static const int PROCESSING = 0;
+  // static const int QUOTE_APPOINT = 1;
+  // static const int REPAIR = 2;
+  // static const int SETTLEMENT_APPOINT = 3;
+  // static const int PAY = 4;
+  // static const int PAID = 5;
+  // static const int CANCELLED = 6;
+
+  // // Thêm trạng thái Thanh toán
+
+  // // Cập nhật currentStatusIndex
+  // int get currentStatusIndex {
+  //   switch (status) {
+  //     case PROCESSING:
+  //       return 0;
+  //     case QUOTE_APPOINT:
+  //       return 1;
+  //     case REPAIR:
+  //       return 2;
+  //     case SETTLEMENT_APPOINT:
+  //       return 3;
+  //     case PAY:
+  //       return 4;
+  //     case PAID:
+  //       return 5;
+  //     case CANCELLED:
+  //       return 6;
+  //     default:
+  //       return 0;
+  //   }
+  // }
+
+  // String get currentStatus {
+  //   switch (status) {
+  //     case PROCESSING:
+  //       return 'Đang xử lý yêu cầu';
+  //     case QUOTE_APPOINT:
+  //       return 'Báo giá';
+  //     case REPAIR:
+  //       return 'Đang sửa chữa';
+  //     case SETTLEMENT_APPOINT:
+  //       return 'Quyết toán';
+  //     case PAY:
+  //       return 'Thanh toán';
+  //     case PAID:
+  //       return 'Đã thanh toán';
+  //     case CANCELLED:
+  //       return 'Đã hủy';
+  //     default:
+  //       return 'Không xác định';
+  //   }
+  // }
 
   AppointmentModel.fromJson(Map<String, dynamic> json) {
     appointment_id = json['appointment_id'];
