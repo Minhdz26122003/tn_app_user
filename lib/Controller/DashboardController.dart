@@ -61,7 +61,7 @@ class Dashboardcontroller extends GetxController {
       gender.value = await Utils.getStringValueWithKey(Constant.GENDER) ?? '';
       address.value = await Utils.getStringValueWithKey(Constant.ADDRESS) ?? '';
     } catch (e) {
-      print("Lỗi khi tải dữ liệu: $e");
+      //print("Lỗi khi tải dữ liệu: $e");
     } finally {
       isLoading.value = false;
     }

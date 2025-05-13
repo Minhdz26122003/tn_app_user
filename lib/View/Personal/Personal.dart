@@ -3,6 +3,7 @@ import 'package:app_hm/Controller/Personal/PersonalController.dart';
 import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Services/Auth.dart';
+import 'package:app_hm/Services/PushNotification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -198,6 +199,20 @@ class Personal extends StatelessWidget {
                                 svg: 'assets/icons/setting.svg',
                                 onTap: () {
                                   Get.toNamed(Routes.setting);
+                                  // PushNotifications.scheduleQuickTest(
+                                  //     title: 'Test 10 s',
+                                  //     body: 'Bạn sẽ thấy sau 10s');
+                                },
+                              ),
+                              const SizedBox(height: 5),
+                              _item(
+                                title: 'hương dan',
+                                svg: 'assets/icons/setting.svg',
+                                onTap: () {
+                                  Get.toNamed(Routes.permissionguide);
+                                  // PushNotifications.scheduleQuickTest(
+                                  //     title: 'Test 10 s',
+                                  //     body: 'Bạn sẽ thấy sau 10s');
                                 },
                               ),
                               const SizedBox(height: 5),

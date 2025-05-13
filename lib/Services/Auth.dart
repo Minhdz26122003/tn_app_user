@@ -150,10 +150,10 @@ class Auth {
             ..avatar.value = user.photoURL ?? ''
             ..phoneNumber.value = '';
           final d = data['data'];
-          // 1 giờ
 
           final idTokenResult = await user.getIdTokenResult();
-          final DateTime expiryUtc = idTokenResult.expirationTime!.toUtc();
+          final DateTime expiryUtc = idTokenResult.expirationTime!;
+          print(expiryUtc);
           await Utils.saveStringWithKey(
               Constant.TOKEN_EXPIRY, expiryUtc.toIso8601String());
 
@@ -196,7 +196,7 @@ class Auth {
           title: 'notification'.tr, message: 'enter_current_password'.tr);
     } else {
       try {
-        final timeNow = DateTime.now().toUtc();
+        final timeNow = DateTime.now();
         final formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
 
         final param = {
@@ -215,9 +215,11 @@ class Auth {
         await Utils.saveStringWithKey(Constant.ACCESS_TOKEN, token);
         GlobalValue.getInstance().setToken('Bearer $token');
 
-        final DateTime nowUtc = DateTime.now().toUtc();
-        final DateTime expiryUtc = nowUtc.add(const Duration(hours: 1));
+        final DateTime nowUtc = DateTime.now();
+        print(nowUtc);
+        final DateTime expiryUtc = nowUtc.add(const Duration(hours: 2));
         final String expiryString = expiryUtc.toIso8601String();
+        print(expiryString);
         await Utils.saveStringWithKey(Constant.TOKEN_EXPIRY, expiryString);
 
         final d = data['data'];
@@ -244,9 +246,9 @@ class Auth {
         Utils.showSnackBar(
             title: 'Thông báo', message: 'Đăng nhập thành công.');
       } catch (e) {
-        //debugPrint("Lỗi API: $e", wrapWidth: 1024);
+        debugPrint("Lỗi API: $e", wrapWidth: 1024);
         //Utils.showSnackBar(title: 'Lỗi đăng nhập', message: e.toString());
-        Utils.showSnackBar(title: 'notification'.tr, message: 'Error Login');
+        //Utils.showSnackBar(title: 'notification'.tr, message: 'Error Login');
       } finally {
         login.isLoading.value = false;
       }

@@ -12,6 +12,7 @@ import 'package:app_hm/View/Appointment/ListAppointment.dart';
 import 'package:app_hm/View/Car/AddCar.dart';
 import 'package:app_hm/View/Car/Car.dart';
 import 'package:app_hm/View/Car/EditCar.dart';
+import 'package:app_hm/View/Guideapp/PermissionGuide.dart';
 import 'package:app_hm/View/Login/Login.dart';
 import 'package:app_hm/View/Login/Onboarding.dart';
 import 'package:app_hm/View/Notification/Notification.dart';
@@ -195,6 +196,12 @@ class AppPages {
     GetPage(
       name: Routes.servicedetail,
       page: () => const Servicedetail(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.permissionguide,
+      page: () => const PermissionGuide(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 400),
     ),

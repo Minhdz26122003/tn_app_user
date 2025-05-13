@@ -9,13 +9,64 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:device_info_plus/device_info_plus.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  tz.initializeTimeZones();
+  tz.setLocalLocation(tz.getLocation('Asia/Ho_Chi_Minh'));
+
+  // Khởi tạo Firebase trước khi chạy ứng dụng
+  if (Platform.isAndroid) {
+    await Firebase.initializeApp(
+      name: "demo1-4b8c1",
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } else {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
+  // Yêu cầu quyền thông báo ngay khi khởi động
+  //await _requestPermissions();
   runApp(MyApp(initialLocale: await TranslationService.getSavedLocale()));
-  await FirebasePlatform();
+
   await startNotification();
 }
+
+// Future<void> _requestPermissions() async {
+//   final notificationStatus = await Permission.notification.status;
+//   if (notificationStatus.isDenied || notificationStatus.isPermanentlyDenied) {
+//     if (Platform.isIOS) {
+//       await Permission.notification.request();
+//     } else if (Platform.isAndroid) {
+//       await Permission.notification.request();
+//     }
+//   } else {
+//     print('Notification permission already granted');
+//   }
+
+//   if (Platform.isAndroid) {
+//     final androidInfo = await DeviceInfoPlugin().androidInfo;
+//     if (androidInfo.version.sdkInt >= 31) {
+//       final alarmStatus = await Permission.scheduleExactAlarm.status;
+//       print('Trạng thái quyền báo thức chính xác: $alarmStatus');
+//       if (alarmStatus.isDenied || alarmStatus.isPermanentlyDenied) {
+//         final newAlarmStatus = await Permission.scheduleExactAlarm.request();
+//         if (newAlarmStatus.isGranted) {
+//           print('Exact alarm permission granted');
+//         } else {
+//           print('Exact alarm permission denied');
+//         }
+//       } else {
+//         print('Exact alarm permission already granted');
+//       }
+//     }
+//   }
+// }
 
 class MyApp extends StatelessWidget {
   final Locale initialLocale;
@@ -52,19 +103,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-Future FirebasePlatform() async {
-  if (Platform.isAndroid) {
-    await Firebase.initializeApp(
-      name: "demo1-4b8c1",
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-  } else {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-  }
-}
-
 Future firebaseBackgroundMessage(RemoteMessage message) async {
   if (message.notification != null) {}
 }
@@ -72,6 +110,7 @@ Future firebaseBackgroundMessage(RemoteMessage message) async {
 Future startNotification() async {
   await PushNotifications.localNotiInit();
   await PushNotifications.init();
+
   FirebaseMessaging.onBackgroundMessage(firebaseBackgroundMessage);
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
@@ -99,6 +138,7 @@ Future startNotification() async {
   FirebaseMessaging.onMessageOpenedApp.listen((message) async {
     await PushNotifications.navigationInNotification(message.data);
   });
+
 // Kiểm tra nếu ứng dụng khởi động từ thông báo
   final RemoteMessage? message = await FirebaseMessaging.instance
       .getInitialMessage(); // gọi hàm  này khi thông báo được nhấn vào từ trạng thái app đang đóng

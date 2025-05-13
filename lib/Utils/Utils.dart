@@ -99,9 +99,12 @@ class Utils {
   static final steps = [
     'processing_request'.tr,
     'price_quote'.tr,
+    'accepted_quote'.tr,
     'repair'.tr,
-    'final_settlement'.tr,
+    'completed'.tr,
+    'settlement'.tr,
     'pay'.tr,
+    'paid'.tr,
   ];
 
   static String getStatusString(int value) {

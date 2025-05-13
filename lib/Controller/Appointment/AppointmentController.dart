@@ -486,20 +486,37 @@ class Appointmentcontroller extends GetxController {
           .post('Book/book_appointment.php', param);
       print("data lich hen: $param");
       if (data != null && data['status'] == 'success') {
-        //String appointmentId = data['items']['appointment_id'].toString();
+        String appointmentId = data['items']['appointment_id'].toString();
         // Utils.showSnackBar(
         //   title: 'notification'.tr,
         //   message: "Đặt lịch thành công với ID: $appointmentId",
         // );
 
         await GetAppointmentList();
+
         buildSlots();
         Get.offAllNamed(Routes.appointmentlist);
+
+        final apptDT = DateTime(
+          selectedDate.value.year,
+          selectedDate.value.month,
+          selectedDate.value.day,
+          int.parse(selectedTime.value.split(':')[0]),
+          int.parse(selectedTime.value.split(':')[1]),
+        );
+
+        await PushNotifications.scheduleReminders(
+          uid,
+          apptDT,
+          title: 'Nhắc nhở lịch hẹn #$appointmentId',
+          body: 'Bạn có lịch hẹn được đặt vào lúc '
+              '${DateFormat('HH:mm dd/MM/yyyy').format(apptDT)}',
+        );
       } else {
-        debugPrint("Lỗi API: " + data?['error']['message'], wrapWidth: 1024);
+        debugPrint("Lỗi APIdl: " + data?['error']['message'], wrapWidth: 1024);
       }
     } catch (e) {
-      debugPrint("Lỗi API: $e", wrapWidth: 1024);
+      debugPrint("Lỗi APIdl2: $e", wrapWidth: 1024);
       //Utils.showSnackBar(title: 'Thông báo', message: 'Lỗi: $e');
     } finally {
       isBooking.value = false;
