@@ -1,9 +1,8 @@
+import 'package:app_hm/Controller/Appointment/Appointmentcontroller.dart';
 import 'package:app_hm/Controller/DashboardController.dart';
-import 'package:app_hm/Controller/Personal/PersonalController.dart';
 import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Services/Auth.dart';
-import 'package:app_hm/Services/PushNotification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -14,7 +13,7 @@ class Personal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(Dashboardcontroller());
-
+    final apct = Get.find<Appointmentcontroller>();
     return Scaffold(
       backgroundColor: ColorHex.white,
       body: Obx(() {
@@ -188,6 +187,7 @@ class Personal extends StatelessWidget {
                                   if (!controller.isLoggedIn.value) {
                                     Get.toNamed(Routes.login);
                                   } else {
+                                    apct.GetAppointmentList();
                                     Get.toNamed(Routes.appointmentlist);
                                   }
                                 },

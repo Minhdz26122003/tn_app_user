@@ -117,14 +117,23 @@ class Appoointmentdetail extends StatelessWidget {
       // Status 1: Báo giá
       case 1:
         return _quoteCard(m, controller, context, appointmentId);
-      // Status 2: Sửa chữa
+      // Status 2: Chấp nhận báo giá
       case 2:
-        return _repairCard(m, controller);
-      // Status 3: Quyết toán
+        return _confirmQuoteCard(m, controller);
+      // Status 3: Đang sửa
       case 3:
-        return _settlementCard(m); // Thêm widget cho trạng thái Quyết toán
-      // Status 4: Thanh toán
+        return _repairCard(m);
+      // Status 4: Hoàn thành
       case 4:
+        return _completeCard(m);
+      // Status 5: Quyết toán
+      case 5:
+        return _settlementCard(m);
+      // Status 6: Thanh toán
+      case 6:
+        return _settlementCard(m); // Thêm widget cho trạng thái Thanh toán
+      // Status 7: Hoàn thành
+      case 7:
         return _paymentCard(m); // Thêm widget cho trạng thái Thanh toán
       default:
         return const SizedBox.shrink();
@@ -153,20 +162,20 @@ class Appoointmentdetail extends StatelessWidget {
                     color: ColorHex.black)),
             const SizedBox(height: 8),
             Text('${'date'.tr}: $dateStr',
-                style:
-                    const TextStyle(fontSize: 14, color: ColorHex.textContent)),
+                style: const TextStyle(
+                    fontSize: 14, color: ColorHex.grey_shade600)),
             const SizedBox(height: 4),
             Text('${'time'.tr}: $timeStr',
-                style:
-                    const TextStyle(fontSize: 14, color: ColorHex.textContent)),
+                style: const TextStyle(
+                    fontSize: 14, color: ColorHex.grey_shade600)),
             const SizedBox(height: 4),
             Text('${'address'.tr}: ${m.gara_address}',
-                style:
-                    const TextStyle(fontSize: 14, color: ColorHex.textContent)),
+                style: const TextStyle(
+                    fontSize: 14, color: ColorHex.grey_shade600)),
             const SizedBox(height: 4),
             Text('${'code'.tr}: #${m.appointment_id}',
-                style:
-                    const TextStyle(fontSize: 14, color: ColorHex.textContent)),
+                style: const TextStyle(
+                    fontSize: 14, color: ColorHex.grey_shade600)),
           ],
         ),
       ),
@@ -313,49 +322,161 @@ class Appoointmentdetail extends StatelessWidget {
     );
   }
 
-  // sửa chữa
-  Widget _repairCard(AppointmentModel m, Appointmentcontroller controller) {
-    double totalPrice = 0;
-    int totalTime = 0; // Giả sử thời gian là số phút
-
-    if (m.services != null) {
-      for (var service in m.services!) {
-        totalPrice += service.price ?? 0;
-        totalTime += _parseDurationToMinutes(service.time ?? '0:00:00');
-      }
-    }
-
-    final formattedPrice =
-        NumberFormat.currency(locale: 'vi_VN', symbol: '₫').format(totalPrice);
-    final formattedTotalTime = '$totalTime phút'; // Định dạng tổng thời gian
+// chấp nhận báo giá
+  Widget _confirmQuoteCard(
+      AppointmentModel m, Appointmentcontroller controller) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         color: ColorHex.grey_shade300,
         child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                Icons.check_circle_outline,
+                size: 48,
+                color: Colors.green,
+              ),
+              SizedBox(height: 12),
+              Text(
+                'Báo giá đã được chấp nhận',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green[800],
+                ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Cảm ơn bạn đã xác nhận. Nhân viên của chúng tôi sẽ sớm tiến hành dịch vụ.',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[700],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // sửa chữa
+  Widget _repairCard(AppointmentModel m) {
+    //double totalPrice = 0;
+    int totalTime = 0;
+    if (m.services != null) {
+      for (var service in m.services!) {
+        //totalPrice += service.price ?? 0;
+        totalTime += _parseDurationToMinutes(service.time ?? '0:00:00');
+      }
+    }
+    // final formattedPrice =
+    //     NumberFormat.currency(locale: 'vi_VN', symbol: '₫').format(totalPrice);
+    final formattedTime = '$totalTime phút';
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        elevation: 2,
+        child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Đang sửa chữa',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: ColorHex.black,
-                ),
+              // Tiêu đề với icon để minh họa
+              const Row(
+                children: [
+                  Icon(Icons.build_circle_outlined,
+                      size: 28, color: Colors.blue),
+                  SizedBox(width: 8),
+                  Text(
+                    'Đang sửa chữa',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: ColorHex.black,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 8),
+
+              const SizedBox(height: 12),
+
+              // Thời gian và chi phí dự kiến
+              Row(
+                children: [
+                  const Icon(Icons.schedule,
+                      size: 20, color: ColorHex.grey_shade600),
+                  const SizedBox(width: 4),
+                  Text(
+                    formattedTime,
+                    style: const TextStyle(
+                        fontSize: 14, color: ColorHex.grey_shade600),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 12),
+
+              // Mô tả ngắn về trạng thái
+              const Text(
+                'Xe của bạn đang được sửa chữa tại gara. Nhân viên sẽ cập nhật khi hoàn thành.',
+                style: TextStyle(fontSize: 14, color: ColorHex.grey_shade600),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Hoàn thành
+  Widget _completeCard(AppointmentModel m) {
+    int totalTime = 0;
+    if (m.services != null) {
+      for (var svc in m.services!) {
+        totalTime += _parseDurationToMinutes(svc.time ?? '0:00:00');
+      }
+    }
+    final formattedTime = '$totalTime phút';
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        elevation: 2,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 1. Icon & Tiêu đề hoàn thành
+              Row(
+                children: [
+                  Icon(Icons.check_circle_outline,
+                      size: 28, color: Colors.green),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Hoàn thành',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green[800],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+
               Text(
-                'Thời gian: $formattedTotalTime',
+                'Xe của bạn đã được sửa chữa xong. Cảm ơn bạn đã tin tưởng sử dụng dịch vụ!',
                 style: const TextStyle(
                     fontSize: 14, color: ColorHex.grey_shade600),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Xe của bạn đang được sửa chữa tại gara.',
-                style: TextStyle(fontSize: 14, color: ColorHex.grey_shade600),
               ),
             ],
           ),

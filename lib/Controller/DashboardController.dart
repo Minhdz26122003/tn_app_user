@@ -1,3 +1,4 @@
+import 'package:app_hm/Controller/Appointment/Appointmentcontroller.dart';
 import 'package:app_hm/Global/Constant.dart';
 import 'package:app_hm/Services/Auth.dart';
 import 'package:app_hm/Utils/Utils.dart';
@@ -39,6 +40,7 @@ class Dashboardcontroller extends GetxController {
   @override
   Future<void> onInit() async {
     super.onInit();
+
     final idx = Get.arguments;
     if (idx is int) currentPageIndex.value = idx;
     firebaseUser.bindStream(FirebaseAuth.instance.authStateChanges());
@@ -92,5 +94,12 @@ class Dashboardcontroller extends GetxController {
 
   void changePage(int index) {
     currentPageIndex.value = index;
+    if (index == 0) {
+      // Giả sử Home page ở index 0, và bạn đã khởi tạo ServiceController
+      final apct = Get.find<Appointmentcontroller>();
+      apct.GetServiceTypeList();
+      apct.GetServiceList();
+      // apct.GetAppointmentList();
+    }
   }
 }

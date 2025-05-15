@@ -36,7 +36,7 @@ class AppointmentModel {
     this.quoteAmount,
     this.depositAmount,
     this.totalAmount,
-    this.services, // Thêm vào constructor
+    this.services,
   });
 
   //Trả về index để dùng trong Stepper/Timeline
@@ -111,7 +111,7 @@ class ServiceDetail {
   String? service_name;
   String? service_img;
   double? price;
-  String? time; // Hoặc có thể là int nếu thời gian là số phút
+  String? time;
 
   ServiceDetail({
     this.service_id,
@@ -128,7 +128,7 @@ class ServiceDetail {
     price = json['price'] != null
         ? double.tryParse(json['price'].toString())
         : null;
-    time = json['time']?.toString(); // Đảm bảo là String
+    time = json['time']?.toString();
   }
 
   Map<String, dynamic> toJson() {

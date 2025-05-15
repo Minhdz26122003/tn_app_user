@@ -2,7 +2,7 @@ import 'package:app_hm/Controller/Appointment/Appointmentcontroller.dart';
 import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Model/Appointment/ApointmentModel.dart';
 import 'package:app_hm/Router/AppPage.dart';
-import 'package:app_hm/View/Personal/Personal.dart';
+import 'package:app_hm/Utils/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -20,12 +20,13 @@ class Appointmentlist extends StatelessWidget {
             style: const TextStyle(color: ColorHex.white, fontSize: 17)),
         backgroundColor: ColorHex.total_color,
         centerTitle: false,
-        leading: GestureDetector(
-          onTap: () {
-            Get.offAllNamed(Routes.dashboard);
-          },
-          child: const Icon(Icons.arrow_back, color: ColorHex.white),
-        ),
+        leading: const BackButton(color: Colors.white),
+        // leading: GestureDetector(
+        //   onTap: () {
+        //     Get.offAllNamed(Routes.dashboard);
+        //   },
+        //   child: const Icon(Icons.arrow_back, color: ColorHex.white),
+        // ),
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
@@ -85,26 +86,29 @@ class Appointmentlist extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     final date = DateTime.tryParse(model.appointment_date!) ?? DateTime.now();
+    // Trạng thái
+    final status = model.currentStatusIndex;
 
     return GestureDetector(
       onTap: onTap,
       child: Card(
-        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         elevation: 2,
         child: Row(
           children: [
-            // Phần date box
+            // Date box
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+              padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 12),
               decoration: const BoxDecoration(
-                color: ColorHex.border_5,
+                color: ColorHex.status_update_vote_5,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(12),
                   bottomLeft: Radius.circular(12),
                 ),
               ),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     '${date.day}',
@@ -132,7 +136,9 @@ class Appointmentlist extends StatelessWidget {
                     Text(
                       model.gara_name ?? 'not_yet'.tr,
                       style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.bold),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
                     ),
                     const SizedBox(height: 4),
                     Row(
@@ -144,10 +150,24 @@ class Appointmentlist extends StatelessWidget {
                           height: 16,
                         ),
                         const SizedBox(width: 4),
+                        Text(model.appointment_time ?? 'not_yet'.tr,
+                            style:
+                                const TextStyle(color: ColorHex.grey_shade600)),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.car_crash_outlined,
+                          size: 16,
+                        ),
+                        const SizedBox(width: 6),
                         Text(
-                          model.appointment_time ?? 'not_yet'.tr,
+                          Utils.steps[status].tr,
                           style: const TextStyle(
-                              fontSize: 14, color: ColorHex.grey_shade600),
+                              color: ColorHex.status_0,
+                              fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),

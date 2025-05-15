@@ -85,8 +85,8 @@ class Appointmenthistory extends StatelessWidget {
 
     // Trạng thái
     final status = m.currentStatusIndex;
-    final isCancelled = status == 7; // hủy
-    final isCompleted = status == 6; // hthanh
+    final isCancelled = status == 8; // hủy
+    final isCompleted = status == 7; // hthanh
     final icon = isCompleted
         ? Icons.check_circle
         : isCancelled
@@ -119,7 +119,7 @@ class Appointmenthistory extends StatelessWidget {
           children: [
             // Date box
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+              padding: const EdgeInsets.symmetric(vertical: 17, horizontal: 12),
               decoration: const BoxDecoration(
                 color: ColorHex.status_1,
                 borderRadius: BorderRadius.only(

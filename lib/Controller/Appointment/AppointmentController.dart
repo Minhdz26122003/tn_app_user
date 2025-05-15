@@ -52,7 +52,6 @@ class Appointmentcontroller extends GetxController {
   Rxn<CenterModel> selectedAddress = Rxn<CenterModel>();
 
   Rx<DateTime> selectedDate = DateTime.now().obs;
-  DateTime timeNow = DateTime.now();
   var description = ''.obs;
 
   TextEditingController descriptionController = TextEditingController();
@@ -222,10 +221,12 @@ class Appointmentcontroller extends GetxController {
     }
   }
 
+  // Hủy lịch hẹn
   void CancelAppoint(int appoiId, String reason) async {
     if (cancelreason.text.trim().isEmpty) {
       Utils.showSnackBar(title: 'notification'.tr, message: 'Hãy nhập lý do');
     }
+    DateTime timeNow = DateTime.now();
     String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
     var param = {
       "keyCert":
@@ -252,7 +253,9 @@ class Appointmentcontroller extends GetxController {
     }
   }
 
+  // Chấp nhận báo giá
   void AcceptAppoint(int appoiId) async {
+    DateTime timeNow = DateTime.now();
     String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
     var param = {
       "keyCert":
@@ -277,6 +280,7 @@ class Appointmentcontroller extends GetxController {
   }
 
   getAccount() async {
+    DateTime timeNow = DateTime.now();
     String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
     if (uid != 0) {
       var param = {
@@ -300,9 +304,10 @@ class Appointmentcontroller extends GetxController {
   }
 
   GetServiceTypeList() async {
-    isLoading.value = true;
+    //isLoading.value = true;
     typeList.clear();
     try {
+      DateTime timeNow = DateTime.now();
       String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
       var param = {
         "keyCert":
@@ -322,20 +327,24 @@ class Appointmentcontroller extends GetxController {
     } catch (e) {
       debugPrint("Lỗi API: $e", wrapWidth: 1024);
       //Utils.showSnackBar(title: 'notification'.tr, message: '$e');
-    } finally {
-      isLoading.value = false;
     }
+    // finally {
+    //   isLoading.value = false;
+    // }
   }
 
   GetServiceList() async {
     serviceList.clear();
+    isLoading.value = true;
     try {
+      DateTime timeNow = DateTime.now();
       String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
       var param = {
         "keyCert":
             Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
         "time": formattedTime,
       };
+      print('param $param');
       var data =
           await APICaller.getInstance().post('Service/get_service.php', param);
       if (data != null) {
@@ -351,6 +360,8 @@ class Appointmentcontroller extends GetxController {
     } catch (e) {
       //debugPrint("Lỗi API: $e", wrapWidth: 1024);
       Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -367,6 +378,7 @@ class Appointmentcontroller extends GetxController {
   GetAddressList() async {
     centerList.clear();
     try {
+      DateTime timeNow = DateTime.now();
       String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
       var param = {
         "keyCert":
@@ -392,6 +404,7 @@ class Appointmentcontroller extends GetxController {
     if (uid != 0) {
       isLoading.value = true;
       try {
+        DateTime timeNow = DateTime.now();
         String formattedTime =
             DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
         var param = {
@@ -422,6 +435,7 @@ class Appointmentcontroller extends GetxController {
 
     isLoading.value = true;
     try {
+      DateTime timeNow = DateTime.now();
       String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
       var param = {
         "keyCert":
@@ -429,6 +443,7 @@ class Appointmentcontroller extends GetxController {
         "time": formattedTime,
         "uid": uid,
       };
+
       final data =
           await APICaller.getInstance().post('Appointment/getappoi.php', param);
 

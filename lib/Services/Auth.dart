@@ -15,7 +15,6 @@ enum LoginMethod { firebase, php }
 
 class Auth {
   static String textemail = "";
-  static DateTime timeNow = DateTime.now();
 
   static Future<void> backLogin(bool isRun) async {
     if (!isRun) return;
@@ -124,6 +123,7 @@ class Auth {
       final user = userCredential.user;
 
       if (user != null) {
+        final timeNow = DateTime.now();
         final formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
         final keyCert =
             Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime);
