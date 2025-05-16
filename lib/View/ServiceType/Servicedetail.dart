@@ -52,7 +52,8 @@ class Servicedetail extends StatelessWidget {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            controller.formatCurrency(service.price),
+                            controller
+                                .formatCurrency(service.price?.toString()),
                             style: const TextStyle(
                               fontSize: 13,
                               color: Colors.red,

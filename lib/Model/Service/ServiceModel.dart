@@ -1,10 +1,10 @@
 class ServiceModel {
-  String? service_id;
+  int? service_id;
   String? service_name;
-  String? type_id;
+  int? type_id;
   String? description;
   String? service_img;
-  String? price;
+  double? price;
   String? time;
 
   ServiceModel(
@@ -16,14 +16,28 @@ class ServiceModel {
       this.price,
       this.time});
 
-  ServiceModel.fromJson(Map<String, dynamic> json) {
-    service_id = json['service_id'];
-    service_name = json['service_name'];
-    type_id = json['type_id'];
-    description = json['description'];
-    service_img = json['service_img'];
-    price = json['price'];
-    time = json['time'];
+  factory ServiceModel.fromJson(Map<String, dynamic> json) {
+    //print('ServiceModel raw json: $json'); // <--- add this
+    return ServiceModel(
+      // json['service_id'] có thể là int hoặc String, ta parse về int:
+      service_id: json['service_id'] is int
+          ? json['service_id'] as int
+          : int.tryParse(json['service_id'].toString()) ?? 0,
+
+      service_name: json['service_name']?.toString() ?? '',
+      description: json['description']?.toString() ?? '',
+      type_id: json['type_id'] is int
+          ? json['type_id'] as int
+          : int.tryParse(json['type_id'].toString()) ?? 0,
+      service_img: json['service_img']?.toString() ?? '',
+      // Giá có thể là num hoặc String, ép về double:
+      price: json['price'] != null
+          ? double.tryParse(json['price'].toString())
+          : null,
+
+      // Time giữ nguyên chuỗi
+      time: json['time']?.toString() ?? '0:00:00',
+    );
   }
 
   Map<String, dynamic> toJson() {

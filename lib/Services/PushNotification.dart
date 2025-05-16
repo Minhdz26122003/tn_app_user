@@ -83,7 +83,7 @@ class PushNotifications {
     const AndroidInitializationSettings androidInit =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     const DarwinInitializationSettings iosInit = DarwinInitializationSettings();
-    final InitializationSettings initSettings = const InitializationSettings(
+    const InitializationSettings initSettings = InitializationSettings(
       android: androidInit,
       iOS: iosInit,
     );
@@ -239,7 +239,7 @@ class PushNotifications {
           notifTitle,
           notifBody,
           fireTime,
-          NotificationDetails(
+          const NotificationDetails(
             android: AndroidNotificationDetails(
               'demo1-4b8c1', // channel ID
               'Demo1 Notifications',

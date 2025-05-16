@@ -37,7 +37,8 @@ class Appoointmentdetail extends StatelessWidget {
           (a) => a.appointment_id == appointmentId,
         );
         if (appt == null) {
-          return Center(child: Text('Lịch hẹn không tồn tại hoặc đã bị hủy'));
+          return const Center(
+              child: Text('Lịch hẹn không tồn tại hoặc đã bị hủy'));
         }
         final currentStep = appt.currentStatusIndex;
         return SingleChildScrollView(
@@ -51,8 +52,8 @@ class Appoointmentdetail extends StatelessWidget {
               const SizedBox(height: 16),
               _buildTimeLine(currentStep),
               const SizedBox(height: 24),
-              if (currentStep <= 1)
-                _buildButtons(controller, context, appointmentId),
+              if (currentStep <= 2)
+                _buildButtons(currentStep, controller, context, appointmentId),
             ],
           ),
         );
@@ -128,10 +129,11 @@ class Appoointmentdetail extends StatelessWidget {
         return _completeCard(m);
       // Status 5: Quyết toán
       case 5:
-        return _settlementCard(m);
+        return _settlementCard(m, controller, context);
+
       // Status 6: Thanh toán
       case 6:
-        return _settlementCard(m); // Thêm widget cho trạng thái Thanh toán
+        return _completeCard(m); // Thêm widget cho trạng thái Thanh toán
       // Status 7: Hoàn thành
       case 7:
         return _paymentCard(m); // Thêm widget cho trạng thái Thanh toán
@@ -218,8 +220,9 @@ class Appoointmentdetail extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'service'.tr + ':',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                '${'service'.tr}:',
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
               ),
               const Divider(),
               // Danh sách từng service
@@ -331,16 +334,16 @@ class Appoointmentdetail extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         color: ColorHex.grey_shade300,
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(
+              const Icon(
                 Icons.check_circle_outline,
                 size: 48,
                 color: Colors.green,
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               Text(
                 'Báo giá đã được chấp nhận',
                 style: TextStyle(
@@ -349,7 +352,7 @@ class Appoointmentdetail extends StatelessWidget {
                   color: Colors.green[800],
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 'Cảm ơn bạn đã xác nhận. Nhân viên của chúng tôi sẽ sớm tiến hành dịch vụ.',
                 style: TextStyle(
@@ -421,7 +424,7 @@ class Appoointmentdetail extends StatelessWidget {
                 ],
               ),
 
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
 
               // Mô tả ngắn về trạng thái
               const Text(
@@ -443,7 +446,6 @@ class Appoointmentdetail extends StatelessWidget {
         totalTime += _parseDurationToMinutes(svc.time ?? '0:00:00');
       }
     }
-    final formattedTime = '$totalTime phút';
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -458,7 +460,7 @@ class Appoointmentdetail extends StatelessWidget {
               // 1. Icon & Tiêu đề hoàn thành
               Row(
                 children: [
-                  Icon(Icons.check_circle_outline,
+                  const Icon(Icons.check_circle_outline,
                       size: 28, color: Colors.green),
                   const SizedBox(width: 8),
                   Text(
@@ -473,10 +475,9 @@ class Appoointmentdetail extends StatelessWidget {
               ),
               const SizedBox(height: 12),
 
-              Text(
+              const Text(
                 'Xe của bạn đã được sửa chữa xong. Cảm ơn bạn đã tin tưởng sử dụng dịch vụ!',
-                style: const TextStyle(
-                    fontSize: 14, color: ColorHex.grey_shade600),
+                style: TextStyle(fontSize: 14, color: ColorHex.grey_shade600),
               ),
             ],
           ),
@@ -486,38 +487,150 @@ class Appoointmentdetail extends StatelessWidget {
   }
 
   // Quyết toán
-  Widget _settlementCard(AppointmentModel m) {
+  Widget _settlementCard(AppointmentModel m, Appointmentcontroller controller,
+      BuildContext context) {
+    final svTotal = controller.serviceTotal.value;
+    final ptTotal = controller.partsTotal.value;
+    final grandTotal = controller.totalAmount.value;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        color: ColorHex.grey_shade300,
+        elevation: 2,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Quyết toán',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: ColorHex.black,
-                ),
-              ),
-              const SizedBox(height: 8),
-              GestureDetector(
-                onTap: () {
-                  // TODO: Implement view settlement details
-                },
-                child: const Text(
-                  'Xem quyết toán',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.blue, // Or your link color
-                    decoration: TextDecoration.underline,
+              // Tiêu đề với icon
+              Row(
+                children: const [
+                  Icon(Icons.receipt_long, size: 28, color: Colors.orange),
+                  SizedBox(width: 8),
+                  Text(
+                    'Quyết toán',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      color: ColorHex.status_3,
+                    ),
                   ),
-                ),
+                ],
+              ),
+              const SizedBox(height: 12),
+
+              // (chi phí dịch vụ + phụ tùng)
+              // Total dịch vụ
+              Row(
+                children: [
+                  const Text('- Dịch vụ: ',
+                      style: TextStyle(
+                          fontSize: 13, color: ColorHex.grey_shade600)),
+                  const Spacer(),
+                  Text(
+                    NumberFormat.currency(locale: 'vi_VN', symbol: '₫')
+                        .format(svTotal),
+                    style: const TextStyle(
+                        fontSize: 13, color: ColorHex.grey_shade600),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+
+              // Total phụ tùng
+              Row(
+                children: [
+                  const Text('- Phụ tùng: ',
+                      style: TextStyle(
+                          fontSize: 13, color: ColorHex.grey_shade600)),
+                  const Spacer(),
+                  Text(
+                    NumberFormat.currency(locale: 'vi_VN', symbol: '₫')
+                        .format(ptTotal),
+                    style: const TextStyle(
+                        fontSize: 13, color: ColorHex.grey_shade600),
+                  ),
+                ],
+              ),
+              const Divider(height: 20),
+
+              // Tổng cộng
+              Row(
+                children: [
+                  const Text('Tổng cộng:',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: ColorHex.black,
+                      )),
+                  const Spacer(),
+                  Text(
+                    NumberFormat.currency(locale: 'vi_VN', symbol: '₫')
+                        .format(grandTotal),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.redAccent,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+
+              //  xem chi tiết, tải hóa đơn
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () {
+                        openSettlementDetails(m.appointment_id ?? 0, context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        side: const BorderSide(color: ColorHex.grey),
+                        backgroundColor: ColorHex.status_update_vote_3,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                      icon: const Icon(
+                        Icons.visibility_outlined,
+                        color: ColorHex.white,
+                      ),
+                      label: const Text('Chi tiết',
+                          style:
+                              TextStyle(color: ColorHex.white, fontSize: 13)),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () {
+                        openSettlementDetails(m.appointment_id ?? 0, context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        side: const BorderSide(color: ColorHex.grey),
+                        backgroundColor: ColorHex.total_color,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                      icon: const Icon(
+                        Icons.done,
+                        color: ColorHex.white,
+                      ),
+                      label: Text('confirm'.tr,
+                          style: const TextStyle(
+                              color: ColorHex.white, fontSize: 13)),
+                    ),
+                  ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     //controller.downloadInvoice(m.idLichHen);
+                  //   },
+                  //   child: const Icon(Icons.download_rounded),
+                  // ),
+                ],
               ),
             ],
           ),
@@ -576,8 +689,8 @@ class Appoointmentdetail extends StatelessWidget {
     );
   }
 
-  Widget _buildButtons(Appointmentcontroller controller, BuildContext context,
-      int appointmentId) {
+  Widget _buildButtons(int currentStep, Appointmentcontroller controller,
+      BuildContext context, int appointmentId) {
     return Row(
       children: [
         Expanded(
@@ -624,7 +737,8 @@ class Appoointmentdetail extends StatelessWidget {
       builder: (_) => SafeArea(
         child: AlertDialog(
           title: Text('Xác nhận hủy'.tr,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              style:
+                  const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           content: Text('Bạn có chắc chắn muốn hủy lịch hẹn này?'.tr),
           actions: [
             TextButton(
@@ -640,7 +754,7 @@ class Appoointmentdetail extends StatelessWidget {
                   builder: (_) => SafeArea(
                     child: AlertDialog(
                       title: Text('Lý do hủy hẹn'.tr,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold)),
                       content: TextField(
                         controller: controller.cancelreason,
@@ -659,24 +773,18 @@ class Appoointmentdetail extends StatelessWidget {
                         ),
                         ElevatedButton(
                           onPressed: () async {
-                            if (appointmentId != null) {
-                              print(
-                                  "nhap ly do: ${controller.cancelreason.text}");
-                              controller.CancelAppoint(
-                                  appointmentId, controller.cancelreason.text);
+                            // print(
+                            //     "nhap ly do: ${controller.cancelreason.text}");
+                            controller.CancelAppoint(
+                                appointmentId, controller.cancelreason.text);
 
-                              Get.back();
-                            } else {
-                              Utils.showSnackBar(
-                                  title: 'Lỗi'.tr,
-                                  message: 'Không tìm thấy ID lịch hẹn.');
-                            }
+                            Get.back();
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: ColorHex.total_color,
                           ),
                           child: Text('Xác nhận hủy'.tr,
-                              style: TextStyle(color: Colors.white)),
+                              style: const TextStyle(color: Colors.white)),
                         ),
                       ],
                     ),
@@ -686,9 +794,157 @@ class Appoointmentdetail extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.redAccent,
               ),
-              child: Text('Có, hủy'.tr, style: TextStyle(color: Colors.white)),
+              child: Text('Có, hủy'.tr,
+                  style: const TextStyle(color: Colors.white)),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  void openSettlementDetails(int appointmentId, BuildContext context) {
+    final controller = Get.find<Appointmentcontroller>();
+    controller.getSettlementUser(appointmentId);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent, // để bo tròn đẹp hơn
+      builder: (_) => SafeArea(
+        child: DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.6, // mở lên 60% màn hình
+          minChildSize: 0.3,
+          maxChildSize: 0.9,
+          builder: (_, scrollCtrl) => Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+            padding: const EdgeInsets.all(16),
+            child: Obx(() {
+              // Nếu đang load, hiện spinner
+              if (controller.isLoadingSettlement.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              // Lấy giá trị, đảm bảo không null
+              final totalAmt = controller.totalAmount.value ?? 0;
+
+              return ListView(
+                controller: scrollCtrl,
+                children: [
+                  // Drag handle
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      margin: const EdgeInsets.only(bottom: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[400],
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+
+                  const Text(
+                    'Hoá đơn thanh toán',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const Divider(),
+
+                  // Chi tiết dịch vụ
+                  const Text('Chi tiết dịch vụ',
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                  ...controller.serviceList.map((svc) {
+                    final price = (svc.price ?? 0);
+                    return ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(svc.service_name ?? '',
+                          style: const TextStyle(fontSize: 12)),
+                      trailing: Text(
+                          NumberFormat.currency(locale: 'vi_VN', symbol: '₫')
+                              .format(price),
+                          style: const TextStyle(color: ColorHex.status_0)),
+                    );
+                  }),
+
+                  const Divider(),
+
+                  // Chi tiết phụ tùng
+                  const Text('Chi tiết phụ tùng',
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                  ...controller.accessList.map((acc) {
+                    final subTotal = (acc.sub_total ?? 0);
+                    return ListTile(
+                      visualDensity: VisualDensity(vertical: -4),
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(
+                          (acc.accessory_name ?? '') +
+                              (' x') +
+                              (acc.quantity?.toString() ?? ''),
+                          style: const TextStyle(fontSize: 12)),
+                      trailing: Text(
+                          NumberFormat.currency(locale: 'vi_VN', symbol: '₫')
+                              .format(subTotal),
+                          style: const TextStyle(color: ColorHex.status_0)),
+                    );
+                  }),
+
+                  const Divider(),
+
+                  // Tổng cộng
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Tổng cộng:',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold)),
+                      Text(
+                        NumberFormat.currency(locale: 'vi_VN', symbol: '₫')
+                            .format(totalAmt),
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.redAccent),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // Nút hành động
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () => Navigator.of(context).pop(),
+                          style: ElevatedButton.styleFrom(
+                            side: const BorderSide(color: ColorHex.grey),
+                            backgroundColor: ColorHex.grey_shade300,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                          ),
+                          icon: const Icon(
+                            Icons.close,
+                            color: ColorHex.black,
+                          ),
+                          label: const Text(
+                            'Đóng',
+                            style: TextStyle(color: ColorHex.black),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            }),
+          ),
         ),
       ),
     );

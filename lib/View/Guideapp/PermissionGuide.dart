@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PermissionGuide extends StatelessWidget {
-  const PermissionGuide({Key? key}) : super(key: key);
+  const PermissionGuide({super.key});
 
   Future<void> _openSettings() async {
     await openAppSettings();

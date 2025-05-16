@@ -1,11 +1,7 @@
 import 'package:app_hm/Controller/Car/CarController.dart';
 import 'package:app_hm/Global/ColorHex.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_check_box_rounded/flutter_check_box_rounded.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class AddCar extends StatelessWidget {
   const AddCar({super.key});

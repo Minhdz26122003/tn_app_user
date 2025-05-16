@@ -1,7 +1,6 @@
 import 'package:app_hm/Controller/Appointment/Appointmentcontroller.dart';
 import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Model/Appointment/ApointmentModel.dart';
-import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Utils/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -110,10 +109,10 @@ class Appointmenthistory extends StatelessWidget {
       elevation: 2,
       color: ColorHex.grey_shade300,
       child: InkWell(
-        onTap: () {
-          Get.toNamed(Routes.appoointmentdetail,
-              arguments: {'appointment_id': m.appointment_id});
-        },
+        // onTap: () {
+        //   Get.toNamed(Routes.appoointmentdetail,
+        //       arguments: {'appointment_id': m.appointment_id});
+        // },
         borderRadius: BorderRadius.circular(12),
         child: Row(
           children: [

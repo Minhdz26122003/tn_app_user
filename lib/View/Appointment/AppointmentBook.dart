@@ -153,24 +153,49 @@ class Appointmentbook extends StatelessWidget {
             const SizedBox(height: 15),
 
             Obx(() {
-              return SizedBox(
-                height: 48,
-                child: ElevatedButton(
-                  onPressed: controller.hasSelectedService
-                      ? () {
-                          controller.nextStep();
-                        }
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: ColorHex.total_color,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
+              return Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Get.offAllNamed(Routes.dashboard);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: ColorHex.grey,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        minimumSize: const Size(double.infinity, 45),
+                      ),
+                      child: Text(
+                        'cancel'.tr,
+                        style: const TextStyle(
+                            fontSize: 16, color: ColorHex.white),
+                      ),
+                    ),
                   ),
-                  child: Text(
-                    'next'.tr,
-                    style: const TextStyle(fontSize: 16, color: ColorHex.white),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: controller.hasSelectedService
+                          ? () {
+                              controller.nextStep();
+                            }
+                          : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: ColorHex.total_color,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        minimumSize: const Size(double.infinity, 45),
+                      ),
+                      child: Text(
+                        'next'.tr,
+                        style: const TextStyle(
+                            fontSize: 16, color: ColorHex.white),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               );
             }),
           ],
@@ -238,20 +263,21 @@ class Appointmentbook extends StatelessWidget {
       builder: (_) => SafeArea(
         child: AlertDialog(
           title: Text('add_description'.tr,
-              style: TextStyle(fontSize: 16, color: ColorHex.black)),
+              style: const TextStyle(fontSize: 16, color: ColorHex.black)),
           content: TextField(
             controller: controller.descriptionController,
             maxLines: 1,
             decoration: InputDecoration(
                 hintText: 'enter_description'.tr,
-                hintStyle: TextStyle(fontSize: 13, color: ColorHex.black)),
+                hintStyle:
+                    const TextStyle(fontSize: 13, color: ColorHex.black)),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
               child: Text(
                 'cancel'.tr,
-                style: TextStyle(fontSize: 13, color: ColorHex.black),
+                style: const TextStyle(fontSize: 13, color: ColorHex.black),
               ),
             ),
             ElevatedButton(
@@ -264,7 +290,7 @@ class Appointmentbook extends StatelessWidget {
                 backgroundColor: ColorHex.total_color,
               ),
               child: Text('confirm'.tr,
-                  style: TextStyle(fontSize: 13, color: ColorHex.white)),
+                  style: const TextStyle(fontSize: 13, color: ColorHex.white)),
             ),
           ],
         ),

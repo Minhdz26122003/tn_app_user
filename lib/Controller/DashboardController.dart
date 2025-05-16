@@ -1,4 +1,5 @@
 import 'package:app_hm/Controller/Appointment/Appointmentcontroller.dart';
+import 'package:app_hm/Controller/Notification/NotificationController.dart';
 import 'package:app_hm/Global/Constant.dart';
 import 'package:app_hm/Services/Auth.dart';
 import 'package:app_hm/Utils/Utils.dart';
@@ -94,11 +95,13 @@ class Dashboardcontroller extends GetxController {
 
   void changePage(int index) {
     currentPageIndex.value = index;
+    final apct = Get.find<Appointmentcontroller>();
+    final noti = Get.find<NotificationController>();
     if (index == 0) {
       // Giả sử Home page ở index 0, và bạn đã khởi tạo ServiceController
-      final apct = Get.find<Appointmentcontroller>();
       apct.GetServiceTypeList();
       apct.GetServiceList();
+      noti.notificationList();
       // apct.GetAppointmentList();
     }
   }

@@ -5,7 +5,6 @@ import 'package:app_hm/Model/Service/TypeServiceModel.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class Listservice extends StatelessWidget {
   const Listservice({super.key});
@@ -13,7 +12,7 @@ class Listservice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final args = Get.arguments as Map<String, dynamic>;
-    final String typeId = args['type_id'] as String;
+    final int typeId = args['type_id'] as int;
     final String typeName = args['type_name'] as String? ?? 'Dịch vụ';
 
     final Servicecontroller controller = Get.put(Servicecontroller());
@@ -88,7 +87,7 @@ class Listservice extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      controller.formatCurrency(service.price),
+                      controller.formatCurrency(service.price?.toString()),
                       style: const TextStyle(
                           fontSize: 15,
                           color: Colors.red,

@@ -5,7 +5,6 @@ import 'package:app_hm/Model/Car/CarModel.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 
 class Appointmentconfirm extends StatelessWidget {

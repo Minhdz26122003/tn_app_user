@@ -50,8 +50,8 @@ class Auth {
     String? loginMethodStr =
         await Utils.getStringValueWithKey(Constant.LOGIN_METHOD);
     String timesaved = await Utils.getStringValueWithKey(Constant.TOKEN_EXPIRY);
-    final expiryUtc = DateTime.tryParse(timesaved)?.toUtc();
-    final nowUtc = DateTime.now().toUtc();
+    final expiryUtc = DateTime.tryParse(timesaved);
+    final nowUtc = DateTime.now();
 
     if (loginMethodStr == 'php') {
       // Kiểm tra đăng nhập bằng PHP
@@ -216,10 +216,8 @@ class Auth {
         GlobalValue.getInstance().setToken('Bearer $token');
 
         final DateTime nowUtc = DateTime.now();
-        print(nowUtc);
         final DateTime expiryUtc = nowUtc.add(const Duration(hours: 2));
         final String expiryString = expiryUtc.toIso8601String();
-        print(expiryString);
         await Utils.saveStringWithKey(Constant.TOKEN_EXPIRY, expiryString);
 
         final d = data['data'];

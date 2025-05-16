@@ -3,7 +3,6 @@ import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Model/Car/CarModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class EditCar extends StatelessWidget {
   const EditCar({super.key});

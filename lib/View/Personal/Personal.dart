@@ -210,9 +210,6 @@ class Personal extends StatelessWidget {
                                 svg: 'assets/icons/setting.svg',
                                 onTap: () {
                                   Get.toNamed(Routes.permissionguide);
-                                  // PushNotifications.scheduleQuickTest(
-                                  //     title: 'Test 10 s',
-                                  //     body: 'Bạn sẽ thấy sau 10s');
                                 },
                               ),
                               const SizedBox(height: 5),
@@ -255,47 +252,50 @@ class Personal extends StatelessWidget {
     );
   }
 
-  _item({
+  Widget _item({
     required String title,
     required String svg,
     required GestureTapCallback onTap,
     bool isLogout = false,
   }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-        decoration: BoxDecoration(
-          color: ColorHex.disableplace,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          children: [
-            SvgPicture.asset(
-              svg,
-              width: 24,
-              height: 24,
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                title,
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 14,
-                  color: isLogout ? ColorHex.status_0 : null,
-                  overflow: TextOverflow.ellipsis,
+    return Material(
+      color: const Color.fromARGB(255, 252, 252, 252),
+      borderRadius: BorderRadius.circular(8),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(8),
+        splashColor: Colors.grey.withOpacity(0.3),
+        highlightColor: Colors.grey.withOpacity(0.1),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+          child: Row(
+            children: [
+              SvgPicture.asset(
+                svg,
+                width: 24,
+                height: 24,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                    color: isLogout ? ColorHex.status_0 : ColorHex.black,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(width: 10),
-            if (!isLogout)
-              const Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 16,
-                color: ColorHex.textContent,
-              )
-          ],
+              const SizedBox(width: 10),
+              if (!isLogout)
+                const Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 16,
+                  color: ColorHex.textContent,
+                )
+            ],
+          ),
         ),
       ),
     );

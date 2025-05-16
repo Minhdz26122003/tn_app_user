@@ -54,7 +54,6 @@ class _StepCircle extends StatelessWidget {
   final bool isActive;
 
   const _StepCircle({
-    super.key,
     required this.number,
     required this.label,
     this.isActive = false,

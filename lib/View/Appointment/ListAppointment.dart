@@ -42,8 +42,19 @@ class Appointmentlist extends StatelessWidget {
             final appt = controller.appointmentList[i];
             return appointmentCard(
               model: appt,
-              onTap: () => Get.toNamed(Routes.appoointmentdetail,
-                  arguments: {'appointment_id': appt.appointment_id}),
+              onTap: () async {
+                // Nếu status = 5 thì load settlement trước
+                if (appt.status == 5) {
+                  if (appt.appointment_id != null) {
+                    await controller.getSettlementUser(appt.appointment_id!);
+                  }
+                }
+                // Sau đó mới navigate sang trang chi tiết
+                Get.toNamed(
+                  Routes.appoointmentdetail,
+                  arguments: {'appointment_id': appt.appointment_id},
+                );
+              },
             );
           },
         );

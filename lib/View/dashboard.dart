@@ -79,9 +79,15 @@ class Dashboard extends StatelessWidget {
                     ),
                   ],
                   currentIndex: controller.currentPageIndex.value,
-                  selectedItemColor: ColorHex.applyColor,
+
+                  selectedIconTheme: const IconThemeData(
+                      size: 28), // Tăng kích thước icon khi được chọn
+                  selectedLabelStyle: const TextStyle(
+                      fontWeight:
+                          FontWeight.bold), // In đậm label khi được chọn
                   type: BottomNavigationBarType.fixed,
                   onTap: (value) => controller.changePage(value),
+                  backgroundColor: const Color.fromARGB(255, 250, 250, 250),
                 ),
               ),
             ),

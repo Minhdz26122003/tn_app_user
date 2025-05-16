@@ -12,11 +12,6 @@ class AppointmentModel {
   int? status;
   String? created_at;
 
-  // Tạo tạm thời
-  double? quoteAmount;
-  double? depositAmount;
-  double? totalAmount;
-
   // Thêm trường này để chứa danh sách dịch vụ
   List<ServiceDetail>? services;
 
@@ -33,9 +28,6 @@ class AppointmentModel {
     this.reason,
     this.status,
     this.created_at,
-    this.quoteAmount,
-    this.depositAmount,
-    this.totalAmount,
     this.services,
   });
 
@@ -61,15 +53,6 @@ class AppointmentModel {
     appointment_date = json['appointment_date'];
     status = json['status'];
     created_at = json['created_at'];
-    quoteAmount = json['quoteAmount'] != null
-        ? double.tryParse(json['quoteAmount'].toString())
-        : null;
-    depositAmount = json['depositAmount'] != null
-        ? double.tryParse(json['depositAmount'].toString())
-        : null;
-    totalAmount = json['totalAmount'] != null
-        ? double.tryParse(json['totalAmount'].toString())
-        : null;
 
     // Xử lý danh sách dịch vụ nếu có
     if (json['services'] != null && json['services'] is List) {
@@ -95,9 +78,7 @@ class AppointmentModel {
     data['appointment_date'] = appointment_date;
     data['status'] = status;
     data['created_at'] = created_at;
-    data['quoteAmount'] = quoteAmount;
-    data['depositAmount'] = depositAmount;
-    data['totalAmount'] = totalAmount;
+
     if (services != null) {
       data['services'] = services!.map((v) => v.toJson()).toList();
     }
@@ -121,14 +102,21 @@ class ServiceDetail {
     this.time,
   });
 
-  ServiceDetail.fromJson(Map<String, dynamic> json) {
-    service_id = json['service_id'];
-    service_name = json['service_name'];
-    service_img = json['service_img'];
-    price = json['price'] != null
-        ? double.tryParse(json['price'].toString())
-        : null;
-    time = json['time']?.toString();
+  factory ServiceDetail.fromJson(Map<String, dynamic> json) {
+    return ServiceDetail(
+      // json['service_id'] có thể là int hoặc String, ta parse về int:
+      service_id: json['service_id'] is int
+          ? json['service_id'] as int
+          : int.tryParse(json['service_id'].toString()) ?? 0,
+
+      service_name: json['service_name']?.toString() ?? '',
+      // Giá có thể là num hoặc String, ép về int:
+      price: json['price'] != null
+          ? double.tryParse(json['price'].toString())
+          : null,
+      // Time giữ nguyên chuỗi
+      time: json['time']?.toString() ?? '0:00:00',
+    );
   }
 
   Map<String, dynamic> toJson() {
