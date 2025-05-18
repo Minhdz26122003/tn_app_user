@@ -98,11 +98,10 @@ class Dashboardcontroller extends GetxController {
     final apct = Get.find<Appointmentcontroller>();
     final noti = Get.find<NotificationController>();
     if (index == 0) {
-      // Giả sử Home page ở index 0, và bạn đã khởi tạo ServiceController
-      apct.GetServiceTypeList();
-      apct.GetServiceList();
+      apct.getServiceTypeList();
+      apct.getServiceList();
       noti.notificationList();
-      // apct.GetAppointmentList();
+      // apct.getAppointmentList();
     }
   }
 }

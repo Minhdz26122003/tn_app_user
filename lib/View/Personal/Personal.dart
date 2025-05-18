@@ -187,7 +187,7 @@ class Personal extends StatelessWidget {
                                   if (!controller.isLoggedIn.value) {
                                     Get.toNamed(Routes.login);
                                   } else {
-                                    apct.GetAppointmentList();
+                                    apct.getAppointmentList();
                                     Get.toNamed(Routes.appointmentlist);
                                   }
                                 },

@@ -57,16 +57,16 @@ class Auth {
       // Kiểm tra đăng nhập bằng PHP
       String? token = await Utils.getStringValueWithKey(Constant.ACCESS_TOKEN);
       if (token == null || token.isEmpty) return false;
-      if (timesaved.isEmpty) {
-        await Utils.removeKey(Constant.ACCESS_TOKEN);
-        return false;
-      }
-      if (expiryUtc == null || nowUtc.isAfter(expiryUtc)) {
-        // token đã hết hạn
-        await Utils.removeKey(Constant.ACCESS_TOKEN);
-        await Utils.removeKey(Constant.TOKEN_EXPIRY);
-        return false;
-      }
+      // if (timesaved.isEmpty) {
+      //   await Utils.removeKey(Constant.ACCESS_TOKEN);
+      //   return false;
+      // }
+      // if (expiryUtc == null || nowUtc.isAfter(expiryUtc)) {
+      //   // token đã hết hạn
+      //   await Utils.removeKey(Constant.ACCESS_TOKEN);
+      //   await Utils.removeKey(Constant.TOKEN_EXPIRY);
+      //   return false;
+      // }
 
       return true;
     } else if (loginMethodStr == 'firebase') {
@@ -75,17 +75,17 @@ class Auth {
 
       if (FirebaseAuth.instance.currentUser == null) return false;
       // Kiểm tra thời gian hết hạn
-      if (timesaved.isEmpty) {
-        await FirebaseAuth.instance.signOut();
-        await GoogleSignIn().signOut();
-        return false;
-      }
-      if (expiryUtc == null || nowUtc.isAfter(expiryUtc)) {
-        await FirebaseAuth.instance.signOut();
-        await GoogleSignIn().signOut();
-        await Utils.removeKey(Constant.TOKEN_EXPIRY);
-        return false;
-      }
+      // if (timesaved.isEmpty) {
+      //   await FirebaseAuth.instance.signOut();
+      //   await GoogleSignIn().signOut();
+      //   return false;
+      // }
+      // if (expiryUtc == null || nowUtc.isAfter(expiryUtc)) {
+      //   await FirebaseAuth.instance.signOut();
+      //   await GoogleSignIn().signOut();
+      //   await Utils.removeKey(Constant.TOKEN_EXPIRY);
+      //   return false;
+      // }
       return true;
     } else {
       return false;
@@ -151,11 +151,11 @@ class Auth {
             ..phoneNumber.value = '';
           final d = data['data'];
 
-          final idTokenResult = await user.getIdTokenResult();
-          final DateTime expiryUtc = idTokenResult.expirationTime!;
-          print(expiryUtc);
-          await Utils.saveStringWithKey(
-              Constant.TOKEN_EXPIRY, expiryUtc.toIso8601String());
+          // final idTokenResult = await user.getIdTokenResult();
+          // final DateTime expiryUtc = idTokenResult.expirationTime!;
+          // print(expiryUtc);
+          // await Utils.saveStringWithKey(
+          //     Constant.TOKEN_EXPIRY, expiryUtc.toIso8601String());
 
           await Utils.saveStringWithKey(Constant.LOGIN_METHOD, 'firebase');
           await Utils.saveIntWithKey(Constant.UUID_USER_ACC, d['uid'] ?? 0);
@@ -215,10 +215,10 @@ class Auth {
         await Utils.saveStringWithKey(Constant.ACCESS_TOKEN, token);
         GlobalValue.getInstance().setToken('Bearer $token');
 
-        final DateTime nowUtc = DateTime.now();
-        final DateTime expiryUtc = nowUtc.add(const Duration(hours: 2));
-        final String expiryString = expiryUtc.toIso8601String();
-        await Utils.saveStringWithKey(Constant.TOKEN_EXPIRY, expiryString);
+        // final DateTime nowUtc = DateTime.now();
+        // final DateTime expiryUtc = nowUtc.add(const Duration(hours: 2));
+        // final String expiryString = expiryUtc.toIso8601String();
+        // await Utils.saveStringWithKey(Constant.TOKEN_EXPIRY, expiryString);
 
         final d = data['data'];
         await Utils.saveStringWithKey(Constant.LOGIN_METHOD, 'php');

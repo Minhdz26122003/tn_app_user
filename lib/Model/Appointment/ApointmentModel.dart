@@ -104,17 +104,13 @@ class ServiceDetail {
 
   factory ServiceDetail.fromJson(Map<String, dynamic> json) {
     return ServiceDetail(
-      // json['service_id'] có thể là int hoặc String, ta parse về int:
       service_id: json['service_id'] is int
           ? json['service_id'] as int
           : int.tryParse(json['service_id'].toString()) ?? 0,
-
       service_name: json['service_name']?.toString() ?? '',
-      // Giá có thể là num hoặc String, ép về int:
       price: json['price'] != null
           ? double.tryParse(json['price'].toString())
           : null,
-      // Time giữ nguyên chuỗi
       time: json['time']?.toString() ?? '0:00:00',
     );
   }

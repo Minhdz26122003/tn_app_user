@@ -59,22 +59,18 @@ class Service {
       this.time});
   factory Service.fromJson(Map<String, dynamic> json) {
     return Service(
-      // json['service_id'] có thể là int hoặc String, ta parse về int:
       service_id: json['service_id'] is int
           ? json['service_id'] as int
           : int.tryParse(json['service_id'].toString()) ?? 0,
-
       service_name: json['service_name']?.toString() ?? '',
       description: json['description']?.toString() ?? '',
       type_id: json['type_id'] is int
           ? json['type_id'] as int
           : int.tryParse(json['type_id'].toString()) ?? 0,
       service_img: json['service_img']?.toString() ?? '',
-      // Giá có thể là num hoặc String, ép về int:
       price: json['price'] != null
           ? double.tryParse(json['price'].toString())
           : null,
-      // Time giữ nguyên chuỗi
       time: json['time']?.toString() ?? '0:00:00',
     );
   }

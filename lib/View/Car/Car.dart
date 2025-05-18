@@ -213,7 +213,7 @@ class Car extends StatelessWidget {
     selectedStatusCache.value = controller.selectedStatus.value;
 
     controller.isTruckLoading.value = true;
-    await controller.GetCarList();
+    await controller.getCarList();
 
     showModalBottomSheet(
       context: context,

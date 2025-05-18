@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:app_hm/Controller/DashboardController.dart';
 import 'package:app_hm/Global/Constant.dart';
-import 'package:app_hm/Global/GlobalValue.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Services/APICaller.dart';
 import 'package:app_hm/Utils/Utils.dart';
@@ -12,7 +11,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest_all.dart' as tz;
 
 class PushNotifications {
   static final firebaseMessaging = FirebaseMessaging.instance;
@@ -68,7 +66,7 @@ class PushNotifications {
     //  Định nghĩa channel Android 8.0+
     const AndroidNotificationChannel channel = AndroidNotificationChannel(
       'demo1-4b8c1',
-      'Demo1 Notifications',
+      'All Notifications',
       description: 'Kênh thông báo demo1',
       importance: Importance.max,
     );
@@ -117,7 +115,7 @@ class PushNotifications {
     const AndroidNotificationDetails androidDetails =
         AndroidNotificationDetails(
       'demo1-4b8c1',
-      'Demo1 Notifications',
+      'All Notifications',
       channelDescription: 'Kênh thông báo demo1',
       importance: Importance.max,
       priority: Priority.high,
@@ -217,7 +215,7 @@ class PushNotifications {
     // Các khoảng cần nhắc
     final reminders = [
       const Duration(hours: 1),
-      const Duration(minutes: 30),
+      const Duration(minutes: 10),
     ];
 
     for (var dur in reminders) {
@@ -226,14 +224,12 @@ class PushNotifications {
         appointmentDateTime.subtract(dur),
         tz.local,
       );
-
-      // Chỉ schedule nếu thời điểm còn nằm trong tương lai
+      print('fireTime $fireTime');
       if (fireTime.isAfter(now)) {
-        final label = dur.inMinutes >= 60 ? '1 giờ trước' : '30 phút trước';
+        final label = dur.inMinutes >= 60 ? '1 giờ trước' : '20 phút trước';
         final notifTitle = title;
         final notifBody = body ?? '$title ($label)';
 
-        // 1) Schedule local notification
         await plugin.zonedSchedule(
           fireTime.hashCode, // id
           notifTitle,
@@ -241,9 +237,9 @@ class PushNotifications {
           fireTime,
           const NotificationDetails(
             android: AndroidNotificationDetails(
-              'demo1-4b8c1', // channel ID
-              'Demo1 Notifications',
-              channelDescription: 'Kênh thông báo demo1',
+              'demo1-4b8c1',
+              'All Notifications',
+              channelDescription: 'Kênh thông báo',
               importance: Importance.max,
               priority: Priority.high,
             ),
@@ -253,8 +249,6 @@ class PushNotifications {
           androidAllowWhileIdle: true,
         );
 
-        // 2) Lưu bản ghi notification vào database
-        //    để luôn hiển thị được trong app
         await saveNotification(uid, notifTitle, notifBody);
       }
     }

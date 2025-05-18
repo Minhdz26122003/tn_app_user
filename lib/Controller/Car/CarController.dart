@@ -52,12 +52,12 @@ class Carcontroller extends GetxController {
     //       scrollController.position.maxScrollExtent) {
     //     if (totalPage > page) {
     //       page++;
-    //       GetCarList();
+    //       getCarList();
     //     }
     //   }
     // });
 
-    await GetCarList();
+    await getCarList();
     setCar();
     isLoading.value = false;
     super.onInit();
@@ -93,7 +93,7 @@ class Carcontroller extends GetxController {
   refreshData() async {
     page = 1;
     carList.clear();
-    await GetCarList();
+    await getCarList();
   }
 
   void clearData() {
@@ -110,7 +110,7 @@ class Carcontroller extends GetxController {
     textYearManufacturer.text = car.year_manufacture ?? '';
   }
 
-  Future<void> GetCarList() async {
+  Future<void> getCarList() async {
     carList.clear();
     if (uid != 0) {
       isLoading.value = true;
@@ -185,7 +185,7 @@ class Carcontroller extends GetxController {
           message: 'thanh cong'.tr,
         );
         clearData();
-        await GetCarList();
+        await getCarList();
       } else {
         Utils.showSnackBar(
           title: 'Lỗi',
@@ -240,7 +240,7 @@ class Carcontroller extends GetxController {
       if (response['status'] == 'success' || response['error']?['code'] == 0) {
         Utils.showSnackBar(title: 'notification'.tr, message: 'thanh cong');
         clearData();
-        await GetCarList();
+        await getCarList();
       } else {
         Utils.showSnackBar(
           title: 'Lỗi',

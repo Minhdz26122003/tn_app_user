@@ -95,15 +95,15 @@ class Appointmentcontroller extends GetxController {
     //everAll([selectedDate, selectedSession], (_) => buildSlots());
     buildSlots();
     checkedValuesService.value = List<bool>.filled(serviceList.length, false);
-    await GetServiceTypeList();
-    await GetServiceList();
-    await GetAddressList();
-    await GetCarList();
+    await getServiceTypeList();
+    await getServiceList();
+    await getAddressList();
+    await getCarList();
     // chọn xe mặc định
     if (carList.isNotEmpty) {
       selectedCar.value = carList.first;
     }
-    await GetAppointmentList();
+    await getAppointmentList();
 
     everAll([selectedDate, selectedSession, selectedCar], (_) => buildSlots());
 
@@ -120,16 +120,6 @@ class Appointmentcontroller extends GetxController {
     print('on close second');
     super.onClose();
   }
-
-  // String formatTime(String? time) {
-  //   if (time == null || time.isEmpty) return '--:--';
-  //   // Giả sử m.appointment_time là dạng "HH:mm:ss"
-  //   final parts = time.split(':');
-  //   if (parts.length >= 2) {
-  //     return '${parts[0].padLeft(2, '0')}:${parts[1].padLeft(2, '0')}';
-  //   }
-  //   return time;
-  // }
 
   void updateDate(DateTime d) => selectedDate.value = d;
 
@@ -197,7 +187,7 @@ class Appointmentcontroller extends GetxController {
       currentStep.value++;
       navigateToStep();
     } else {
-      BookAppointment();
+      bookAppointment();
     }
   }
 
@@ -236,7 +226,7 @@ class Appointmentcontroller extends GetxController {
   }
 
   // Hủy lịch hẹn
-  void CancelAppoint(int appoiId, String reason) async {
+  void cancelAppoint(int appoiId, String reason) async {
     if (cancelreason.text.trim().isEmpty) {
       Utils.showSnackBar(title: 'notification'.tr, message: 'Hãy nhập lý do');
     }
@@ -260,7 +250,7 @@ class Appointmentcontroller extends GetxController {
           title: 'notification'.tr,
           message: response?['error']['message'] ?? 'Hủy lịch hẹn thành công ',
         );
-        await GetAppointmentList();
+        await getAppointmentList();
       }
     } catch (e) {
       Utils.showSnackBar(title: 'notification'.tr, message: '$e');
@@ -268,7 +258,7 @@ class Appointmentcontroller extends GetxController {
   }
 
   // Chấp nhận báo giá
-  void AcceptAppoint(int appoiId) async {
+  void acceptQuote(int appoiId) async {
     DateTime timeNow = DateTime.now();
     String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
     var param = {
@@ -280,16 +270,58 @@ class Appointmentcontroller extends GetxController {
     };
     try {
       var response = await APICaller.getInstance()
-          .post('Appointment/accept_appointment.php', param);
+          .post('Appointment/accept_quote.php', param);
       if (response != null && response['status'] == 'success') {
         Utils.showSnackBar(
           title: 'notification'.tr,
           message: response?['error']['message'] ?? 'Đã chấp nhận báo giá',
         );
-        await GetAppointmentList();
+        await getAppointmentList();
       }
     } catch (e) {
       Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+    }
+  }
+
+  // Chấp nhận bill
+  Future<void> acceptBill(int appoiId) async {
+    isLoadingSettlement.value = true;
+    try {
+      DateTime now = DateTime.now();
+      String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(now);
+      var param = {
+        "keyCert":
+            Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
+        "time": formattedTime,
+        "uid": uid,
+        "appointment_id": appoiId,
+      };
+      final response = await APICaller.getInstance()
+          .post('Appointment/accept_bill.php', param);
+
+      if (response != null || response['status'] == 'success') {
+        // lưu hóa đơn
+        final total = totalAmount.value;
+        await addPayment(appoiId, total);
+
+        Utils.showSnackBar(
+          title: 'notification'.tr,
+          message: 'Đã xác nhận thành công',
+        );
+        await getAppointmentList();
+      } else {
+        final msg =
+            response['error']?['message'] ?? 'Chấp nhận hoá đơn thất bại';
+        debugPrint("Lỗi response acceptBill: $msg", wrapWidth: 1024);
+      }
+    } catch (e) {
+      debugPrint("Lỗi API acceptBill: $e", wrapWidth: 1024);
+      // Utils.showSnackBar(
+      //   title: 'notification'.tr,
+      //   message: e.toString(),
+      // );
+    } finally {
+      isLoadingSettlement.value = false;
     }
   }
 
@@ -317,7 +349,7 @@ class Appointmentcontroller extends GetxController {
     }
   }
 
-  GetServiceTypeList() async {
+  getServiceTypeList() async {
     //isLoading.value = true;
     typeList.clear();
     try {
@@ -339,7 +371,7 @@ class Appointmentcontroller extends GetxController {
         typeList.addAll(listItem);
       }
     } catch (e) {
-      //debugPrint("Lỗi API GetServiceTypeList : $e", wrapWidth: 1024);
+      //debugPrint("Lỗi API getServiceTypeList : $e", wrapWidth: 1024);
       Utils.showSnackBar(title: 'notification'.tr, message: '$e');
     }
     // finally {
@@ -347,7 +379,7 @@ class Appointmentcontroller extends GetxController {
     // }
   }
 
-  GetServiceList() async {
+  getServiceList() async {
     serviceList.clear();
     //isLoading.value = true;
     try {
@@ -372,7 +404,7 @@ class Appointmentcontroller extends GetxController {
             List<bool>.filled(serviceList.length, false);
       }
     } catch (e) {
-      //debugPrint("Lỗi API GetServiceList: $e", wrapWidth: 1024);
+      //debugPrint("Lỗi API getServiceList: $e", wrapWidth: 1024);
       Utils.showSnackBar(title: 'notification'.tr, message: '$e');
     }
     // finally {
@@ -390,7 +422,7 @@ class Appointmentcontroller extends GetxController {
     return selected;
   }
 
-  GetAddressList() async {
+  getAddressList() async {
     centerList.clear();
     try {
       DateTime timeNow = DateTime.now();
@@ -414,7 +446,7 @@ class Appointmentcontroller extends GetxController {
     }
   }
 
-  GetCarList() async {
+  getCarList() async {
     carList.clear();
     if (uid != 0) {
       isLoading.value = true;
@@ -444,7 +476,7 @@ class Appointmentcontroller extends GetxController {
     }
   }
 
-  Future<void> GetAppointmentList() async {
+  Future<void> getAppointmentList() async {
     appointmentList.clear();
     if (uid == 0) return;
 
@@ -474,7 +506,7 @@ class Appointmentcontroller extends GetxController {
         Utils.showSnackBar(title: 'Lỗi', message: msg);
       }
     } catch (e) {
-      debugPrint("Lỗi API GetAppointmentList: $e");
+      debugPrint("Lỗi API getAppointmentList: $e");
       Utils.showSnackBar(
           title: 'Lỗi', message: 'Không thể kết nối tới máy chủ');
     } finally {
@@ -482,7 +514,7 @@ class Appointmentcontroller extends GetxController {
     }
   }
 
-  Future<void> BookAppointment() async {
+  Future<void> bookAppointment() async {
     savetoken();
     isBooking.value = true;
     try {
@@ -514,7 +546,7 @@ class Appointmentcontroller extends GetxController {
 
       var data = await APICaller.getInstance()
           .post('Book/book_appointment.php', param);
-      print("data lich hen: $param");
+      //print("data lich hen: $param");
       if (data != null && data['status'] == 'success') {
         String appointmentId = data['items']['appointment_id'].toString();
         // Utils.showSnackBar(
@@ -522,7 +554,7 @@ class Appointmentcontroller extends GetxController {
         //   message: "Đặt lịch thành công với ID: $appointmentId",
         // );
 
-        await GetAppointmentList();
+        await getAppointmentList();
 
         buildSlots();
         Get.offAllNamed(Routes.appointmentlist);
@@ -572,8 +604,8 @@ class Appointmentcontroller extends GetxController {
         "appointment_id": appointmentId,
       };
 
-      final data =
-          await APICaller.getInstance().post('Payment/get_payment.php', params);
+      final data = await APICaller.getInstance()
+          .post('Payment/get_settlement.php', params);
       //print('list $data');
       if (data != null && data['status'] == 'success') {
         // Parse services
@@ -603,6 +635,34 @@ class Appointmentcontroller extends GetxController {
       //     title: 'Lỗi', message: 'Không thể kết nối tới máy chủ');
     } finally {
       isLoadingSettlement.value = false;
+    }
+  }
+
+  Future<void> addPayment(int appoiId, double total) async {
+    DateTime t = DateTime.now();
+    String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(t);
+    String keyCert =
+        Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime);
+
+    var param = {
+      "keyCert": keyCert,
+      "time": formattedTime,
+      "uid": uid,
+      "appointment_id": appoiId,
+      "form": 0, // 0 = online, 1 = offline...
+      "status": 0, // 0 = chưa thanh toán, 1 = đã thanh toán
+      "total_price": total,
+    };
+
+    final data =
+        await APICaller.getInstance().post('Payment/add_payment.php', param);
+
+    if (data != null && data['status'] == 'success') {
+      String payment_id = data['items']['payment_id'].toString();
+      print('message $payment_id');
+    } else {
+      final msg = data?['error']?['message'] ?? 'Lỗi server';
+      debugPrint("Lỗi API getServiceList: $msg", wrapWidth: 1024);
     }
   }
 

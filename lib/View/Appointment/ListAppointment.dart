@@ -20,13 +20,13 @@ class Appointmentlist extends StatelessWidget {
             style: const TextStyle(color: ColorHex.white, fontSize: 17)),
         backgroundColor: ColorHex.total_color,
         centerTitle: false,
-        leading: const BackButton(color: Colors.white),
-        // leading: GestureDetector(
-        //   onTap: () {
-        //     Get.offAllNamed(Routes.dashboard);
-        //   },
-        //   child: const Icon(Icons.arrow_back, color: ColorHex.white),
-        // ),
+        //leading: const BackButton(color: Colors.white),
+        leading: GestureDetector(
+          onTap: () {
+            Get.offAllNamed(Routes.dashboard);
+          },
+          child: const Icon(Icons.arrow_back, color: ColorHex.white),
+        ),
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
