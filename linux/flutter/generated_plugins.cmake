@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   file_selector_linux
   flutter_localization
+  gtk
   maps_launcher
   url_launcher_linux
 )

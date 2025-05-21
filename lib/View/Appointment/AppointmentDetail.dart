@@ -138,7 +138,8 @@ class Appoointmentdetail extends StatelessWidget {
       case 6:
         return _paymentCard(m);
       // Status 7:Đã thanh toán
-      //   return _paymentCard(m);
+      case 7:
+        return _paymentedCard(m);
       default:
         return const SizedBox.shrink();
     }
@@ -640,10 +641,10 @@ class Appoointmentdetail extends StatelessWidget {
     );
   }
 
-  // Thành toán
+  // Thanh toán
   Widget _paymentCard(AppointmentModel m) {
     final controller = Get.put(PaymentController());
-    // Fetch payment một lần
+
     if (m.appointment_id != null && controller.payment.value == null) {
       controller.fetchPayment(m.appointment_id!);
     }
@@ -655,6 +656,7 @@ class Appoointmentdetail extends StatelessWidget {
       final pay = controller.payment.value;
       final formattedPrice = NumberFormat.currency(locale: 'vi_VN', symbol: '₫')
           .format(pay?.total_price ?? 0);
+      final isPendingDirectPayment = pay?.form == 2 && pay?.status == 0;
 
       return Card(
         margin: const EdgeInsets.all(12),
@@ -686,54 +688,60 @@ class Appoointmentdetail extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 16),
-
-              // Chọn phương thức
-              const Text(
-                'Chọn phương thức thanh toán',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                  color: ColorHex.grey_shade600,
+              if (isPendingDirectPayment) ...[
+                Text(
+                  'Bạn đã chọn thanh toán trực tiếp. Vui lòng thanh toán tại gara khi đến nhận xe. Thanh toán của bạn đang chờ xác nhận từ quản trị viên.',
+                  style: TextStyle(color: Colors.orange[800]),
                 ),
-              ),
-              const SizedBox(height: 8),
-              Theme(
-                data: Theme.of(Get.context!).copyWith(
-                  radioTheme: RadioThemeData(
-                    fillColor: MaterialStateProperty.all(ColorHex.applyColor),
+                const SizedBox(height: 16),
+              ] else ...[
+                // Chọn phương thức
+                const Text(
+                  'Chọn phương thức thanh toán',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: ColorHex.grey_shade600,
                   ),
                 ),
-                child: Obx(() => Column(
-                      children: [
-                        RadioListTile<int>(
-                          title: const Text(
-                            'Thanh toán online',
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.w400),
+                const SizedBox(height: 8),
+                Theme(
+                  data: Theme.of(Get.context!).copyWith(
+                    radioTheme: RadioThemeData(
+                      fillColor: MaterialStateProperty.all(ColorHex.applyColor),
+                    ),
+                  ),
+                  child: Obx(() => Column(
+                        children: [
+                          RadioListTile<int>(
+                            title: const Text(
+                              'Thanh toán online',
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.w400),
+                            ),
+                            value: 1,
+                            groupValue: controller.selectedMethod.value,
+                            onChanged: (v) =>
+                                controller.selectedMethod.value = v!,
+                            contentPadding: EdgeInsets.zero,
                           ),
-                          value: 1,
-                          groupValue: controller.selectedMethod.value,
-                          onChanged: (v) =>
-                              controller.selectedMethod.value = v!,
-                          contentPadding: EdgeInsets.zero,
-                        ),
-                        RadioListTile<int>(
-                          title: const Text(
-                            'Thanh toán trực tiếp',
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.w400),
+                          RadioListTile<int>(
+                            title: const Text(
+                              'Thanh toán trực tiếp',
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.w400),
+                            ),
+                            value: 2,
+                            groupValue: controller.selectedMethod.value,
+                            onChanged: (v) =>
+                                controller.selectedMethod.value = v!,
+                            contentPadding: EdgeInsets.zero,
                           ),
-                          value: 2,
-                          groupValue: controller.selectedMethod.value,
-                          onChanged: (v) =>
-                              controller.selectedMethod.value = v!,
-                          contentPadding: EdgeInsets.zero,
-                        ),
-                      ],
-                    )),
-              ),
-              const SizedBox(height: 16),
-
+                        ],
+                      )),
+                ),
+                const SizedBox(height: 16),
+              ],
               // Hướng dẫn thanh toán trực tiếp
               if (controller.selectedMethod.value == 2) ...[
                 Container(
@@ -779,7 +787,6 @@ class Appoointmentdetail extends StatelessWidget {
                 ),
               ],
 
-              // Divider giống type1
               const Divider(thickness: 1),
 
               // Tổng cộng
@@ -813,8 +820,13 @@ class Appoointmentdetail extends StatelessWidget {
                       ? null
                       : () {
                           if (controller.selectedMethod.value == 1) {
-                            // controller.processOnlinePayment(
-                            //     m.appointment_id!, pay?.totalPrice ?? 0);
+                            Get.toNamed(
+                              Routes.payment,
+                              arguments: {
+                                'appointment_id': m.appointment_id,
+                                'total_price': pay?.total_price ?? 0,
+                              },
+                            );
                           } else {
                             controller.PaymentOffline(pay?.payment_id ?? 0);
                             Get.back();
@@ -833,6 +845,109 @@ class Appoointmentdetail extends StatelessWidget {
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
+// Đã thanh toán
+  Widget _paymentedCard(AppointmentModel m) {
+    final controller = Get.put(PaymentController());
+
+    if (m.appointment_id != null && controller.payment.value == null) {
+      controller.fetchPayment(m.appointment_id!);
+    }
+
+    return Obx(() {
+      if (controller.isLoadingPayment.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      final pay = controller.payment.value;
+      if (pay == null) return const SizedBox();
+
+      final formattedPrice = NumberFormat.currency(locale: 'vi_VN', symbol: '₫')
+          .format(pay.total_price ?? 0);
+      final formText = pay.form == 1 ? 'Online' : 'Trực tiếp';
+      final statusColor = Colors.green;
+
+      return Card(
+        margin: const EdgeInsets.all(12),
+        elevation: 4,
+        shadowColor: Colors.grey.withOpacity(0.3),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Row(
+                children: [
+                  Icon(
+                    Icons.verified,
+                    color: Colors.green,
+                    size: 28,
+                  ),
+                  SizedBox(width: 8),
+                  Text(
+                    'Đã thanh toán',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.green,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  const Text(
+                    'Hình thức: ',
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                  Text(formText),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  const Text(
+                    'Ngày thanh toán: ',
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                  Text(pay.payment_date ?? 'Không rõ'),
+                ],
+              ),
+              if (pay.form == 1 && pay.status == 1) ...[
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    const Text(
+                      'Mã giao dịch: ',
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                    Flexible(child: Text((pay.payment_id ?? 0) as String)),
+                  ],
+                ),
+              ],
+              const Divider(thickness: 1, height: 32),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Tổng cộng:',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  Text(
+                    formattedPrice,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.green),
+                  ),
+                ],
               ),
             ],
           ),

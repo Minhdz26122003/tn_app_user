@@ -3,12 +3,14 @@ import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Services/PushNotification.dart';
 import 'package:app_hm/Services/TranslationService.dart';
 import 'package:app_hm/firebase_options.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
 

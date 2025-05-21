@@ -16,6 +16,7 @@ import 'package:app_hm/View/Guideapp/PermissionGuide.dart';
 import 'package:app_hm/View/Login/Login.dart';
 import 'package:app_hm/View/Login/Onboarding.dart';
 import 'package:app_hm/View/Notification/Notification.dart';
+import 'package:app_hm/View/Payment/Payment.dart';
 import 'package:app_hm/View/Personal/PersonalDetail.dart';
 import 'package:app_hm/View/Book/Servicebook.dart';
 import 'package:app_hm/View/ServiceType/Listservice.dart';
@@ -202,6 +203,12 @@ class AppPages {
     GetPage(
       name: Routes.permissionguide,
       page: () => const PermissionGuide(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.payment,
+      page: () => const Payment(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 400),
     ),

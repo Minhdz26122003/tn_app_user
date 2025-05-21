@@ -28,16 +28,16 @@ class Car extends StatelessWidget {
       body: Obx(
         () => (controller.isLoading.value)
             ? const Center(child: CircularProgressIndicator())
-            : controller.carList == null // Kiểm tra null
+            : controller.carList == null
                 ? Center(
-                    child: Text('no_car'.tr),
+                    child: Text('nocar'.tr),
                   )
                 : Stack(
                     children: [
                       Column(
                         children: [
                           Container(
-                            color: ColorHex.grey_shade300,
+                            color: const Color.fromARGB(255, 247, 247, 247),
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 20.0, horizontal: 20.0),
@@ -75,7 +75,7 @@ class Car extends StatelessWidget {
                           ),
                           Container(
                             width: Get.width,
-                            color: ColorHex.grey_shade300,
+                            color: const Color.fromARGB(255, 247, 247, 247),
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 15.0),
                             child: Row(

@@ -21,7 +21,7 @@ class Auth {
 
     try {
       clearData();
-
+      Get.offAllNamed(Routes.dashboard);
       await FirebaseAuth.instance.signOut();
       await GoogleSignIn().signOut();
 
@@ -39,7 +39,6 @@ class Auth {
 
       Utils.showSnackBar(
           title: 'notification'.tr, message: 'log_out_success'.tr);
-      Get.offAllNamed(Routes.dashboard);
     } catch (e) {
       print("Lỗi khi đăng xuất: $e");
     }

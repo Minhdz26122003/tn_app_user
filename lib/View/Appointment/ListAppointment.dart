@@ -1,3 +1,4 @@
+import 'package:app_hm/Component/EmptyList.dart';
 import 'package:app_hm/Controller/Appointment/Appointmentcontroller.dart';
 import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Model/Appointment/ApointmentModel.dart';
@@ -33,7 +34,13 @@ class Appointmentlist extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
         if (controller.appointmentList.isEmpty) {
-          return Center(child: Text('book_service'.tr));
+          return Center(
+            child: EmptyList(
+              imgSrc: 'assets/icons/empty_appoint.svg',
+              title: 'Không có lịch hẹn nào',
+              content: 'appointment_booking_instructions'.tr,
+            ),
+          );
         }
         return ListView.builder(
           padding: const EdgeInsets.only(top: 5),

@@ -31,6 +31,7 @@ abstract class Routes {
   static const listservice = _Paths.listservice;
   static const servicedetail = _Paths.servicedetail;
   static const permissionguide = _Paths.permissionguide;
+  static const payment = _Paths.payment;
   Routes._();
 }
 
@@ -66,4 +67,5 @@ abstract class _Paths {
   static const listservice = '/listservice';
   static const servicedetail = '/servicedetail';
   static const permissionguide = '/permissionguide';
+  static const payment = '/payment';
 }

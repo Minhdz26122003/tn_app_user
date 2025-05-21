@@ -1,3 +1,5 @@
+import 'package:app_hm/Model/Payment/PaymentModel.dart';
+
 class AppointmentModel {
   int? appointment_id;
   int? uid;
@@ -14,6 +16,7 @@ class AppointmentModel {
 
   // Thêm trường này để chứa danh sách dịch vụ
   List<ServiceDetail>? services;
+  PaymentModel? payment;
 
   AppointmentModel({
     this.appointment_id,
@@ -29,6 +32,7 @@ class AppointmentModel {
     this.status,
     this.created_at,
     this.services,
+    this.payment,
   });
 
   //Trả về index để dùng trong Stepper/Timeline
@@ -38,6 +42,26 @@ class AppointmentModel {
     } else {
       return 0;
     }
+  }
+
+  // Helper để lấy tên dịch vụ (nếu có nhiều dịch vụ, có thể nối lại)
+  String get serviceName {
+    if (services != null && services!.isNotEmpty) {
+      return services!.map((e) => e.service_name).join(', ');
+    }
+    return 'N/A';
+  }
+
+  // Trả về tổng tiền của dịch vụ
+  double get totalAmount {
+    if (payment != null && payment!.total_price != null) {
+      return payment!.total_price!;
+    }
+    if (services != null && services!.isNotEmpty) {
+      return services!
+          .fold(0.0, (sum, service) => sum + (service.price ?? 0.0));
+    }
+    return 0.0;
   }
 
   AppointmentModel.fromJson(Map<String, dynamic> json) {
@@ -62,6 +86,9 @@ class AppointmentModel {
     } else {
       services = [];
     }
+    if (json['payment'] != null) {
+      payment = PaymentModel.fromJson(json['payment']);
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -81,6 +108,10 @@ class AppointmentModel {
 
     if (services != null) {
       data['services'] = services!.map((v) => v.toJson()).toList();
+    }
+    if (payment != null) {
+      // <--- THÊM DÒNG NÀY VÀO toJson
+      data['payment'] = payment!.toJson();
     }
     return data;
   }
