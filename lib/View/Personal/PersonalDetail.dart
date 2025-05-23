@@ -44,23 +44,23 @@ class Personaldetail extends StatelessWidget {
                                           .imageFile.value.path.isNotEmpty
                                       ? Image.file(
                                           controller.imageFile.value,
-                                          width: 86,
-                                          height: 86,
+                                          width: 100,
+                                          height: 100,
                                           fit: BoxFit.cover,
                                         )
                                       : Image.network(
                                           controller2.avatar.value.isNotEmpty
                                               ? controller2.avatar.value
                                               : 'https://via.placeholder.com/150',
-                                          height: 38,
-                                          width: 38,
+                                          height: 100,
+                                          width: 100,
                                           fit: BoxFit.cover,
                                           errorBuilder: (BuildContext context,
                                               Object exception,
                                               StackTrace? stackTrace) {
                                             return Container(
-                                              height: 38,
-                                              width: 38,
+                                              height: 100,
+                                              width: 100,
                                               decoration: const BoxDecoration(
                                                 shape: BoxShape.circle,
                                                 color: ColorHex.grey,

@@ -64,7 +64,11 @@ class Servicebook extends StatelessWidget {
                     svg: 'assets/icons/appointment.svg',
                     color: ColorHex.background,
                     onTap: () {
-                      Get.toNamed(Routes.appointmentbook);
+                      if (!controller.isLoggedIn.value) {
+                        Get.toNamed(Routes.login);
+                      } else {
+                        Get.toNamed(Routes.appointmentbook);
+                      }
                     },
                   ),
                   // Thêm nhiều dịch vụ khác tại đây nếu cần

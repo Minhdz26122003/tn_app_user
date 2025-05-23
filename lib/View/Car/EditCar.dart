@@ -22,21 +22,17 @@ class EditCar extends StatelessWidget {
         ),
         automaticallyImplyLeading: false,
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: GestureDetector(
-              onTap: () {
-                Get.back();
-              },
-              child: Text(
-                'cancel'.tr,
-                style: const TextStyle(
-                  color: ColorHex.white,
-                  fontSize: 13,
-                ),
-              ),
+          IconButton(
+            padding: const EdgeInsets.only(right: 20),
+            icon: const Icon(
+              Icons.clear,
+              color: ColorHex.white,
             ),
-          ),
+            tooltip: 'Quay lại',
+            onPressed: () {
+              Get.back();
+            },
+          )
         ],
       ),
       body: SingleChildScrollView(
@@ -67,8 +63,8 @@ class EditCar extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
-                    controller.updateCar();
-                    Get.back();
+                    await controller.updateCar();
+                    //Get.back();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: ColorHex.total_color,

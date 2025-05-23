@@ -1,6 +1,7 @@
 import 'package:app_hm/Controller/Car/CarController.dart';
 import 'package:app_hm/Global/ColorHex.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class AddCar extends StatelessWidget {
@@ -19,21 +20,17 @@ class AddCar extends StatelessWidget {
         ),
         automaticallyImplyLeading: false,
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: GestureDetector(
-              onTap: () {
-                Get.back();
-              },
-              child: Text(
-                'Cancel'.tr,
-                style: const TextStyle(
-                  color: ColorHex.white,
-                  fontSize: 13,
-                ),
-              ),
+          IconButton(
+            padding: const EdgeInsets.only(right: 20),
+            icon: const Icon(
+              Icons.clear,
+              color: ColorHex.white,
             ),
-          ),
+            tooltip: 'Quay lại',
+            onPressed: () {
+              Get.back();
+            },
+          )
         ],
       ),
       body: Stack(
@@ -74,7 +71,13 @@ class AddCar extends StatelessWidget {
                       buildTextField(
                           tittle: "Nhập năm sản xuất xe",
                           hint: "Vd: 2011",
-                          controller: controller.textYearManufacturer),
+                          controller: controller.textYearManufacturer,
+                          keyboardType:
+                              TextInputType.number, // Chỉ cho phép bàn phím số
+                          inputFormatters: [
+                            FilteringTextInputFormatter
+                                .digitsOnly // Chỉ cho phép nhập số
+                          ]),
                       const SizedBox(
                         height: 12,
                       ),
@@ -82,26 +85,24 @@ class AddCar extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  alignment: Alignment.bottomCenter,
-                  child: Positioned(
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        controller.AddCar();
-                        Get.back();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: ColorHex.total_color,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 15, horizontal: 130),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                  width: double.infinity,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      await controller.AddCar();
+                      //Get.back();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: ColorHex.total_color,
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      child: const Text(
-                        "Lưu lại",
-                        style: TextStyle(fontSize: 14, color: ColorHex.white),
-                      ),
+                    ),
+                    child: const Text(
+                      "Lưu lại",
+                      style: TextStyle(fontSize: 14, color: ColorHex.white),
                     ),
                   ),
                 ),
@@ -113,10 +114,13 @@ class AddCar extends StatelessWidget {
     );
   }
 
+  // Thêm các tham số mới vào hàm buildTextField
   Widget buildTextField({
     required String tittle,
     required String hint,
     TextEditingController? controller,
+    TextInputType? keyboardType, // Thêm tham số này
+    List<TextInputFormatter>? inputFormatters, // Thêm tham số này
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,9 +146,11 @@ class AddCar extends StatelessWidget {
         const SizedBox(height: 6),
         TextField(
           controller: controller,
+          keyboardType: keyboardType, // Sử dụng tham số keyboardType
+          inputFormatters: inputFormatters, // Sử dụng tham số inputFormatters
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: const TextStyle(color: ColorHex.grey_shade300),
+            hintStyle: const TextStyle(color: ColorHex.grey_shade600),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide:

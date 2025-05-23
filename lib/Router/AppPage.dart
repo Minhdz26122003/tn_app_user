@@ -6,6 +6,7 @@ import 'package:app_hm/View/Appointment/AppointmentBook.dart';
 import 'package:app_hm/View/Appointment/AppointmentConfirm.dart';
 import 'package:app_hm/View/Appointment/AppointmentDetail.dart';
 import 'package:app_hm/View/Appointment/AppointmentHistory.dart';
+import 'package:app_hm/View/Appointment/AppointmentHistoryDetail.dart';
 import 'package:app_hm/View/Appointment/AppointmentPlace.dart';
 import 'package:app_hm/View/Appointment/AppointmentTime.dart';
 import 'package:app_hm/View/Appointment/ListAppointment.dart';
@@ -22,9 +23,11 @@ import 'package:app_hm/View/Book/Servicebook.dart';
 import 'package:app_hm/View/ServiceType/Listservice.dart';
 import 'package:app_hm/View/ServiceType/Servicedetail.dart';
 import 'package:app_hm/View/Setting/Language.dart';
+import 'package:app_hm/View/Setting/NotificationSet.dart';
 import 'package:app_hm/View/Setting/setting.dart';
 import 'package:app_hm/View/Signup/Signup.dart';
 import 'package:app_hm/View/dashboard.dart';
+import 'package:app_hm/View/home/ServiceSearch.dart';
 import 'package:app_hm/View/home/home.dart';
 import 'package:get/get.dart';
 import 'package:app_hm/View/Login/Splash.dart';
@@ -89,6 +92,12 @@ class AppPages {
     GetPage(
       name: Routes.notification,
       page: () => const Notification(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.notificationset,
+      page: () => const Notificationset(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 400),
     ),
@@ -209,6 +218,18 @@ class AppPages {
     GetPage(
       name: Routes.payment,
       page: () => const Payment(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.servicesearch,
+      page: () => const Servicesearch(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.appointmenthistorydetail,
+      page: () => const Appointmenthistorydetail(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 400),
     ),

@@ -8,8 +8,8 @@ import 'package:http/http.dart' as http;
 
 class APICaller {
   static APICaller _apiCaller = APICaller();
-  //static String BASE_URL = "http://192.168.1.2/apihm/User/";
-  static String BASE_URL = "https://wecarmih.loca.lt/apihm/User/";
+  static String BASE_URL = "http://192.168.1.6/apihm/User/";
+  //static String BASE_URL = "https://wecarmih.loca.lt/apihm/User/";
   // static String BASE_URL = "http://10.0.2.2/apihm/User/";
   // static late String BASE_URL;
 

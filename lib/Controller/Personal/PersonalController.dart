@@ -13,7 +13,7 @@ import 'package:intl/intl.dart';
 
 class Personalcontroller extends GetxController {
   RxBool isLoading = true.obs;
-  DateTime timeNow = DateTime.now();
+
   int uid = 0;
   String emailAcc = "";
   String UsernameAcc = "";
@@ -93,6 +93,7 @@ class Personalcontroller extends GetxController {
   getAccount() async {
     if (uid != 0) {
       isLoading.value = true;
+      DateTime timeNow = DateTime.now();
       String formattedTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(timeNow);
       var param = {
         "keyCert":
@@ -173,6 +174,7 @@ class Personalcontroller extends GetxController {
       Utils.showSnackBar(
           title: 'notification'.tr, message: 'password_not_match'.tr);
     } else {
+      DateTime timeNow = DateTime.now();
       String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
       var param = {
         "keyCert":
@@ -185,17 +187,17 @@ class Personalcontroller extends GetxController {
       };
       try {
         var response = await APICaller.getInstance()
-            .post('/Account/change_pass.php', param);
+            .post('Account/change_pass.php', param);
         if (response != null) {
           textPasswordNew.clear();
           textPasswordConfirm.clear();
-          Get.to(Routes.personal);
+          Get.back();
           Utils.showSnackBar(
               title: 'notification'.tr,
               message: 'password_changed_successfully'.tr);
         }
       } catch (e) {
-        debugPrint("Lỗi API: $e", wrapWidth: 1024);
+        debugPrint("Lỗi APIpp: $e", wrapWidth: 1024);
       }
     }
   }
@@ -225,6 +227,7 @@ class Personalcontroller extends GetxController {
           title: 'notification'.tr, message: 'address_255_characters'.tr);
       return;
     } else {
+      isLoading.value = true;
       // lưu Cloudinary publicId hoặc URL
       String cloudinaryImage = "";
 
@@ -232,7 +235,7 @@ class Personalcontroller extends GetxController {
         await pushFile();
         cloudinaryImage = responseFileApi.value;
       }
-
+      DateTime timeNow = DateTime.now();
       String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
       var param = {
         "keyCert":
@@ -253,7 +256,7 @@ class Personalcontroller extends GetxController {
       // print(param);
       try {
         var response = await APICaller.getInstance()
-            .post('/Account/edit_account.php', param);
+            .post('Account/edit_account.php', param);
         if (response != null) {
           Utils.saveStringWithKey(Constant.FULL_NAME, textFullName.text.trim());
 
@@ -284,6 +287,8 @@ class Personalcontroller extends GetxController {
       } catch (e) {
         // Utils.showSnackBar(title: 'notification'.tr, message: '$e');
         debugPrint("Lỗi API: $e", wrapWidth: 1024);
+      } finally {
+        isLoading.value = false;
       }
     }
   }

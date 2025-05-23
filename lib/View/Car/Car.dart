@@ -30,7 +30,7 @@ class Car extends StatelessWidget {
             ? const Center(child: CircularProgressIndicator())
             : controller.carList == null
                 ? Center(
-                    child: Text('nocar'.tr),
+                    child: Text('Không có xe'),
                   )
                 : Stack(
                     children: [
@@ -49,26 +49,27 @@ class Car extends StatelessWidget {
                                   hintText: 'search_keyword'.tr,
                                   hintStyle: const TextStyle(fontSize: 14),
                                   filled: true,
-                                  fillColor: ColorHex.white,
+                                  fillColor: Colors.grey.shade200,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                    borderSide: BorderSide.none,
+                                  ),
                                   contentPadding: const EdgeInsets.symmetric(
                                       horizontal: 20.0),
                                   prefixIcon: const Icon(Icons.search),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                    borderSide: BorderSide.none,
-                                  ),
-                                  suffixIcon: Padding(
-                                    padding: const EdgeInsets.all(20.0),
-                                    child: GestureDetector(
-                                      onTap: () => bottomSheetFilter(
-                                          context: context,
-                                          controller: controller),
-                                      child: SvgPicture.asset(
-                                        'assets/icons/filter.svg',
-                                        fit: BoxFit.contain,
-                                      ),
-                                    ),
-                                  ),
+                                  // bộ lọc
+                                  // suffixIcon: Padding(
+                                  //   padding: const EdgeInsets.all(20.0),
+                                  //   child: GestureDetector(
+                                  //     onTap: () => bottomSheetFilter(
+                                  //         context: context,
+                                  //         controller: controller),
+                                  //     child: SvgPicture.asset(
+                                  //       'assets/icons/filter.svg',
+                                  //       fit: BoxFit.contain,
+                                  //     ),
+                                  //   ),
+                                  // ),
                                 ),
                               ),
                             ),
@@ -122,7 +123,9 @@ class Car extends StatelessWidget {
                         bottom: 20.0,
                         right: 20.0,
                         child: GestureDetector(
-                          onTap: () => Get.toNamed(Routes.addcar),
+                          onTap: () {
+                            Get.toNamed(Routes.addcar);
+                          },
                           child: const CircleAvatar(
                             radius: 30.0,
                             backgroundColor: ColorHex.total_color,

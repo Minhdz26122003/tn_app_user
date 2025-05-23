@@ -1,4 +1,4 @@
-import 'package:app_hm/Controller/ServiceControl/ServiceController.dart';
+import 'package:app_hm/Controller/ServiceC/ServiceController.dart';
 import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Model/Service/TypeServiceModel.dart';
 import 'package:flutter/material.dart';
@@ -52,8 +52,7 @@ class Servicedetail extends StatelessWidget {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            controller
-                                .formatCurrency(service.price?.toString()),
+                            controller.formatCurrency(service.price),
                             style: const TextStyle(
                               fontSize: 13,
                               color: Colors.red,

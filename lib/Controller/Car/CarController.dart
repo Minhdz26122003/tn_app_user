@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:app_hm/Global/Constant.dart';
 import 'package:app_hm/Model/Car/CarModel.dart';
+import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Services/APICaller.dart';
 import 'package:app_hm/Utils/Utils.dart';
 import 'package:flutter/material.dart';
@@ -11,16 +12,19 @@ import 'package:intl/intl.dart';
 class Carcontroller extends GetxController {
   int uid = 0;
   String emailAcc = "";
-  DateTime timeNow = DateTime.now();
+
   RxBool isLoading = false.obs;
   RxBool isShowOverview = false.obs;
   RxBool isChecked = false.obs;
-  RxList<CarModel> carList = RxList<CarModel>();
+
   CarModel car = CarModel();
   TextEditingController textLicensePlate = TextEditingController();
   TextEditingController textName = TextEditingController();
   TextEditingController textManufacturer = TextEditingController();
   TextEditingController textYearManufacturer = TextEditingController();
+
+  RxList<CarModel> carList = RxList<CarModel>(); // Danh sách xe gốc từ API
+  RxList<CarModel> filteredCarList = RxList<CarModel>(); // Danh sách xe đã lọc
 
   RxList<bool> checkedValues = <bool>[].obs;
   final RxBool isExpanded = false.obs;
@@ -46,7 +50,7 @@ class Carcontroller extends GetxController {
   void onInit() async {
     uid = await Utils.getIntValueWithKey(Constant.UUID_USER_ACC);
     emailAcc = await Utils.getStringValueWithKey(Constant.EMAIL);
-
+    textSearch.addListener(_onSearchChanged);
     // scrollController.addListener(() {
     //   if (scrollController.position.pixels ==
     //       scrollController.position.maxScrollExtent) {
@@ -65,35 +69,39 @@ class Carcontroller extends GetxController {
 
   @override
   void onClose() {
+    textSearch.removeListener(_onSearchChanged);
     print('on close second');
     super.onClose();
   }
 
-  // Hàm tìm kiếm và lọc
-  void searchAndFilterTrucks() {
-    String keyword = textSearch.text.toLowerCase();
-    // Lọc danh sách truck dựa trên từ khóa và trạng thái
-    searchList.value = carList.where((car) {
-      bool matchesKeyword = car.license_plate!.toLowerCase().contains(keyword);
-      // bool matchesStatus = status.isEmpty ||
-      //     (status == 1 && truck.status == 1) ||
-      //     (status == 0 && truck.status == 0);
-      // return matchesKeyword && matchesStatus;
-      return matchesKeyword;
-    }).toList();
-  }
-
-  onSearchChanged() {
-    if (_debounce?.isActive ?? false) _debounce!.cancel();
-    _debounce = Timer(const Duration(milliseconds: 700), () {
-      refreshData();
+  // Hàm lắng nghe sự thay đổi của textSearch
+  void _onSearchChanged() {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 300), () {
+      filterCars(textSearch.text);
     });
   }
 
+  // Hàm lọc danh sách xe
+  void filterCars(String query) {
+    if (query.isEmpty) {
+      filteredCarList.assignAll(carList);
+    } else {
+      final lowerCaseQuery = query.toLowerCase();
+      filteredCarList.assignAll(
+        carList.where((car) {
+          return car.license_plate?.toLowerCase().contains(lowerCaseQuery) ??
+              false;
+        }).toList(),
+      );
+    }
+  }
+
   refreshData() async {
-    page = 1;
+    page = 0;
     carList.clear();
     await getCarList();
+    filterCars(textSearch.text);
   }
 
   void clearData() {
@@ -115,6 +123,7 @@ class Carcontroller extends GetxController {
     if (uid != 0) {
       isLoading.value = true;
       try {
+        DateTime timeNow = DateTime.now();
         String formattedTime =
             DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
         var param = {
@@ -125,14 +134,22 @@ class Carcontroller extends GetxController {
         };
         var data = await APICaller.getInstance().post('Car/get_car.php', param);
         if (data != null) {
-          List<dynamic> list = data['items'];
-          var listItem =
-              list.map((dynamic json) => CarModel.fromJson(json)).toList();
-          carList.addAll(listItem);
+          // Chú ý: Nếu bạn muốn tải thêm (pagination), bạn cần append chứ không phải clear
+          // carList.clear(); // Bỏ dòng này nếu có pagination
+          List<CarModel> fetchedCars = [];
+          for (var item in data['items']) {
+            fetchedCars.add(CarModel.fromJson(item));
+          }
+          carList.assignAll(fetchedCars); // Cập nhật carList gốc
+          filterCars(textSearch.text); // Lọc ngay sau khi tải về
+          // List<dynamic> list = data['items'];
+          // var listItem =
+          //     list.map((dynamic json) => CarModel.fromJson(json)).toList();
+          // carList.addAll(listItem);
         }
       } catch (e) {
-        //debugPrint("Lỗi API: $e", wrapWidth: 1024);
-        Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+        debugPrint("Lỗi API: $e", wrapWidth: 1024);
+        //Utils.showSnackBar(title: 'notification'.tr, message: '$e');
       } finally {
         isLoading.value = false;
       }
@@ -155,7 +172,9 @@ class Carcontroller extends GetxController {
       );
       return;
     }
-    if (textYearManufacturer.text.isEmpty) {
+
+    final yearManufacture = textYearManufacturer.text.trim();
+    if (yearManufacture.isEmpty) {
       Utils.showSnackBar(
         title: 'notification'.tr,
         message: 'enter_year_manufacture'.tr,
@@ -163,6 +182,15 @@ class Carcontroller extends GetxController {
       return;
     }
 
+    if (int.tryParse(yearManufacture) == null) {
+      Utils.showSnackBar(
+        title: 'notification'.tr,
+        message: 'Năm sản xuất phải là số.',
+      );
+      return;
+    }
+
+    DateTime timeNow = DateTime.now();
     String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
     final keyCert =
         Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime);
@@ -182,18 +210,22 @@ class Carcontroller extends GetxController {
       if (response['status'] == 'success' || response['error']?['code'] == 0) {
         Utils.showSnackBar(
           title: 'Thông báo',
-          message: 'thanh cong'.tr,
+          message: 'Thêm xe thành công',
         );
         clearData();
         await getCarList();
+        Get.offAndToNamed(Routes.car);
       } else {
         Utils.showSnackBar(
           title: 'Lỗi',
-          message: response?['error']['message'] ?? 'Thêm xe thất bại',
+          message: 'Thêm xe thất bại',
         );
+        // debugPrint("Lỗi response: $response?['error']['message']",
+        //     wrapWidth: 1024);
       }
     } catch (e) {
-      Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+      debugPrint("Lỗi response car: $e", wrapWidth: 1024);
+      //Utils.showSnackBar(title: 'notification'.tr, message: '$e');
     }
   }
 
@@ -206,6 +238,7 @@ class Carcontroller extends GetxController {
       );
       return;
     }
+
     if (textManufacturer.text.isEmpty) {
       Utils.showSnackBar(
         title: 'notification'.tr,
@@ -213,7 +246,9 @@ class Carcontroller extends GetxController {
       );
       return;
     }
-    if (textYearManufacturer.text.isEmpty) {
+
+    final yearManufacture = textYearManufacturer.text.trim();
+    if (yearManufacture.isEmpty) {
       Utils.showSnackBar(
         title: 'notification'.tr,
         message: 'enter_year_manufacture'.tr,
@@ -221,6 +256,15 @@ class Carcontroller extends GetxController {
       return;
     }
 
+    if (int.tryParse(yearManufacture) == null) {
+      Utils.showSnackBar(
+        title: 'notification'.tr,
+        message: 'Năm sản xuất phải là số.',
+      );
+      return;
+    }
+
+    DateTime timeNow = DateTime.now();
     String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
     final keyCert =
         Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime);
@@ -238,9 +282,11 @@ class Carcontroller extends GetxController {
       final response =
           await APICaller.getInstance().post('Car/edit_car.php', param);
       if (response['status'] == 'success' || response['error']?['code'] == 0) {
-        Utils.showSnackBar(title: 'notification'.tr, message: 'thanh cong');
+        Utils.showSnackBar(
+            title: 'notification'.tr, message: 'Cập nhật xe thành công !');
         clearData();
         await getCarList();
+        Get.offAndToNamed(Routes.car);
       } else {
         Utils.showSnackBar(
           title: 'Lỗi',
@@ -255,6 +301,7 @@ class Carcontroller extends GetxController {
   Future<void> deleteCar(int carId) async {
     isLoading.value = true;
     try {
+      DateTime timeNow = DateTime.now();
       String formattedTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(timeNow);
 
       var param = {
@@ -271,7 +318,7 @@ class Carcontroller extends GetxController {
         carList.removeWhere((c) => c.car_id == carId);
         Utils.showSnackBar(
           title: 'Thông báo',
-          message: 'Xoa thanh cong'.tr,
+          message: 'Xoá xe thành công !'.tr,
         );
       } else {
         Utils.showSnackBar(

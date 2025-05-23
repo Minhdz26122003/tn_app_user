@@ -188,7 +188,7 @@ class Changepassword extends StatelessWidget {
                               foregroundColor: ColorHex.white,
                               backgroundColor: ColorHex.total_color,
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 110, vertical: 15),
+                                  horizontal: 100, vertical: 15),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),

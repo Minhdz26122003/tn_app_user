@@ -13,7 +13,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class Appoointmentdetail extends StatelessWidget {
-  const Appoointmentdetail({super.key});
+  const Appoointmentdetail();
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class Appoointmentdetail extends StatelessWidget {
       ),
       backgroundColor: ColorHex.background,
       body: Obx(() {
-        final appt = controller.appointmentList.firstWhereOrNull(
+        final appt = controller.pendingAppointments.firstWhereOrNull(
           (a) => a.appointment_id == appointmentId,
         );
         if (appt == null) {
@@ -167,20 +167,18 @@ class Appoointmentdetail extends StatelessWidget {
                     color: ColorHex.black)),
             const SizedBox(height: 8),
             Text('${'date'.tr}: $dateStr',
-                style: const TextStyle(
-                    fontSize: 14, color: ColorHex.grey_shade600)),
+                style: const TextStyle(fontSize: 14, color: ColorHex.black)),
             const SizedBox(height: 4),
             Text('${'time'.tr}: $timeStr',
-                style: const TextStyle(
-                    fontSize: 14, color: ColorHex.grey_shade600)),
+                style: const TextStyle(fontSize: 14, color: ColorHex.black)),
             const SizedBox(height: 4),
             Text('${'address'.tr}: ${m.gara_address}',
-                style: const TextStyle(
-                    fontSize: 14, color: ColorHex.grey_shade600)),
+                style: const TextStyle(fontSize: 14, color: ColorHex.black)),
             const SizedBox(height: 4),
             Text('${'code'.tr}: #${m.appointment_id}',
-                style: const TextStyle(
-                    fontSize: 14, color: ColorHex.grey_shade600)),
+                style: const TextStyle(fontSize: 14, color: ColorHex.black)),
+            Text('${'license_plate'.tr}: ${m.license_plate}',
+                style: const TextStyle(fontSize: 14, color: ColorHex.black)),
           ],
         ),
       ),
@@ -204,13 +202,11 @@ class Appoointmentdetail extends StatelessWidget {
     if (m.services != null) {
       for (var service in m.services!) {
         totalPrice += service.price ?? 0;
-        //totalTime += _parseDurationToMinutes(service.time ?? '0:00:00');
       }
     }
 
     final formattedPrice =
         NumberFormat.currency(locale: 'vi_VN', symbol: '₫').format(totalPrice);
-    //final formattedTotalTime = '$totalTime phút'; // Định dạng tổng thời gian
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -378,12 +374,10 @@ class Appoointmentdetail extends StatelessWidget {
     int totalTime = 0;
     if (m.services != null) {
       for (var service in m.services!) {
-        //totalPrice += service.price ?? 0;
         totalTime += _parseDurationToMinutes(service.time ?? '0:00:00');
       }
     }
-    // final formattedPrice =
-    //     NumberFormat.currency(locale: 'vi_VN', symbol: '₫').format(totalPrice);
+
     final formattedTime = '$totalTime phút';
 
     return Padding(
@@ -828,7 +822,7 @@ class Appoointmentdetail extends StatelessWidget {
                               },
                             );
                           } else {
-                            controller.PaymentOffline(pay?.payment_id ?? 0);
+                            controller.paymentOffline(pay?.payment_id ?? 0);
                             Get.back();
                           }
                         },
@@ -853,7 +847,7 @@ class Appoointmentdetail extends StatelessWidget {
     });
   }
 
-// Đã thanh toán
+  // Đã thanh toán
   Widget _paymentedCard(AppointmentModel m) {
     final controller = Get.put(PaymentController());
 
@@ -930,7 +924,7 @@ class Appoointmentdetail extends StatelessWidget {
                       'Mã giao dịch: ',
                       style: TextStyle(fontWeight: FontWeight.w500),
                     ),
-                    Flexible(child: Text((pay.payment_id ?? 0) as String)),
+                    Flexible(child: Text(('${pay.payment_id ?? 0}'))),
                   ],
                 ),
               ],

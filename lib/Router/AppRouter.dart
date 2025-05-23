@@ -10,6 +10,7 @@ abstract class Routes {
   static const signup = _Paths.signup;
   static const sendtopt = _Paths.sendotp;
   static const notification = _Paths.notification;
+  static const notificationset = _Paths.notificationset;
   static const createpassword = _Paths.createpassword;
   static const forgotPassword = _Paths.forgotpassword;
   static const changepassword = _Paths.changepassword;
@@ -32,6 +33,8 @@ abstract class Routes {
   static const servicedetail = _Paths.servicedetail;
   static const permissionguide = _Paths.permissionguide;
   static const payment = _Paths.payment;
+  static const servicesearch = _Paths.servicesearch;
+  static const appointmenthistorydetail = _Paths.appointmenthistorydetail;
   Routes._();
 }
 
@@ -44,6 +47,7 @@ abstract class _Paths {
   static const sendotp = '/sendotp';
   static const home = '/home';
   static const notification = '/notification';
+  static const notificationset = '/notificationset';
   static const onboarding = '/onboarding';
   static const forgotpassword = '/forgotpassword';
   static const account = '/account';
@@ -68,4 +72,6 @@ abstract class _Paths {
   static const servicedetail = '/servicedetail';
   static const permissionguide = '/permissionguide';
   static const payment = '/payment';
+  static const servicesearch = '/servicesearch';
+  static const appointmenthistorydetail = '/appointmenthistorydetail';
 }

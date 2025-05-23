@@ -1,3 +1,4 @@
+import 'package:app_hm/Global/ColorHex.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -24,8 +25,12 @@ class PermissionGuide extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Hướng dẫn cấp quyền'),
-        centerTitle: true,
+        title: Text(
+          'Hướng dẫn cấp quyền',
+          style: const TextStyle(color: Colors.white, fontSize: 17),
+        ),
+        backgroundColor: ColorHex.total_color,
+        leading: const BackButton(color: Colors.white),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -53,20 +58,28 @@ class PermissionGuide extends StatelessWidget {
               subtitle: 'Tắt tối ưu pin để app không bị chặn.',
             ),
             const Spacer(),
-            Center(
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.settings),
-                label: const Text('Mở Cài đặt App'),
-                onPressed: () => _openSettings(),
-                style: ElevatedButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  textStyle: const TextStyle(fontSize: 16),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                ),
-              ),
-            ),
+            // Center(
+            //   child: ElevatedButton.icon(
+            //     icon: const Icon(
+            //       Icons.settings,
+            //       color: ColorHex.white,
+            //     ),
+            //     label: const Text(
+            //       'Mở Cài đặt App',
+            //       style: TextStyle(color: ColorHex.white),
+            //     ),
+            //     onPressed: () => _openSettings(),
+            //     style: ElevatedButton.styleFrom(
+            //       side: const BorderSide(color: ColorHex.grey),
+            //       padding:
+            //           const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            //       textStyle: const TextStyle(fontSize: 16),
+            //       backgroundColor: ColorHex.total_color,
+            //       shape: RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.circular(8)),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

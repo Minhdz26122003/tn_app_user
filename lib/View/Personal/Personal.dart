@@ -143,7 +143,8 @@ class Personal extends StatelessWidget {
                               _buildSectionTitle('personal_information'.tr),
                               _item(
                                 title: 'personal_information'.tr,
-                                svg: 'assets/icons/profile.svg',
+                                //svg: 'assets/icons/profile.svg',
+                                svg: 'assets/icons/personal1.svg',
                                 onTap: () {
                                   if (!controller.isLoggedIn.value) {
                                     Get.toNamed(Routes.login);
@@ -155,7 +156,7 @@ class Personal extends StatelessWidget {
                               const SizedBox(height: 5),
                               _item(
                                 title: 'mycar'.tr,
-                                svg: 'assets/icons/car.svg',
+                                svg: 'assets/icons/car1.svg',
                                 onTap: () {
                                   if (!controller.isLoggedIn.value) {
                                     Get.toNamed(Routes.login);
@@ -169,7 +170,8 @@ class Personal extends StatelessWidget {
                                   LoginMethod.firebase)
                                 _item(
                                   title: 'change_password'.tr,
-                                  svg: 'assets/icons/security.svg',
+                                  //svg: 'assets/icons/sercurity.svg',
+                                  svg: 'assets/icons/change_pass1.svg',
                                   onTap: () {
                                     if (!controller.isLoggedIn.value) {
                                       Get.toNamed(Routes.login);
@@ -182,7 +184,8 @@ class Personal extends StatelessWidget {
                               _buildSectionTitle('appointment'.tr),
                               _item(
                                 title: 'list_appointment'.tr,
-                                svg: 'assets/icons/appointment.svg',
+                                //svg: 'assets/icons/appointment.svg',
+                                svg: 'assets/icons/appointment_list1.svg',
                                 onTap: () {
                                   if (!controller.isLoggedIn.value) {
                                     Get.toNamed(Routes.login);
@@ -196,7 +199,7 @@ class Personal extends StatelessWidget {
                               _buildSectionTitle('setting'.tr),
                               _item(
                                 title: 'setting'.tr,
-                                svg: 'assets/icons/setting.svg',
+                                svg: 'assets/icons/setting1.svg',
                                 onTap: () {
                                   Get.toNamed(Routes.setting);
                                   // PushNotifications.scheduleQuickTest(
@@ -206,8 +209,8 @@ class Personal extends StatelessWidget {
                               ),
                               const SizedBox(height: 5),
                               _item(
-                                title: 'hương dan',
-                                svg: 'assets/icons/setting.svg',
+                                title: 'guide'.tr,
+                                svg: 'assets/icons/guide.svg',
                                 onTap: () {
                                   Get.toNamed(Routes.permissionguide);
                                 },
@@ -215,7 +218,7 @@ class Personal extends StatelessWidget {
                               const SizedBox(height: 5),
                               if (controller.isLoggedIn.value)
                                 _item(
-                                  svg: 'assets/icons/logout.svg',
+                                  svg: 'assets/icons/logout1.svg',
                                   title: 'log_out'.tr,
                                   isLogout: true,
                                   onTap: () {

@@ -401,7 +401,7 @@ Widget _buildButtons(Appointmentcontroller controller) {
           child: ElevatedButton(
             onPressed: controller.checkdetail
                 ? () {
-                    controller.nextStep();
+                    controller.bookAppointment();
                   }
                 : null,
             style: ElevatedButton.styleFrom(

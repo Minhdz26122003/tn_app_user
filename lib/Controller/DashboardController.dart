@@ -93,15 +93,15 @@ class Dashboardcontroller extends GetxController {
     }
   }
 
-  void changePage(int index) {
+  Future<void> changePage(int index) async {
     currentPageIndex.value = index;
-    final apct = Get.find<Appointmentcontroller>();
-    final noti = Get.find<NotificationController>();
     if (index == 0) {
+      // Chỉ load thông báo, không block UI
+      final apct = Get.find<Appointmentcontroller>();
+      final noti = Get.find<NotificationController>();
       apct.getServiceTypeList();
       apct.getServiceList();
       noti.notificationList();
-      // apct.getAppointmentList();
     }
   }
 }

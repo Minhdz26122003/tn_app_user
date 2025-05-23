@@ -1,6 +1,7 @@
 import 'package:app_hm/Controller/Appointment/Appointmentcontroller.dart';
 import 'package:app_hm/Controller/DashboardController.dart';
 import 'package:app_hm/Controller/Notification/NotificationController.dart';
+import 'package:app_hm/Controller/ServiceC/ServiceController.dart';
 import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:flutter/material.dart' hide Badge;
@@ -16,6 +17,7 @@ class Home extends StatelessWidget {
     final Dashboardcontroller dashC = Get.put(Dashboardcontroller());
     final Appointmentcontroller apptC = Get.put(Appointmentcontroller());
     final nc = Get.put(NotificationController());
+    final serviceC = Get.put(Servicecontroller()); // Lấy ServiceController
     return Scaffold(
       body: Obx(() {
         if (apptC.isLoading.value) {
@@ -104,8 +106,13 @@ class Home extends StatelessWidget {
 
                       // search bar
                       TextField(
+                        onTap: () {
+                          serviceC.initFilters();
+                          Get.toNamed(Routes.servicesearch);
+                        },
+                        readOnly: true,
                         decoration: InputDecoration(
-                          hintText: 'Nhập dịch vụ bạn muốn tìm',
+                          hintText: 'Tìm kiếm dịch vụ',
                           prefixIcon: const Icon(Icons.search),
                           filled: true,
                           fillColor: Colors.white70,

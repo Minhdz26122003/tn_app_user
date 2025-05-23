@@ -35,23 +35,19 @@ class Setting extends StatelessWidget {
                       child: Expanded(
                           child: Column(
                         children: [
-                          _item(
-                            title: 'language'.tr,
-                            svg: 'assets/icons/language.svg',
-                            onTap: () {
-                              Get.toNamed(Routes.language);
-                            },
-                          ),
-                          const SizedBox(height: 5),
+                          // _item(
+                          //   title: 'language'.tr,
+                          //   svg: 'assets/icons/language.svg',
+                          //   onTap: () {
+                          //     Get.toNamed(Routes.language);
+                          //   },
+                          // ),
+                          // const SizedBox(height: 5),
                           _item(
                             title: 'notification'.tr,
                             svg: 'assets/icons/bell.svg',
                             onTap: () {
-                              if (!controller.isLoggedIn.value) {
-                                Get.toNamed(Routes.notification);
-                              } else {
-                                Get.toNamed(Routes.login);
-                              }
+                              Get.toNamed(Routes.notificationset);
                             },
                           ),
                         ],

@@ -9,7 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class Appointmentlist extends StatelessWidget {
-  const Appointmentlist({super.key});
+  const Appointmentlist();
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class Appointmentlist extends StatelessWidget {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
-        if (controller.appointmentList.isEmpty) {
+        if (controller.pendingAppointments.isEmpty) {
           return Center(
             child: EmptyList(
               imgSrc: 'assets/icons/empty_appoint.svg',
@@ -44,9 +44,9 @@ class Appointmentlist extends StatelessWidget {
         }
         return ListView.builder(
           padding: const EdgeInsets.only(top: 5),
-          itemCount: controller.appointmentList.length,
+          itemCount: controller.pendingAppointments.length,
           itemBuilder: (c, i) {
-            final appt = controller.appointmentList[i];
+            final appt = controller.pendingAppointments[i];
             return appointmentCard(
               model: appt,
               onTap: () async {

@@ -1,6 +1,7 @@
 import 'package:app_hm/Controller/Appointment/Appointmentcontroller.dart';
 import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Model/Appointment/ApointmentModel.dart';
+import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Utils/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class Appointmenthistory extends StatelessWidget {
-  const Appointmenthistory({super.key});
+  const Appointmenthistory();
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class Appointmenthistory extends StatelessWidget {
       ),
       backgroundColor: ColorHex.background,
       body: Obx(() {
-        final list = controller.appointmentList;
+        final list = controller.historyAppointments;
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -92,7 +93,7 @@ class Appointmenthistory extends StatelessWidget {
             ? Icons.cancel
             : Icons.hourglass_bottom;
     final statusText = isCompleted
-        ? 'completed'.tr
+        ? 'paid'.tr
         : isCancelled
             ? 'cancelled'.tr
             : Utils.steps[status].tr;
@@ -109,19 +110,19 @@ class Appointmenthistory extends StatelessWidget {
       elevation: 2,
       color: ColorHex.grey_shade300,
       child: InkWell(
-        // onTap: () {
-        //   Get.toNamed(Routes.appoointmentdetail,
-        //       arguments: {'appointment_id': m.appointment_id});
-        // },
+        onTap: () {
+          Get.toNamed(Routes.appointmenthistorydetail,
+              arguments: {'appointment_id': m.appointment_id});
+        },
         borderRadius: BorderRadius.circular(12),
         child: Row(
           children: [
             // Date box
             Container(
               padding: const EdgeInsets.symmetric(vertical: 17, horizontal: 12),
-              decoration: const BoxDecoration(
-                color: ColorHex.status_1,
-                borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                color: statusColor,
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(12),
                   bottomLeft: Radius.circular(12),
                 ),

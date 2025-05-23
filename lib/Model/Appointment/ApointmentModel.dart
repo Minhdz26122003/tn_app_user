@@ -6,6 +6,7 @@ class AppointmentModel {
   int? car_id;
   int? gara_id;
   String? gara_name;
+  String? license_plate;
   String? gara_address;
   String? appointment_date;
   String? appointment_time;
@@ -25,6 +26,7 @@ class AppointmentModel {
     this.car_id,
     this.gara_id,
     this.gara_name,
+    this.license_plate,
     this.gara_address,
     this.appointment_time,
     this.description,
@@ -70,6 +72,7 @@ class AppointmentModel {
     car_id = json['car_id'];
     gara_id = json['gara_id'];
     gara_address = json['gara_address'];
+    license_plate = json['license_plate'];
     gara_name = json['gara_name'];
     appointment_time = json['appointment_time'];
     description = json['description'];
@@ -98,6 +101,7 @@ class AppointmentModel {
     data['car_id'] = car_id;
     data['gara_id'] = gara_id;
     data['gara_name'] = gara_name;
+    data['license_plate'] = license_plate;
     data['gara_address'] = gara_address;
     data['appointment_time'] = appointment_time;
     data['description'] = description;
@@ -110,7 +114,6 @@ class AppointmentModel {
       data['services'] = services!.map((v) => v.toJson()).toList();
     }
     if (payment != null) {
-      // <--- THÊM DÒNG NÀY VÀO toJson
       data['payment'] = payment!.toJson();
     }
     return data;

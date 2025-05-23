@@ -59,6 +59,10 @@ class Appointmentcontroller extends GetxController {
   RxList<ServiceModel> serviceList = RxList<ServiceModel>();
   RxList<AccessoryModel> accessList = RxList<AccessoryModel>();
   RxList<AppointmentModel> appointmentList = RxList<AppointmentModel>();
+
+  RxList<AppointmentModel> pendingAppointments = RxList<AppointmentModel>();
+  RxList<AppointmentModel> historyAppointments = RxList<AppointmentModel>();
+
   RxList<CarModel> carList = RxList<CarModel>();
   RxList<CenterModel> centerList = RxList<CenterModel>();
   List<String> morningTimes = ['08:00', '09:00', '10:00', '11:00', '12:00'];
@@ -187,7 +191,9 @@ class Appointmentcontroller extends GetxController {
       currentStep.value++;
       navigateToStep();
     } else {
-      bookAppointment();
+      Utils.showSnackBar(
+          title: 'notification'.tr, message: 'Hãy hoàn tất đặt lịch');
+      // bookAppointment();
     }
   }
 
@@ -381,7 +387,7 @@ class Appointmentcontroller extends GetxController {
 
   getServiceList() async {
     serviceList.clear();
-    //isLoading.value = true;
+    isLoading.value = true;
     try {
       DateTime timeNow = DateTime.now();
       String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
@@ -406,10 +412,9 @@ class Appointmentcontroller extends GetxController {
     } catch (e) {
       //debugPrint("Lỗi API getServiceList: $e", wrapWidth: 1024);
       Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+    } finally {
+      isLoading.value = false;
     }
-    // finally {
-    //   isLoading.value = false;
-    // }
   }
 
   List<ServiceModel> get selectedServices {
@@ -477,8 +482,9 @@ class Appointmentcontroller extends GetxController {
   }
 
   Future<void> getAppointmentList() async {
-    appointmentList.clear();
-    if (uid == 0) return;
+    if (uid == 0) {
+      return;
+    }
 
     isLoading.value = true;
     try {
@@ -490,23 +496,34 @@ class Appointmentcontroller extends GetxController {
         "time": formattedTime,
         "uid": uid,
       };
-
-      final data =
+      var data =
           await APICaller.getInstance().post('Appointment/getappoi.php', param);
-
       if (data != null && data['status'] == 'success') {
-        final items = data['items'] as List<dynamic>;
-        final listItem = items
-            .map((json) =>
-                AppointmentModel.fromJson(json as Map<String, dynamic>))
+        List<dynamic> list = data['items'];
+        var allAppointments = list
+            .map((dynamic json) => AppointmentModel.fromJson(json))
             .toList();
-        appointmentList.assignAll(listItem);
-      } else {
-        final msg = data?['error']?['message'] ?? 'Không thể tải lịch hẹn';
-        Utils.showSnackBar(title: 'Lỗi', message: msg);
+
+        // Xóa danh sách cũ trước khi cập nhật
+        pendingAppointments.clear();
+        historyAppointments.clear();
+
+        for (var appointment in allAppointments) {
+          if (appointment.status == 0 ||
+              appointment.status == 1 ||
+              appointment.status == 2 ||
+              appointment.status == 3 ||
+              appointment.status == 4 ||
+              appointment.status == 5 ||
+              appointment.status == 6) {
+            pendingAppointments.add(appointment);
+          } else {
+            historyAppointments.add(appointment);
+          }
+        }
       }
     } catch (e) {
-      debugPrint("Lỗi API getAppointmentList: $e");
+      //debugPrint('Lỗi API getAppointmentList: $e');
       Utils.showSnackBar(
           title: 'Lỗi', message: 'Không thể kết nối tới máy chủ');
     } finally {
@@ -527,7 +544,9 @@ class Appointmentcontroller extends GetxController {
           }
         }
       }
+
       DateTime timeNow = DateTime.now();
+      debugPrint('🔥 bookAppointment called at $timeNow');
       String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
       var param = {
         "keyCert":

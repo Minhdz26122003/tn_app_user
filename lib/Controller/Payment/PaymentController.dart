@@ -160,7 +160,7 @@ class PaymentController extends GetxController {
       if (responseData == null) {
         Get.snackbar(
           'Lỗi',
-          'Không nhận được phản hồi từ máy chủ.',
+          'Không nhận được phản hồi từ máy chủ hoặc đã thanh toán rồi.',
           snackPosition: SnackPosition.TOP,
           backgroundColor: Get.theme.colorScheme.error,
           colorText: Get.theme.colorScheme.onError,
@@ -262,32 +262,68 @@ class PaymentController extends GetxController {
     }
   }
 
-  Future<void> PaymentOffline(int payID) async {
-    DateTime timeNow = DateTime.now();
-    String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
-    var param = {
+  Future<void> paymentOffline(int payID) async {
+    DateTime now = DateTime.now();
+    String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(now);
+
+    final params = {
       "keyCert":
           Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
       "time": formattedTime,
       "payment_id": payID,
     };
+
     try {
-      var response =
-          await APICaller.getInstance().post('Payment/add_offline.php', param);
-      if (response != null && response['status'] == 'success') {
+      // Gọi API
+      final response =
+          await APICaller.getInstance().post('Payment/add_offline.php', params);
+
+      if (response == null) {
         Utils.showSnackBar(
           title: 'notification'.tr,
-          message: response?['error']['message'] ??
-              'Cập nhật phường thức thanh toán thành công!',
+          message: 'Không nhận được phản hồi từ máy chủ.',
         );
-      } else {
-        Utils.showSnackBar(
-          title: 'notification'.tr,
-          message: response?['error']['message'],
-        );
+        return;
+      }
+
+      final status = response['status'] as String?;
+
+      switch (status) {
+        case 'success':
+          Utils.showSnackBar(
+            title: 'notification'.tr,
+            message: response['error']?['message'] ??
+                'Xác nhận thanh toán offline thành công!',
+          );
+          break;
+
+        case 'exists':
+          Utils.showSnackBar(
+            title: 'notification'.tr,
+            message: response['error']?['message'] ??
+                'Bạn đã xác nhận thanh toán offline trước đó.',
+          );
+          break;
+
+        case 'error':
+          Utils.showSnackBar(
+            title: 'notification'.tr,
+            message: response['error']?['message'] ??
+                'Đã có lỗi xảy ra, vui lòng thử lại.',
+          );
+          break;
+
+        default:
+          Utils.showSnackBar(
+            title: 'notification'.tr,
+            message: 'Phản hồi không xác định từ server.',
+          );
       }
     } catch (e) {
-      Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+      Utils.showSnackBar(
+        title: 'notification'.tr,
+        message: 'Lỗi khi gọi API: $e',
+      );
     }
   }
 }

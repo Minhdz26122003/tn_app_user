@@ -1,5 +1,5 @@
 import 'package:app_hm/Controller/Appointment/Appointmentcontroller.dart';
-import 'package:app_hm/Controller/ServiceControl/ServiceController.dart';
+import 'package:app_hm/Controller/ServiceC/ServiceController.dart';
 import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Model/Service/TypeServiceModel.dart';
 import 'package:app_hm/Router/AppPage.dart';
@@ -33,6 +33,20 @@ class Listservice extends StatelessWidget {
         leading: const BackButton(color: ColorHex.white),
         title: Text(typeName,
             style: const TextStyle(color: ColorHex.white, fontSize: 17)),
+        actions: [
+          IconButton(
+            padding: const EdgeInsets.only(right: 20),
+            icon: const Icon(
+              Icons.search_outlined,
+              color: ColorHex.white,
+            ),
+            tooltip: 'Tìm kiếm',
+            onPressed: () {
+              controller.initFilters(); // Khởi tạo lại các bộ lọc về mặc định
+              Get.toNamed(Routes.servicesearch);
+            },
+          )
+        ],
       ),
       body: services.isEmpty
           ? const Center(child: Text('Không có dịch vụ nào'))
@@ -87,7 +101,7 @@ class Listservice extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      controller.formatCurrency(service.price?.toString()),
+                      controller.formatCurrency(service.price),
                       style: const TextStyle(
                           fontSize: 15,
                           color: Colors.red,

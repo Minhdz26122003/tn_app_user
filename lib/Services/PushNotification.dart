@@ -11,12 +11,14 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:timezone/timezone.dart' as tz;
+import 'package:uuid/uuid.dart';
 
 class PushNotifications {
   static final firebaseMessaging = FirebaseMessaging.instance;
   static final FlutterLocalNotificationsPlugin
       _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   static int uid = 0;
+  final uuid = Uuid();
   // request notification permission
   static Future init() async {
     await firebaseMessaging.requestPermission(
@@ -209,15 +211,19 @@ class PushNotifications {
     required String title,
     String? body,
   }) async {
+    // 1. Xoá bản ghi cũ trong database và xoá notification đã schedule:
+    await _flutterLocalNotificationsPlugin
+        .cancelAll(); // hoặc cancel list ids cũ
+
     final plugin = _flutterLocalNotificationsPlugin;
     final now = tz.TZDateTime.now(tz.local);
-
+    final uuid = Uuid();
     // Các khoảng cần nhắc
     final reminders = [
       const Duration(hours: 1),
-      const Duration(minutes: 10),
+      const Duration(minutes: 30),
     ];
-
+    print('now $now');
     for (var dur in reminders) {
       // Tính thời điểm firing
       final fireTime = tz.TZDateTime.from(
@@ -226,12 +232,12 @@ class PushNotifications {
       );
       print('fireTime $fireTime');
       if (fireTime.isAfter(now)) {
-        final label = dur.inMinutes >= 60 ? '1 giờ trước' : '20 phút trước';
+        final label = dur.inMinutes >= 60 ? '1 giờ trước' : '30 phút trước';
         final notifTitle = title;
         final notifBody = body ?? '$title ($label)';
 
         await plugin.zonedSchedule(
-          fireTime.hashCode, // id
+          uuid.v4().hashCode, // Sử dụng UUID làm ID
           notifTitle,
           notifBody,
           fireTime,
@@ -249,7 +255,7 @@ class PushNotifications {
           androidAllowWhileIdle: true,
         );
 
-        await saveNotification(uid, notifTitle, notifBody);
+        // await saveNotification(uid, notifTitle, notifBody);
       }
     }
   }
