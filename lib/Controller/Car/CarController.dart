@@ -17,14 +17,13 @@ class Carcontroller extends GetxController {
   RxBool isShowOverview = false.obs;
   RxBool isChecked = false.obs;
 
+  RxList<CarModel> carList = RxList<CarModel>();
+  RxList<CarModel> filteredCarList = RxList<CarModel>();
   CarModel car = CarModel();
   TextEditingController textLicensePlate = TextEditingController();
   TextEditingController textName = TextEditingController();
   TextEditingController textManufacturer = TextEditingController();
   TextEditingController textYearManufacturer = TextEditingController();
-
-  RxList<CarModel> carList = RxList<CarModel>(); // Danh sách xe gốc từ API
-  RxList<CarModel> filteredCarList = RxList<CarModel>(); // Danh sách xe đã lọc
 
   RxList<bool> checkedValues = <bool>[].obs;
   final RxBool isExpanded = false.obs;
@@ -50,7 +49,7 @@ class Carcontroller extends GetxController {
   void onInit() async {
     uid = await Utils.getIntValueWithKey(Constant.UUID_USER_ACC);
     emailAcc = await Utils.getStringValueWithKey(Constant.EMAIL);
-    textSearch.addListener(_onSearchChanged);
+    textSearch.addListener(onSearchChanged);
     // scrollController.addListener(() {
     //   if (scrollController.position.pixels ==
     //       scrollController.position.maxScrollExtent) {
@@ -69,13 +68,18 @@ class Carcontroller extends GetxController {
 
   @override
   void onClose() {
-    textSearch.removeListener(_onSearchChanged);
-    print('on close second');
+    _debounce?.cancel();
+    textSearch.removeListener(onSearchChanged);
+    textSearch.dispose();
+    textLicensePlate.dispose();
+    textName.dispose();
+    textManufacturer.dispose();
+    textYearManufacturer.dispose();
     super.onClose();
   }
 
-  // Hàm lắng nghe sự thay đổi của textSearch
-  void _onSearchChanged() {
+  // lắng nghe sự thay đổi của textSearch
+  void onSearchChanged() {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 300), () {
       filterCars(textSearch.text);
@@ -88,6 +92,7 @@ class Carcontroller extends GetxController {
       filteredCarList.assignAll(carList);
     } else {
       final lowerCaseQuery = query.toLowerCase();
+
       filteredCarList.assignAll(
         carList.where((car) {
           return car.license_plate?.toLowerCase().contains(lowerCaseQuery) ??
@@ -97,11 +102,9 @@ class Carcontroller extends GetxController {
     }
   }
 
-  refreshData() async {
+  Future<void> refreshData() async {
     page = 0;
-    carList.clear();
     await getCarList();
-    filterCars(textSearch.text);
   }
 
   void clearData() {
@@ -119,40 +122,39 @@ class Carcontroller extends GetxController {
   }
 
   Future<void> getCarList() async {
-    carList.clear();
-    if (uid != 0) {
-      isLoading.value = true;
-      try {
-        DateTime timeNow = DateTime.now();
-        String formattedTime =
-            DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
-        var param = {
-          "keyCert":
-              Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
-          "time": formattedTime,
-          "uid": uid,
-        };
-        var data = await APICaller.getInstance().post('Car/get_car.php', param);
-        if (data != null) {
-          // Chú ý: Nếu bạn muốn tải thêm (pagination), bạn cần append chứ không phải clear
-          // carList.clear(); // Bỏ dòng này nếu có pagination
-          List<CarModel> fetchedCars = [];
-          for (var item in data['items']) {
-            fetchedCars.add(CarModel.fromJson(item));
-          }
-          carList.assignAll(fetchedCars); // Cập nhật carList gốc
-          filterCars(textSearch.text); // Lọc ngay sau khi tải về
-          // List<dynamic> list = data['items'];
-          // var listItem =
-          //     list.map((dynamic json) => CarModel.fromJson(json)).toList();
-          // carList.addAll(listItem);
+    isLoading.value = true;
+    try {
+      DateTime timeNow = DateTime.now();
+      String formattedTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(timeNow);
+      String keyCert =
+          Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime);
+
+      var param = {
+        "keyCert": keyCert,
+        "time": formattedTime,
+        "uid": uid.toString(), // Đảm bảo uid có giá trị đúng
+        "page": page.toString(),
+        "pageSize": pageSize.toString(),
+      };
+
+      var response =
+          await APICaller.getInstance().post('Car/get_car.php', param);
+
+      if (response != null && response['error']['code'] == 0) {
+        List<CarModel> fetchedCars = [];
+        for (var item in response['items']) {
+          fetchedCars.add(CarModel.fromJson(item));
         }
-      } catch (e) {
-        debugPrint("Lỗi API: $e", wrapWidth: 1024);
-        //Utils.showSnackBar(title: 'notification'.tr, message: '$e');
-      } finally {
-        isLoading.value = false;
+        carList.assignAll(fetchedCars);
+
+        filterCars(textSearch.text);
+      } else {
+        Utils.showSnackBar(title: 'Lỗi', message: 'Không thể lấy danh sách xe');
       }
+    } catch (e) {
+      Utils.showSnackBar(title: 'Lỗi', message: '$e');
+    } finally {
+      isLoading.value = false;
     }
   }
 

@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class AddCar extends StatelessWidget {
-  const AddCar({super.key});
+  const AddCar();
 
   @override
   Widget build(BuildContext context) {

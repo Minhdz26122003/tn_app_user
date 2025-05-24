@@ -1,6 +1,7 @@
 import 'package:app_hm/Component/DialogCustom.dart';
 import 'package:app_hm/Controller/Car/CarController.dart';
 import 'package:app_hm/Global/ColorHex.dart';
+import 'package:app_hm/Model/Car/CarModel.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -25,125 +26,85 @@ class Car extends StatelessWidget {
           style: const TextStyle(fontSize: 16, color: ColorHex.white),
         ),
       ),
-      body: Obx(
-        () => (controller.isLoading.value)
-            ? const Center(child: CircularProgressIndicator())
-            : controller.carList == null
-                ? Center(
-                    child: Text('Không có xe'),
-                  )
-                : Stack(
-                    children: [
-                      Column(
-                        children: [
-                          Container(
-                            color: const Color.fromARGB(255, 247, 247, 247),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 20.0, horizontal: 20.0),
-                              child: TextField(
-                                controller: controller.textSearch,
-                                onChanged: (value) =>
-                                    controller.onSearchChanged(),
-                                decoration: InputDecoration(
-                                  hintText: 'search_keyword'.tr,
-                                  hintStyle: const TextStyle(fontSize: 14),
-                                  filled: true,
-                                  fillColor: Colors.grey.shade200,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(30),
-                                    borderSide: BorderSide.none,
-                                  ),
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 20.0),
-                                  prefixIcon: const Icon(Icons.search),
-                                  // bộ lọc
-                                  // suffixIcon: Padding(
-                                  //   padding: const EdgeInsets.all(20.0),
-                                  //   child: GestureDetector(
-                                  //     onTap: () => bottomSheetFilter(
-                                  //         context: context,
-                                  //         controller: controller),
-                                  //     child: SvgPicture.asset(
-                                  //       'assets/icons/filter.svg',
-                                  //       fit: BoxFit.contain,
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: Get.width,
-                            color: const Color.fromARGB(255, 247, 247, 247),
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 15.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'car_list'.tr,
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                                Text(
-                                  "${controller.carList.length}",
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      color: ColorHex.total_color,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Obx(
-                            () => (controller.carList.isEmpty)
-                                ? const Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 8),
-                                    child: Center(child: Text('no_car')),
-                                  )
-                                : Expanded(
-                                    child: ListView.builder(
-                                      controller: controller.scrollController,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10.0, vertical: 10),
-                                      itemCount: controller.carList.length,
-                                      itemBuilder: (context, index) {
-                                        return _buildVehicleCard(
-                                            index, controller, context);
-                                      },
-                                    ),
-                                  ),
-                          ),
-                        ],
-                      ),
-                      Positioned(
-                        bottom: 20.0,
-                        right: 20.0,
-                        child: GestureDetector(
-                          onTap: () {
-                            Get.toNamed(Routes.addcar);
-                          },
-                          child: const CircleAvatar(
-                            radius: 30.0,
-                            backgroundColor: ColorHex.total_color,
-                            child: Icon(Icons.add, color: ColorHex.white),
-                          ),
-                        ),
-                      ),
-                    ],
+      body: Column(
+        // Sử dụng Column ở đây
+        children: [
+          // Thanh tìm kiếm
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Container(
+              color: ColorHex.white,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: TextField(
+                controller:
+                    controller.textSearch, // <-- Liên kết với controller
+                decoration: InputDecoration(
+                  hintText: 'Tìm kiếm biển số xe...'.tr,
+                  prefixIcon:
+                      const Icon(Icons.search, color: ColorHex.grey_shade600),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
                   ),
+                  filled: true,
+                  fillColor: ColorHex.background,
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                ),
+                // onChanged không cần thiết ở đây vì listener đã có trong controller
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+
+          // Danh sách xe - Bọc trong Obx riêng biệt
+          Expanded(
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (controller.filteredCarList.isEmpty) {
+                  return Center(
+                    child: Text(
+                      controller.textSearch.text.isEmpty
+                          ? 'Không có xe nào được thêm.'.tr
+                          : 'Không tìm thấy xe nào phù hợp với tìm kiếm của bạn.'
+                              .tr,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 16, color: ColorHex.grey),
+                    ),
+                  );
+                } else {
+                  return ListView.builder(
+                    itemCount: controller.filteredCarList.length,
+                    itemBuilder: (context, index) {
+                      final car = controller.filteredCarList[index];
+                      return _buildVehicleCard(index, controller, context, car);
+                    },
+                  );
+                }
+              }),
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.toNamed(Routes.addcar);
+        },
+        backgroundColor: ColorHex.total_color,
+        child: const Icon(Icons.add, color: ColorHex.white),
       ),
     );
   }
 
   Widget _buildVehicleCard(
-      int index, Carcontroller controller, BuildContext context) {
-    final car = controller.carList[index];
+      int index, Carcontroller controller, BuildContext context, CarModel car) {
+    // Thêm CarModel car
     return Card(
-      margin: const EdgeInsets.only(top: 6, left: 2, right: 5, bottom: 6),
+      margin: const EdgeInsets.only(top: 6, right: 1, bottom: 6),
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: ListTile(
@@ -161,9 +122,9 @@ class Car extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('${'name_car'.tr}: ${car.name}',
-                style: const TextStyle(fontSize: 12)),
+                style: const TextStyle(fontSize: 11)),
             Text('${'manufacturer'.tr}: ${car.manufacturer}',
-                style: const TextStyle(fontSize: 12)),
+                style: const TextStyle(fontSize: 11)),
           ],
         ),
         trailing: Row(
@@ -173,7 +134,7 @@ class Car extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.edit, color: ColorHex.status_1),
               onPressed: () {
-                final car = controller.carList[index];
+                // Sử dụng car đã được truyền vào
                 Get.toNamed(Routes.editcar, arguments: car);
               },
             ),
@@ -191,8 +152,8 @@ class Car extends StatelessWidget {
                     btnColor: ColorHex.status_0,
                     onTap: () async {
                       Navigator.pop(context); // đóng dialog
-                      await controller
-                          .deleteCar(controller.carList[index].car_id!);
+                      // Sử dụng car.car_id đã được truyền vào
+                      await controller.deleteCar(car.car_id!);
                     },
                   ),
                 );
