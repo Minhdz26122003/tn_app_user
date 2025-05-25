@@ -13,6 +13,7 @@ import 'package:app_hm/View/Appointment/ListAppointment.dart';
 import 'package:app_hm/View/Car/AddCar.dart';
 import 'package:app_hm/View/Car/Car.dart';
 import 'package:app_hm/View/Car/EditCar.dart';
+import 'package:app_hm/View/Chat/chat_screen.dart';
 import 'package:app_hm/View/Guideapp/PermissionGuide.dart';
 import 'package:app_hm/View/Login/Login.dart';
 import 'package:app_hm/View/Login/Onboarding.dart';
@@ -182,7 +183,7 @@ class AppPages {
     GetPage(
       name: Routes.car,
       page: () => const Car(),
-      transition: Transition.fadeIn,
+      transition: Transition.zoom,
       transitionDuration: const Duration(milliseconds: 400),
     ),
     GetPage(
@@ -230,6 +231,12 @@ class AppPages {
     GetPage(
       name: Routes.appointmenthistorydetail,
       page: () => const Appointmenthistorydetail(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.chatscreen,
+      page: () => const ChatScreen(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 400),
     ),

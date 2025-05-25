@@ -1,6 +1,8 @@
 import 'package:app_hm/Controller/ServiceC/ServiceController.dart';
 import 'package:app_hm/Global/ColorHex.dart';
+import 'package:app_hm/Model/Service/ServiceModel.dart';
 import 'package:app_hm/Model/Service/TypeServiceModel.dart';
+import 'package:app_hm/Router/AppPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,6 +13,7 @@ class Servicedetail extends StatelessWidget {
   Widget build(BuildContext context) {
     final Servicecontroller controller = Get.put(Servicecontroller());
     final service = Get.arguments as Service;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorHex.total_color,
@@ -67,7 +70,6 @@ class Servicedetail extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-
                           Text(
                             service.description ?? '',
                             style: const TextStyle(fontSize: 12),
@@ -78,7 +80,6 @@ class Servicedetail extends StatelessWidget {
                                 ? TextOverflow.visible
                                 : TextOverflow.ellipsis,
                           ),
-
                           if (!controller.isDescriptionExpanded.value)
                             TextButton(
                               onPressed: () {
@@ -101,57 +102,7 @@ class Servicedetail extends StatelessWidget {
                                     fontSize: 11, color: ColorHex.total_color),
                               ),
                             ),
-
                           const SizedBox(height: 16),
-                          const Text(
-                            'Đánh giá và bình luận',
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          // if (service.comments != null &&
-                          //     service.comments.isNotEmpty)
-                          //   ListView.builder(
-                          //     shrinkWrap: true,
-                          //     physics: const NeverScrollableScrollPhysics(),
-                          //     itemCount: service.comments.length,
-                          //     itemBuilder: (context, index) {
-                          //       final comment = service.comments[index];
-                          //       return Card(
-                          //         child: Padding(
-                          //           padding: const EdgeInsets.all(8.0),
-                          //           child: Column(
-                          //             crossAxisAlignment:
-                          //                 CrossAxisAlignment.start,
-                          //             children: [
-                          //               Text(
-                          //                 comment.userName,
-                          //                 style: const TextStyle(
-                          //                     fontWeight: FontWeight.bold),
-                          //               ),
-                          //               Row(
-                          //                 children: List.generate(5, (i) {
-                          //                   return Icon(
-                          //                     i < comment.rating
-                          //                         ? Icons.star
-                          //                         : Icons.star_border,
-                          //                     color: Colors.yellow,
-                          //                     size: 16,
-                          //                   );
-                          //                 }),
-                          //               ),
-                          //               const SizedBox(height: 4),
-                          //               Text(comment.commentText),
-                          //             ],
-                          //           ),
-                          //         ),
-                          //       );
-                          //     },
-                          //   )
-                          // else
-                          //   const Text('Chưa có đánh giá nào.'),
                         ],
                       ),
                     );
@@ -166,7 +117,7 @@ class Servicedetail extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  // TODO: Xử lý book service
+                  Get.toNamed(Routes.servicebook);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,

@@ -35,6 +35,7 @@ abstract class Routes {
   static const payment = _Paths.payment;
   static const servicesearch = _Paths.servicesearch;
   static const appointmenthistorydetail = _Paths.appointmenthistorydetail;
+  static const chatscreen = _Paths.chatscreen;
   Routes._();
 }
 
@@ -74,4 +75,5 @@ abstract class _Paths {
   static const payment = '/payment';
   static const servicesearch = '/servicesearch';
   static const appointmenthistorydetail = '/appointmenthistorydetail';
+  static const chatscreen = '/chatscreen';
 }

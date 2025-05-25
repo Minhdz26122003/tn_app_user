@@ -125,8 +125,8 @@ class NotificationController extends GetxController {
         notificationList.refresh();
       }
     } catch (e) {
-      //debugPrint(" Lỗi API: $e", wrapWidth: 1024);
-      Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+      debugPrint(" Lỗi API: $e", wrapWidth: 1024);
+      //Utils.showSnackBar(title: 'notification'.tr, message: '$e');
     }
   }
 

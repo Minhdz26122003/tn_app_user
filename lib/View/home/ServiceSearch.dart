@@ -1,6 +1,6 @@
 import 'package:app_hm/Controller/ServiceC/ServiceController.dart';
 import 'package:app_hm/Global/ColorHex.dart';
-import 'package:app_hm/Model/Service/TypeServiceModel.dart'; // Đảm bảo đã import TypeServiceModel
+import 'package:app_hm/Model/Service/TypeServiceModel.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -220,7 +220,7 @@ class _ServicesearchState extends State<Servicesearch> {
                     _minPriceFocusNode.unfocus();
                     _maxPriceFocusNode.unfocus();
 
-                    ctrl.applyFiltersAndSearch(); // Gọi hàm tìm kiếm khi nút được nhấn
+                    ctrl.applyFiltersAndSearch();
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 10),

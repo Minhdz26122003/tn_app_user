@@ -22,9 +22,9 @@ class Servicecontroller extends GetxController {
   final RxBool isLoadingTypes = false.obs;
 
   // Raw data from API
-  final RxList<ServiceModel> allServices = <ServiceModel>[].obs;
+  final RxList<Service> allServices = <Service>[].obs;
   // Filtered results (API sẽ trả về kết quả đã lọc)
-  final RxList<ServiceModel> filteredServices = <ServiceModel>[].obs;
+  final RxList<Service> filteredServices = <Service>[].obs;
 
   // Danh sách tất cả các loại dịch vụ có sẵn
   final RxList<TypeServiceModel> serviceTypes = <TypeServiceModel>[].obs;
@@ -141,7 +141,7 @@ class Servicecontroller extends GetxController {
       if (data != null && data['status'] == 'success') {
         final items = data['items'] as List<dynamic>;
         allServices.assignAll(items
-            .map((e) => ServiceModel.fromJson(e as Map<String, dynamic>))
+            .map((e) => Service.fromJson(e as Map<String, dynamic>))
             .toList());
         filteredServices.assignAll(allServices);
       } else {

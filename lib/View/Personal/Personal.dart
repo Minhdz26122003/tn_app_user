@@ -213,6 +213,7 @@ class Personal extends StatelessWidget {
                                 svg: 'assets/icons/guide.svg',
                                 onTap: () {
                                   Get.toNamed(Routes.permissionguide);
+                                  //Get.toNamed(Routes.chatscreen);
                                 },
                               ),
                               const SizedBox(height: 5),

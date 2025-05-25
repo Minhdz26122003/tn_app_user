@@ -87,6 +87,9 @@ class Home extends StatelessWidget {
                               badgeStyle: const BadgeStyle(
                                 badgeColor: Colors.red,
                               ),
+                              badgeAnimation: const BadgeAnimation.scale(
+                                animationDuration: Duration(milliseconds: 300),
+                              ),
                               child: IconButton(
                                 icon: const Icon(
                                   Icons.notifications_rounded,
@@ -280,6 +283,13 @@ class Home extends StatelessWidget {
           ),
         );
       }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.toNamed(Routes.chatscreen);
+        },
+        backgroundColor: ColorHex.total_color,
+        child: const Icon(Icons.chat_outlined, color: ColorHex.white),
+      ),
     );
   }
 }
