@@ -78,15 +78,12 @@ class Servicecontroller extends GetxController {
                     (e) => TypeServiceModel.fromJson(e as Map<String, dynamic>))
                 .toList());
       } else {
-        print(
-            "Lỗi khi tải loại dịch vụ: ${data?['error']?['message'] ?? 'Unknown error'}");
         Utils.showSnackBar(
             title: 'Thông báo',
             message:
                 'Lỗi khi tải loại dịch vụ: ${data?['error']?['message'] ?? 'Vui lòng thử lại.'}');
       }
     } catch (e) {
-      print("Lỗi API getServiceTypeList : $e");
       Utils.showSnackBar(
           title: 'Thông báo', message: 'Lỗi khi tải loại dịch vụ: $e');
     } finally {

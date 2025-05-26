@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app_hm/Controller/Appointment/Appointmentcontroller.dart';
 import 'package:app_hm/Global/Constant.dart';
 import 'package:app_hm/Model/Car/CarModel.dart';
 import 'package:app_hm/Router/AppPage.dart';
@@ -152,7 +153,8 @@ class Carcontroller extends GetxController {
         Utils.showSnackBar(title: 'Lỗi', message: 'Không thể lấy danh sách xe');
       }
     } catch (e) {
-      Utils.showSnackBar(title: 'Lỗi', message: '$e');
+      debugPrint("Lỗi API getCarList: $e", wrapWidth: 1024);
+      //Utils.showSnackBar(title: 'Lỗi', message: '$e');
     } finally {
       isLoading.value = false;
     }
@@ -216,7 +218,19 @@ class Carcontroller extends GetxController {
         );
         clearData();
         await getCarList();
-        Get.offAndToNamed(Routes.car);
+
+        Get.offNamed(Routes.car);
+        // <--- THAY ĐỔI MỚI Ở ĐÂY: Cập nhật AppointmentController
+        if (Get.isRegistered<Appointmentcontroller>()) {
+          await Get.find<Appointmentcontroller>().getCarList();
+          // Cập nhật selectedCar trong AppointmentController nếu cần
+          final appointmentController = Get.find<Appointmentcontroller>();
+          if (appointmentController.carList.isNotEmpty) {
+            appointmentController.selectedCar.value =
+                appointmentController.carList.last; // Chọn xe vừa thêm
+            // Hoặc: appointmentController.selectedCar.value = appointmentController.carList.first;
+          }
+        }
       } else {
         Utils.showSnackBar(
           title: 'Lỗi',
@@ -289,6 +303,16 @@ class Carcontroller extends GetxController {
         clearData();
         await getCarList();
         Get.offAndToNamed(Routes.car);
+        if (Get.isRegistered<Appointmentcontroller>()) {
+          await Get.find<Appointmentcontroller>().getCarList();
+          // Cập nhật selectedCar trong AppointmentController nếu cần
+          final appointmentController = Get.find<Appointmentcontroller>();
+          if (appointmentController.carList.isNotEmpty) {
+            appointmentController.selectedCar.value =
+                appointmentController.carList.last; // Chọn xe vừa thêm
+            // Hoặc: appointmentController.selectedCar.value = appointmentController.carList.first;
+          }
+        }
       } else {
         Utils.showSnackBar(
           title: 'Lỗi',
@@ -322,6 +346,17 @@ class Carcontroller extends GetxController {
           title: 'Thông báo',
           message: 'Xoá xe thành công !'.tr,
         );
+        getCarList();
+        if (Get.isRegistered<Appointmentcontroller>()) {
+          await Get.find<Appointmentcontroller>().getCarList();
+          // Cập nhật selectedCar trong AppointmentController nếu cần
+          final appointmentController = Get.find<Appointmentcontroller>();
+          if (appointmentController.carList.isNotEmpty) {
+            appointmentController.selectedCar.value =
+                appointmentController.carList.last; // Chọn xe vừa thêm
+            // Hoặc: appointmentController.selectedCar.value = appointmentController.carList.first;
+          }
+        }
       } else {
         Utils.showSnackBar(
           title: 'Lỗi',

@@ -349,8 +349,8 @@ class Appointmentcontroller extends GetxController {
           account.value = AccountModel.fromJson(response['data']);
         }
       } catch (e) {
-        debugPrint("Lỗi API: $e", wrapWidth: 1024);
-        //Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+        //debugPrint("Lỗi API: $e", wrapWidth: 1024);
+        Utils.showSnackBar(title: 'notification'.tr, message: '$e');
       }
     }
   }
@@ -404,8 +404,7 @@ class Appointmentcontroller extends GetxController {
         var listItem =
             list.map((dynamic json) => ServiceModel.fromJson(json)).toList();
         serviceList.addAll(listItem);
-
-        // Khởi tạo trạng thái checkbox
+        debugPrint('Phản hồi từ getServiceList API: $data', wrapWidth: 1024);
         checkedValuesService.value =
             List<bool>.filled(serviceList.length, false);
       }
@@ -446,13 +445,13 @@ class Appointmentcontroller extends GetxController {
         centerList.addAll(listItem);
       }
     } catch (e) {
-      // debugPrint("Lỗi API: $e", wrapWidth: 1024);
+      //debugPrint("Lỗi API: $e", wrapWidth: 1024);
       Utils.showSnackBar(title: 'notification'.tr, message: '$e');
     }
   }
 
-  getCarList() async {
-    carList.clear();
+  Future<void> getCarList() async {
+    carList.clear(); // Xóa danh sách cũ trước khi tải lại
     if (uid != 0) {
       isLoading.value = true;
       try {
@@ -471,9 +470,13 @@ class Appointmentcontroller extends GetxController {
           var listItem =
               list.map((dynamic json) => CarModel.fromJson(json)).toList();
           carList.addAll(listItem);
+          // Cập nhật selectedCar nếu cần, ví dụ chọn xe đầu tiên sau khi load
+          if (selectedCar.value == null && carList.isNotEmpty) {
+            selectedCar.value = carList.first;
+          }
         }
       } catch (e) {
-        // debugPrint("Lỗi API: $e", wrapWidth: 1024);
+        //debugPrint("Lỗi API: $e", wrapWidth: 1024);
         Utils.showSnackBar(title: 'notification'.tr, message: '$e');
       } finally {
         isLoading.value = false;
@@ -496,8 +499,8 @@ class Appointmentcontroller extends GetxController {
         "time": formattedTime,
         "uid": uid,
       };
-      var data =
-          await APICaller.getInstance().post('Appointment/getappoi.php', param);
+      var data = await APICaller.getInstance()
+          .post('Appointment/get_appointment.php', param);
       if (data != null && data['status'] == 'success') {
         List<dynamic> list = data['items'];
         var allAppointments = list
@@ -624,7 +627,7 @@ class Appointmentcontroller extends GetxController {
       };
 
       final data = await APICaller.getInstance()
-          .post('Payment/get_settlement.php', params);
+          .post('Payment/get_payment_detail.php', params);
       //print('list $data');
       if (data != null && data['status'] == 'success') {
         // Parse services

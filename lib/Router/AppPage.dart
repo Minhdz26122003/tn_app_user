@@ -14,7 +14,7 @@ import 'package:app_hm/View/Car/AddCar.dart';
 import 'package:app_hm/View/Car/Car.dart';
 import 'package:app_hm/View/Car/EditCar.dart';
 import 'package:app_hm/View/Chat/chat_screen.dart';
-import 'package:app_hm/View/Guideapp/PermissionGuide.dart';
+import 'package:app_hm/View/Guide/PermissionGuide.dart';
 import 'package:app_hm/View/Login/Login.dart';
 import 'package:app_hm/View/Login/Onboarding.dart';
 import 'package:app_hm/View/Notification/Notification.dart';
@@ -183,7 +183,7 @@ class AppPages {
     GetPage(
       name: Routes.car,
       page: () => const Car(),
-      transition: Transition.zoom,
+      transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 400),
     ),
     GetPage(

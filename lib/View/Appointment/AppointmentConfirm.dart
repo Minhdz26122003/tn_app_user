@@ -13,7 +13,7 @@ class Appointmentconfirm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(Appointmentcontroller());
-
+    // controller.getCarList(); // Dòng này có thể được giữ hoặc bỏ tùy thuộc vào luồng khởi tạo
     return Obx(() {
       return Stack(
         children: [
@@ -45,16 +45,14 @@ class Appointmentconfirm extends StatelessWidget {
                   children: [
                     StepBook(currentStep: controller.currentStep.value),
                     const SizedBox(height: 20),
-                    _buildTitle('license_plate'.tr, onEdit: () {
-                      Get.toNamed(Routes.car);
+                    _buildTitle('license_plate'.tr, onEdit: () async {
+                      // Sửa đổi tại đây
+                      Get.toNamed(Routes.car); // Chỉ cần điều hướng
                     }),
                     _buildCarBox(controller),
                     const SizedBox(height: 20),
-                    _buildTitle('contact'.tr, onEdit: () async {
-                      var result = await Get.toNamed(Routes.personaldetail);
-                      if (result == true) {
-                        controller.getAccount();
-                      }
+                    _buildTitle('contact'.tr, onEdit: () {
+                      Get.toNamed(Routes.personaldetail);
                     }),
                     _buildContactBox(controller),
                     const SizedBox(height: 20),
@@ -134,6 +132,13 @@ Widget _buildTitle(String title, {VoidCallback? onEdit}) {
 Widget _buildCarBox(Appointmentcontroller controller) {
   return Obx(
     () {
+      // Quan trọng: Kiểm tra lại selectedCar.value sau khi carList được cập nhật
+      // Nếu carList không rỗng nhưng selectedCar.value lại là null, hãy chọn cái đầu tiên
+      if (controller.carList.isNotEmpty &&
+          controller.selectedCar.value == null) {
+        controller.selectedCar.value = controller.carList.first;
+      }
+
       if (controller.carList.isEmpty) {
         return Container(
           width: double.infinity,
@@ -161,7 +166,11 @@ Widget _buildCarBox(Appointmentcontroller controller) {
               border: OutlineInputBorder(),
               contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             ),
-            value: controller.selectedCar.value,
+            // Đảm bảo value luôn nằm trong items hoặc là null
+            value: controller.selectedCar.value != null &&
+                    controller.carList.contains(controller.selectedCar.value)
+                ? controller.selectedCar.value
+                : null, // Nếu không tìm thấy, đặt là null
             items: controller.carList.map((car) {
               return DropdownMenuItem<CarModel>(
                 value: car,

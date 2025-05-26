@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:app_hm/Controller/Appointment/Appointmentcontroller.dart';
 import 'package:app_hm/Controller/DashboardController.dart';
 import 'package:app_hm/Global/Constant.dart';
 import 'package:app_hm/Model/Account/AccountModel.dart';
@@ -283,6 +284,10 @@ class Personalcontroller extends GetxController {
           Utils.showSnackBar(
               title: 'notification'.tr,
               message: 'account_updated_successfully'.tr);
+          if (Get.isRegistered<Appointmentcontroller>()) {
+            await Get.find<Appointmentcontroller>()
+                .getAccount(); // Gọi hàm getAccount của AppointmentController
+          }
         }
       } catch (e) {
         // Utils.showSnackBar(title: 'notification'.tr, message: '$e');

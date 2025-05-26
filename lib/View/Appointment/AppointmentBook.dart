@@ -5,6 +5,7 @@ import 'package:app_hm/Model/Service/TypeServiceModel.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class Appointmentbook extends StatelessWidget {
   const Appointmentbook({super.key});
@@ -135,7 +136,11 @@ class Appointmentbook extends StatelessWidget {
                                   value!;
                             },
                             title: Text(
-                              service.service_name ?? '---',
+                              '${service.service_name ?? '---'} - ${NumberFormat.currency(
+                                locale: 'vi_VN',
+                                symbol: 'VND',
+                                decimalDigits: 0,
+                              ).format(service.price ?? 0)}',
                               style: const TextStyle(fontSize: 14),
                             ),
                             controlAffinity: ListTileControlAffinity.trailing,

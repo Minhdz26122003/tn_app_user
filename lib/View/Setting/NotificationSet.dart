@@ -12,7 +12,6 @@ class Notificationset extends StatefulWidget {
 
 class _NotificationsetState extends State<Notificationset> {
   bool _allowNotifications = true;
-  String _reminderTimeLabel = '50 phút trước';
 
   @override
   void initState() {
@@ -66,7 +65,7 @@ class _NotificationsetState extends State<Notificationset> {
               SettingsTile.navigation(
                 leading: const Icon(Icons.lock),
                 title: const Text('Quyền thông báo',
-                    style: TextStyle(fontSize: 13)),
+                    style: TextStyle(fontSize: 14)),
                 onPressed: (context) => _openAppSettings(),
               ),
             ],
@@ -77,14 +76,14 @@ class _NotificationsetState extends State<Notificationset> {
               SettingsTile.navigation(
                 leading: const Icon(Icons.battery_charging_full),
                 title: const Text('Tắt tối ưu hóa pin',
-                    style: TextStyle(fontSize: 13)),
+                    style: TextStyle(fontSize: 14)),
                 onPressed: (context) {
                   // TODO: Hiển thị modal hướng dẫn tắt tối ưu pin
                   showDialog(
                       context: context,
                       builder: (_) => AlertDialog(
                             title: const Text('Hướng dẫn tắt tối ưu pin',
-                                style: TextStyle(fontSize: 13)),
+                                style: TextStyle(fontSize: 14)),
                             content: const Text(
                                 'Vào Settings > Battery & Performance > App battery saver '
                                 'chọn ứng dụng này và thiết lập "No restrictions".',
@@ -93,7 +92,7 @@ class _NotificationsetState extends State<Notificationset> {
                               TextButton(
                                   onPressed: () => Navigator.pop(context),
                                   child: const Text('Đã hiểu',
-                                      style: TextStyle(fontSize: 13)))
+                                      style: TextStyle(fontSize: 14)))
                             ],
                           ));
                 },
@@ -101,23 +100,23 @@ class _NotificationsetState extends State<Notificationset> {
               SettingsTile.navigation(
                 leading: const Icon(Icons.sync),
                 title: const Text('Cho phép chạy nền',
-                    style: TextStyle(fontSize: 13)),
+                    style: TextStyle(fontSize: 14)),
                 onPressed: (context) {
                   // TODO: Hiển thị modal hướng dẫn bật chạy nền (MIUI, OneUI…)
                   showDialog(
                       context: context,
                       builder: (_) => AlertDialog(
                             title: const Text('Hướng dẫn bật chạy nền',
-                                style: TextStyle(fontSize: 13)),
+                                style: TextStyle(fontSize: 14)),
                             content: const Text(
                                 'Vào Settings > Apps > YourApp > Battery > '
                                 'Cho phép hoạt động dưới nền và Autostart.',
-                                style: TextStyle(fontSize: 13)),
+                                style: TextStyle(fontSize: 14)),
                             actions: [
                               TextButton(
                                   onPressed: () => Navigator.pop(context),
                                   child: const Text('Đã hiểu',
-                                      style: TextStyle(fontSize: 13)))
+                                      style: TextStyle(fontSize: 14)))
                             ],
                           ));
                 },
@@ -125,7 +124,7 @@ class _NotificationsetState extends State<Notificationset> {
               SettingsTile.navigation(
                 leading: const Icon(Icons.settings),
                 title: const Text('Cài đặt ứng dụng',
-                    style: TextStyle(fontSize: 13)),
+                    style: TextStyle(fontSize: 14)),
                 onPressed: (context) => _openAppSettings(),
               ),
             ],

@@ -17,7 +17,7 @@ class PermissionGuide extends StatelessWidget {
       leading: Icon(icon, size: 36, color: Colors.blueAccent),
       title: Text(title,
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-      subtitle: Text(subtitle),
+      subtitle: Text(subtitle, style: const TextStyle(fontSize: 14)),
     );
   }
 
@@ -39,7 +39,7 @@ class PermissionGuide extends StatelessWidget {
           children: [
             const Text(
               'Để app hoạt động đầy đủ, vui lòng cấp các quyền sau:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 16),
             _buildStep(

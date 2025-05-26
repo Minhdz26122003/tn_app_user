@@ -466,7 +466,7 @@ class Appointmenthistorydetail extends StatelessWidget {
                           onPressed: () => Navigator.of(context).pop(),
                           style: ElevatedButton.styleFrom(
                             side: const BorderSide(color: ColorHex.grey),
-                            backgroundColor: ColorHex.grey,
+                            backgroundColor: ColorHex.grey_shade400,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
                             ),
