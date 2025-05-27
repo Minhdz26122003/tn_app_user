@@ -16,7 +16,7 @@ import 'package:app_hm/View/Car/EditCar.dart';
 import 'package:app_hm/View/Chat/chat_screen.dart';
 import 'package:app_hm/View/Guide/PermissionGuide.dart';
 import 'package:app_hm/View/Login/Login.dart';
-import 'package:app_hm/View/Login/Onboarding.dart';
+// import 'package:app_hm/View/Login/Onboarding.dart';
 import 'package:app_hm/View/Notification/Notification.dart';
 import 'package:app_hm/View/Payment/Payment.dart';
 import 'package:app_hm/View/Personal/PersonalDetail.dart';
@@ -48,12 +48,12 @@ class AppPages {
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 400),
     ),
-    GetPage(
-      name: Routes.onboarding,
-      page: () => const Onboarding(),
-      transition: Transition.fadeIn,
-      transitionDuration: const Duration(milliseconds: 400),
-    ),
+    // GetPage(
+    //   name: Routes.onboarding,
+    //   page: () => const Onboarding(),
+    //   transition: Transition.fadeIn,
+    //   transitionDuration: const Duration(milliseconds: 400),
+    // ),
     GetPage(
       name: Routes.home,
       page: () => const Home(),

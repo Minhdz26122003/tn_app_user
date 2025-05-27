@@ -404,7 +404,7 @@ class Appointmentcontroller extends GetxController {
         var listItem =
             list.map((dynamic json) => ServiceModel.fromJson(json)).toList();
         serviceList.addAll(listItem);
-        debugPrint('Phản hồi từ getServiceList API: $data', wrapWidth: 1024);
+        // debugPrint('Phản hồi từ getServiceList API: $data', wrapWidth: 1024);
         checkedValuesService.value =
             List<bool>.filled(serviceList.length, false);
       }

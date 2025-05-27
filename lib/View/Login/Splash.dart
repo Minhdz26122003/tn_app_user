@@ -10,41 +10,29 @@ class Splash extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 3), () {
+      // Giảm thời gian hiển thị xuống 3 giây
       final controller = Get.put(Splashcontroller());
     });
 
     return WillPopScope(
       onWillPop: () async {
-        // Trả về `false` để ngăn người dùng quay lại
         return false;
       },
       child: Scaffold(
-        body: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [ColorHex.total_color, ColorHex.status_2],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                stops: [-0.1908, 0.9109],
-                transform: GradientRotation(115 * 3.1415926535897932 / 180),
+        backgroundColor: ColorHex.total_color,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/car_logo.png',
               ),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  'assets/icons/logocar.svg',
-                  width: 100,
-                  height: 100,
-                ),
-                Lottie.asset('assets/json/loading.json'),
-              ],
-            ),
+              Lottie.asset(
+                'assets/json/loading.json',
+              ),
+            ],
           ),
         ),
       ),

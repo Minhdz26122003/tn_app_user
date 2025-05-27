@@ -148,7 +148,7 @@ Widget _buildCarBox(Appointmentcontroller controller) {
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(
-            'no_car'.tr,
+            'nocar'.tr,
             style: const TextStyle(
               fontSize: 13,
               color: ColorHex.textContent,

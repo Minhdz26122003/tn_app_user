@@ -95,7 +95,7 @@ class Appointmenthistory extends StatelessWidget {
     final statusText = isCompleted
         ? 'paid'.tr
         : isCancelled
-            ? 'cancelled'.tr
+            ? 'Đã hủy'
             : Utils.steps[status].tr;
 
     final statusColor = isCompleted

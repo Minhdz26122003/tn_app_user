@@ -1,6 +1,7 @@
 import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
@@ -16,8 +17,8 @@ class Onboarding extends StatelessWidget {
       },
       child: Scaffold(
         body: Container(
-          width: MediaQuery.of(context).size.width, // Chiều rộng màn hình
-          height: MediaQuery.of(context).size.height, // Chiều cao màn hình
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
           decoration: const BoxDecoration(
             color: ColorHex.total_color,
           ),
@@ -26,11 +27,6 @@ class Onboarding extends StatelessWidget {
             crossAxisAlignment:
                 CrossAxisAlignment.start, // Căn trái theo trục ngang
             children: [
-              Center(
-                child: Lottie.asset('assets/json/LoadingCar.json'),
-              ),
-              const SizedBox(height: 50),
-              // Bao bọc phần chữ bằng một Padding riêng
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40.0),
                 child: Column(
@@ -45,32 +41,16 @@ class Onboarding extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Get.offAllNamed(Routes.dashboard);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: ColorHex.total_color,
-                          backgroundColor: ColorHex.white,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 100, vertical: 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          elevation: 5,
-                        ),
-                        child: Text(
-                          'next'.tr,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
+                    SvgPicture.asset(
+                      'assets/images/car_logo.svg',
+                      width: 100,
+                      height: 100,
                     ),
                   ],
                 ),
+              ),
+              Center(
+                child: Lottie.asset('assets/json/LoadingCar.json'),
               ),
             ],
           ),

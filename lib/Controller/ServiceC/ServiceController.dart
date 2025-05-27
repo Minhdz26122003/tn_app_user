@@ -86,6 +86,7 @@ class Servicecontroller extends GetxController {
     } catch (e) {
       Utils.showSnackBar(
           title: 'Thông báo', message: 'Lỗi khi tải loại dịch vụ: $e');
+      //debugPrint('Phản hồi từ getServiceList API: $e', wrapWidth: 1024);
     } finally {
       isLoadingTypes.value = false;
     }
@@ -154,8 +155,9 @@ class Servicecontroller extends GetxController {
       allServices.clear();
       filteredServices.clear();
       // print("Lỗi khi fetchAllServices: $e");
-      Utils.showSnackBar(
-          title: 'Lỗi', message: 'Không thể tải danh sách dịch vụ: $e');
+      // Utils.showSnackBar(
+      //     title: 'Lỗi', message: 'Không thể tải danh sách dịch vụ: $e');
+      debugPrint("Lỗi API Không: $e", wrapWidth: 1024);
     } finally {
       isLoading.value = false;
     }

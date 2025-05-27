@@ -3,7 +3,7 @@ part of 'AppPage.dart';
 abstract class Routes {
   static const dashboard = _Paths.dashboard;
   static const splash = _Paths.splash;
-  static const onboarding = _Paths.onboarding;
+  // static const onboarding = _Paths.onboarding;
   static const login = _Paths.login;
   static const account = _Paths.account;
   static const home = _Paths.home;
@@ -49,7 +49,7 @@ abstract class _Paths {
   static const home = '/home';
   static const notification = '/notification';
   static const notificationset = '/notificationset';
-  static const onboarding = '/onboarding';
+  // static const onboarding = '/onboarding';
   static const forgotpassword = '/forgotpassword';
   static const account = '/account';
   static const createpassword = '/createpassword';
