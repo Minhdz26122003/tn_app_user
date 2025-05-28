@@ -17,7 +17,8 @@ class Appoointmentdetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Appointmentcontroller controller = Get.put(Appointmentcontroller());
+    final Appointmentcontroller controller = Get.find<Appointmentcontroller>();
+    // final Appointmentcontroller controller = Get.put(Appointmentcontroller());
     final dynamic receivedAppointmentId = Get.arguments['appointment_id'];
     final int? appointmentId =
         receivedAppointmentId is int ? receivedAppointmentId : null;
@@ -145,7 +146,7 @@ class Appoointmentdetail extends StatelessWidget {
     }
   }
 
-// Đang xử lý yêu cầu
+  // Đang xử lý yêu cầu
   Widget _processingCard(AppointmentModel m) {
     final dt = DateTime.tryParse(m.appointment_date!) ?? DateTime.now();
     final dateStr = DateFormat("EEE, dd 'thg' MM yyyy", "vi").format(dt);
@@ -166,6 +167,9 @@ class Appoointmentdetail extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     color: ColorHex.black)),
             const SizedBox(height: 8),
+            Text('${'Mã lịch hẹn'}: #${m.appointment_id}',
+                style: const TextStyle(fontSize: 14, color: ColorHex.black)),
+            const SizedBox(height: 4),
             Text('${'date'.tr}: $dateStr',
                 style: const TextStyle(fontSize: 14, color: ColorHex.black)),
             const SizedBox(height: 4),
@@ -175,10 +179,35 @@ class Appoointmentdetail extends StatelessWidget {
             Text('${'address'.tr}: ${m.gara_address}',
                 style: const TextStyle(fontSize: 14, color: ColorHex.black)),
             const SizedBox(height: 4),
-            Text('${'code'.tr}: #${m.appointment_id}',
+            Text('${'Hotline gara'.tr}: ${m.phone}',
+                style: const TextStyle(fontSize: 14, color: ColorHex.black)),
+            const SizedBox(height: 8),
+            Text('Thông tin cá nhân:',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+            Text('${'fullname'.tr}: ${m.fullname}',
+                style: const TextStyle(fontSize: 14, color: ColorHex.black)),
+            Text('${'Số điện thoại'.tr}: ${m.phone}',
+                style: const TextStyle(fontSize: 14, color: ColorHex.black)),
+            Text('${'Xe'.tr}: ${m.name}',
                 style: const TextStyle(fontSize: 14, color: ColorHex.black)),
             Text('${'license_plate'.tr}: ${m.license_plate}',
                 style: const TextStyle(fontSize: 14, color: ColorHex.black)),
+            const SizedBox(height: 8),
+            if (m.services != null && m.services!.isNotEmpty) ...[
+              Text('Dịch vụ đã đặt:',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+              ...m.services!.map((svc) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: Row(
+                      children: [
+                        Expanded(child: Text(svc.service_name ?? '')),
+                        Text(
+                            '${NumberFormat.currency(locale: 'vi_VN', symbol: '₫').format(svc.price)}'),
+                      ],
+                    ),
+                  )),
+              const SizedBox(height: 12),
+            ],
           ],
         ),
       ),

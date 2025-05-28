@@ -32,6 +32,7 @@ void main() async {
     );
   }
   await dotenv.load(fileName: ".env");
+  // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top]);
 
   //await _requestPermissions();
   runApp(MyApp(initialLocale: await TranslationService.getSavedLocale()));

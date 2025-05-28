@@ -1,11 +1,15 @@
 import 'package:app_hm/Controller/Appointment/Appointmentcontroller.dart';
 import 'package:app_hm/Controller/Notification/NotificationController.dart';
 import 'package:app_hm/Global/Constant.dart';
+import 'package:app_hm/Model/Service/ServiceModel.dart';
+import 'package:app_hm/Model/Service/TypeServiceModel.dart';
+import 'package:app_hm/Services/APICaller.dart';
 import 'package:app_hm/Services/Auth.dart';
 import 'package:app_hm/Utils/Utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class Dashboardcontroller extends GetxController {
   RxInt currentPageIndex = 0.obs;
@@ -30,7 +34,9 @@ class Dashboardcontroller extends GetxController {
   TextEditingController textSearch = TextEditingController();
   RxList<String> teamSelectList = RxList<String>();
   RxInt isState = (-1).obs;
-
+  // List
+  RxList<TypeServiceModel> typeList = RxList<TypeServiceModel>();
+  RxList<ServiceModel> serviceList = RxList<ServiceModel>();
   final banners = <String>[
     'assets/images/banner1.jpg',
     'assets/images/banner2.jpg',
@@ -50,6 +56,8 @@ class Dashboardcontroller extends GetxController {
 
     try {
       isLoading.value = true;
+      getServiceTypeList();
+      getServiceList();
       username.value =
           await Utils.getStringValueWithKey(Constant.USERNAME) ?? '';
       fullname.value = await Utils.getStringValueWithKey(Constant.FULL_NAME) ??
@@ -64,7 +72,7 @@ class Dashboardcontroller extends GetxController {
       gender.value = await Utils.getStringValueWithKey(Constant.GENDER) ?? '';
       address.value = await Utils.getStringValueWithKey(Constant.ADDRESS) ?? '';
     } catch (e) {
-      //print("Lỗi khi tải dữ liệu: $e");
+      print("Lỗi khi tải dữ liệu: $e");
     } finally {
       isLoading.value = false;
     }
@@ -93,15 +101,77 @@ class Dashboardcontroller extends GetxController {
     }
   }
 
+  getServiceTypeList() async {
+    //isLoading.value = true;
+    typeList.clear();
+    try {
+      DateTime timeNow = DateTime.now();
+      String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
+      var param = {
+        "keyCert":
+            Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
+        "time": formattedTime,
+      };
+
+      var data = await APICaller.getInstance()
+          .post('Servicetype/get_type_service.php', param);
+      if (data != null && data['error']['code'] == 0) {
+        List<dynamic> list = data['items'];
+        var listItem = list
+            .map((dynamic json) => TypeServiceModel.fromJson(json))
+            .toList();
+        typeList.addAll(listItem);
+      }
+    } catch (e) {
+      //debugPrint("Lỗi API getServiceTypeList : $e", wrapWidth: 1024);
+      Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+    }
+    // finally {
+    //   isLoading.value = false;
+    // }
+  }
+
+  getServiceList() async {
+    serviceList.clear();
+    //isLoading.value = true;
+    try {
+      DateTime timeNow = DateTime.now();
+      String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
+      var param = {
+        "keyCert":
+            Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
+        "time": formattedTime,
+      };
+
+      var data =
+          await APICaller.getInstance().post('Service/get_service.php', param);
+      if (data != null) {
+        List<dynamic> list = data['items'];
+        var listItem =
+            list.map((dynamic json) => ServiceModel.fromJson(json)).toList();
+        serviceList.addAll(listItem);
+      }
+    } catch (e) {
+      //debugPrint("Lỗi API getServiceList: $e", wrapWidth: 1024);
+      Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+    }
+    // finally {
+    //   isLoading.value = false;
+    // }
+  }
+
   Future<void> changePage(int index) async {
     currentPageIndex.value = index;
-    if (index == 0) {
-      // Chỉ load thông báo, không block UI
-      final apct = Get.find<Appointmentcontroller>();
-      final noti = Get.find<NotificationController>();
-      apct.getServiceTypeList();
-      apct.getServiceList();
-      noti.notificationList();
-    }
+    // if (index == 0) {
+    //   try{
+    //      getServiceTypeList();
+    //   getServiceList();
+    //   }catch (e) {
+    //     Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+    //   }finally {
+    //     isLoading.value = false;
+    //   }
+
+    // }
   }
 }

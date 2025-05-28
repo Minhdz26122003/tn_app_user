@@ -13,7 +13,7 @@ class Appointmentlist extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(Appointmentcontroller());
+    final controller = Get.find<Appointmentcontroller>();
 
     return Scaffold(
       appBar: AppBar(

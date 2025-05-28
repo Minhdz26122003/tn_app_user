@@ -65,8 +65,12 @@ class Appointmentcontroller extends GetxController {
 
   RxList<CarModel> carList = RxList<CarModel>();
   RxList<CenterModel> centerList = RxList<CenterModel>();
-  List<String> morningTimes = ['08:00', '09:00', '10:00', '11:00', '12:00'];
-  List<String> afternoonTimes = ['13:00', '14:00', '15:00', '16:00', '17:00'];
+  List<String> morningTimes = [
+    '07:00',
+    '09:00',
+    '11:00',
+  ];
+  List<String> afternoonTimes = ['13:00', '15:00', '17:00'];
   RxList<TimeSlot> slots = <TimeSlot>[].obs;
 
   // theo dõi đối tượng chọn bắt đầu là null
@@ -109,10 +113,8 @@ class Appointmentcontroller extends GetxController {
     }
     await getAppointmentList();
 
-    everAll([selectedDate, selectedSession, selectedCar], (_) => buildSlots());
-
-    // build slot lần đầu
-    buildSlots();
+    everAll([selectedDate, selectedSession], (_) => buildSlots());
+    await buildSlots();
 
     await getAccount();
 
@@ -128,26 +130,17 @@ class Appointmentcontroller extends GetxController {
   void updateDate(DateTime d) => selectedDate.value = d;
 
   // build slot thời gian , so sánh với thời gian hiện tại
-  void buildSlots() {
+  Future<void> buildSlots() async {
+    // Thêm isLoading ở đây để hiển thị trạng thái tải cho các slots
+    isLoading.value = true;
+
     final labels =
         selectedSession.value == 'Sáng' ? morningTimes : afternoonTimes;
     final date = selectedDate.value;
-    final carId = selectedCar.value?.car_id;
 
-    // Lọc và chuyển về HH:mm
-    final takenTimes = appointmentList
-        .where((a) =>
-            a.appointment_date == DateFormat('yyyy-MM-dd').format(date) &&
-            a.car_id == carId)
-        .map((a) {
-      // a.appointment_time có dạng "08:00:00"
-      final parts = a.appointment_time?.split(':') ?? [];
-      // trả về giờ đã được đặt
-      return '${parts[0].padLeft(2, '0')}:${parts[1].padLeft(2, '0')}';
-    }).toSet();
+    List<TimeSlot> tempSlots = [];
 
-    //print('>>> thoi gian = $takenTimes');
-    final tmp = labels.map((label) {
+    for (String label in labels) {
       final parts = label.split(':');
       final dt = DateTime(
         date.year,
@@ -156,23 +149,57 @@ class Appointmentcontroller extends GetxController {
         int.parse(parts[0]),
         int.parse(parts[1]),
       );
-      final booked = takenTimes.contains(label);
-      return TimeSlot(
+
+      // Gọi API mà không truyền car_id
+      bool isBooked = await _checkAppointmentAvailability(
+        DateFormat('yyyy-MM-dd').format(date),
+        label,
+      );
+
+      tempSlots.add(TimeSlot(
         label,
         dt,
         isSelected: label == selectedTime.value,
-        isBooked: booked,
-      );
-    }).toList();
+        isBooked: isBooked,
+      ));
+    }
+    slots.value = tempSlots;
+    isLoading.value = false; // Tắt loading sau khi hoàn thành
+  }
 
-    slots.value = tmp;
+  // Hàm _checkAppointmentAvailability (không thay đổi so với phiên bản trước)
+  Future<bool> _checkAppointmentAvailability(
+      String appointmentDate, String appointmentTime) async {
+    DateTime timeNow = DateTime.now();
+    String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
+    var param = {
+      "keyCert":
+          Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
+      "time": formattedTime,
+      "appointment_date": appointmentDate,
+      "appointment_time": appointmentTime,
+    };
+
+    try {
+      var response = await APICaller.getInstance()
+          .post('Appointment/check_time.php', param);
+      if (response != null && response['status'] == 'success') {
+        return response['is_booked'] ?? false;
+      } else {
+        debugPrint(
+            "Lỗi khi kiểm tra khả dụng: ${response?['error']['message'] ?? 'Không rõ lỗi'}");
+        return false;
+      }
+    } catch (e) {
+      debugPrint("Lỗi API checkAppointmentAvailability: $e");
+      return false;
+    }
   }
 
   void pickTime(String label) {
     final slot = slots.firstWhere((s) => s.label == label);
 
     if (!slot.isAvailable) {
-      // nếu đã qua hoặc đã được book, không cho chọn
       Utils.showSnackBar(
         title: 'Thông báo',
         message: slot.isPast
@@ -183,7 +210,12 @@ class Appointmentcontroller extends GetxController {
     }
 
     selectedTime.value = label;
-    buildSlots(); // cập nhật isSelected
+    // Cập nhật isSelected mà không gọi lại buildSlots để tránh gọi lại API không cần thiết
+    slots.value = slots
+        .map((s) => TimeSlot(s.label, s.dateTime,
+            isSelected: s.label == label, isBooked: s.isBooked))
+        .toList()
+        .obs;
   }
 
   void nextStep() {
@@ -506,11 +538,11 @@ class Appointmentcontroller extends GetxController {
         var allAppointments = list
             .map((dynamic json) => AppointmentModel.fromJson(json))
             .toList();
-
+        //print('datta lich hen: $data');
         // Xóa danh sách cũ trước khi cập nhật
         pendingAppointments.clear();
         historyAppointments.clear();
-
+        appointmentList.clear(); // Đảm bảo làm sạch list chính
         for (var appointment in allAppointments) {
           if (appointment.status == 0 ||
               appointment.status == 1 ||
@@ -549,7 +581,7 @@ class Appointmentcontroller extends GetxController {
       }
 
       DateTime timeNow = DateTime.now();
-      debugPrint('🔥 bookAppointment called at $timeNow');
+      //debugPrint('🔥 bookAppointment called at $timeNow');
       String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
       var param = {
         "keyCert":
@@ -577,9 +609,7 @@ class Appointmentcontroller extends GetxController {
         // );
 
         await getAppointmentList();
-
         buildSlots();
-        Get.offAllNamed(Routes.appointmentlist);
 
         final apptDT = DateTime(
           selectedDate.value.year,
@@ -596,6 +626,7 @@ class Appointmentcontroller extends GetxController {
           body: 'Bạn có lịch hẹn được đặt vào lúc '
               '${DateFormat('HH:mm dd/MM/yyyy').format(apptDT)}',
         );
+        Get.offAllNamed(Routes.appointmentlist);
       } else {
         debugPrint("Lỗi APIdl: " + data?['error']['message'], wrapWidth: 1024);
       }

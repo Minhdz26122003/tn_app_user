@@ -183,7 +183,8 @@ class Appointmenttime extends StatelessWidget {
 
   // Widget cho từng time slot
   Widget _buildTimeSlot(TimeSlot slot, Appointmentcontroller controller) {
-    final bool isEnabled = !slot.isPast && !slot.isBooked;
+    final bool isEnabled =
+        !slot.isPast && !slot.isBooked; // isAvailable của TimeSlot
     Color bg, fg, borderColor;
 
     if (slot.isSelected) {
@@ -191,13 +192,13 @@ class Appointmenttime extends StatelessWidget {
       fg = Colors.white;
       borderColor = ColorHex.total_color;
     } else if (slot.isBooked) {
-      bg = ColorHex.grey_shade300;
-      fg = ColorHex.grey;
-      borderColor = ColorHex.grey;
+      bg = ColorHex.grey_shade300; // Màu nền cho slot đã đặt
+      fg = ColorHex.grey; // Màu chữ cho slot đã đặt
+      borderColor = ColorHex.grey; // Màu viền cho slot đã đặt
     } else if (slot.isPast) {
-      bg = ColorHex.grey;
-      fg = ColorHex.grey_shade600;
-      borderColor = ColorHex.grey_shade400;
+      bg = ColorHex.grey; // Màu nền cho slot đã qua
+      fg = ColorHex.grey_shade600; // Màu chữ cho slot đã qua
+      borderColor = ColorHex.grey_shade400; // Màu viền cho slot đã qua
     } else {
       bg = Colors.white;
       fg = Colors.black;
@@ -222,6 +223,7 @@ class Appointmenttime extends StatelessWidget {
               style: TextStyle(color: fg),
             ),
             if (slot.isBooked) ...[
+              // Hiển thị biểu tượng khóa nếu slot đã được đặt
               const SizedBox(width: 4),
               Icon(
                 Icons.lock,

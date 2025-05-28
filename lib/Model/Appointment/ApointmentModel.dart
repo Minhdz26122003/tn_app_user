@@ -3,6 +3,11 @@ import 'package:app_hm/Model/Payment/PaymentModel.dart';
 class AppointmentModel {
   int? appointment_id;
   int? uid;
+  String? fullname;
+  String? phonenum;
+  String? email;
+  String? name;
+  String? phone;
   int? car_id;
   int? gara_id;
   String? gara_name;
@@ -22,6 +27,11 @@ class AppointmentModel {
   AppointmentModel({
     this.appointment_id,
     this.uid,
+    this.fullname,
+    this.phonenum,
+    this.email,
+    this.name,
+    this.phone,
     this.appointment_date,
     this.car_id,
     this.gara_id,
@@ -71,6 +81,11 @@ class AppointmentModel {
     uid = json['uid'];
     car_id = json['car_id'];
     gara_id = json['gara_id'];
+    fullname = json['fullname'];
+    phonenum = json['phonenum'];
+    email = json['email'];
+    phone = json['phone'];
+    name = json['name'];
     gara_address = json['gara_address'];
     license_plate = json['license_plate'];
     gara_name = json['gara_name'];
@@ -100,7 +115,12 @@ class AppointmentModel {
     data['uid'] = uid;
     data['car_id'] = car_id;
     data['gara_id'] = gara_id;
+    data['fullname'] = fullname;
+    data['phonenum'] = phonenum;
+    data['email'] = email;
+    data['car_name'] = name;
     data['gara_name'] = gara_name;
+    data['phone'] = phone;
     data['license_plate'] = license_plate;
     data['gara_address'] = gara_address;
     data['appointment_time'] = appointment_time;

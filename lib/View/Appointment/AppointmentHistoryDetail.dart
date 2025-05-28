@@ -177,6 +177,41 @@ class Appointmenthistorydetail extends StatelessWidget {
               Row(
                 children: [
                   const Text(
+                    'Người dùng: ',
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                  Text(m.fullname ?? ''),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  const Text(
+                    'Số điện thoại: ',
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                  Text(m.phonenum ?? ''),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Text(
+                    'Email: ',
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                  Expanded(
+                    child: Text(
+                      m.email ?? '',
+                      style: TextStyle(fontSize: 13),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  const Text(
                     'Hình thức: ',
                     style: TextStyle(fontWeight: FontWeight.w500),
                   ),
@@ -267,14 +302,22 @@ class Appointmenthistorydetail extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Tiêu đề dịch vụ
-            Text(
-              m.serviceName ?? 'Dịch vụ không xác định',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-            ),
+            // Dịch vụ
+            const SizedBox(height: 6),
+            if (m.services != null && m.services!.isNotEmpty) ...[
+              Text('Dịch vụ đã đặt:',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              ...m.services!.map((svc) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: Row(
+                      children: [
+                        Expanded(child: Text(svc.service_name ?? '')),
+                        Text(
+                            '${NumberFormat.currency(locale: 'vi_VN', symbol: '₫').format(svc.price)}'),
+                      ],
+                    ),
+                  )),
+            ],
             const SizedBox(height: 8),
 
             // Ngày giờ hẹn
@@ -304,12 +347,34 @@ class Appointmenthistorydetail extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 6),
-
+            Row(
+              children: [
+                const Icon(Icons.account_box_rounded,
+                    size: 18, color: Colors.grey),
+                const SizedBox(width: 6),
+                Text(
+                  m.fullname ?? 'Không có tên',
+                  style: const TextStyle(fontSize: 14),
+                ),
+                SizedBox(
+                  width: 6,
+                ),
+                Text(
+                  m.phonenum ?? 'Không có số điện thoại',
+                  style: const TextStyle(fontSize: 14),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
             // Biển số xe
             Row(
               children: [
                 const Icon(Icons.directions_car, size: 18, color: Colors.grey),
                 const SizedBox(width: 6),
+                Text(
+                  'Biển số ',
+                  style: const TextStyle(fontSize: 14),
+                ),
                 Text(
                   m.license_plate ?? 'Không có biển số',
                   style: const TextStyle(fontSize: 14),
@@ -317,7 +382,6 @@ class Appointmenthistorydetail extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-
             // Trạng thái đã hủy
             Row(
               children: const [
