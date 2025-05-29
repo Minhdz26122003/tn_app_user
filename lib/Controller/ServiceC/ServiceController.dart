@@ -60,7 +60,6 @@ class Servicecontroller extends GetxController {
       DateTime timeNow = DateTime.now();
       String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
       var param = {
-        // Đảm bảo Constant.NEXT_PUBLIC_CERT là đúng tên biến bạn dùng cho keyCert
         "keyCert":
             Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime),
         "time": formattedTime,
@@ -72,11 +71,9 @@ class Servicecontroller extends GetxController {
           data['status'] == 'success' &&
           data['error']['code'] == 0) {
         final items = data['items'] as List<dynamic>;
-        serviceTypes.assignAll(
-            items // Gán vào serviceTypes, không phải selectedType
-                .map(
-                    (e) => TypeServiceModel.fromJson(e as Map<String, dynamic>))
-                .toList());
+        serviceTypes.assignAll(items
+            .map((e) => TypeServiceModel.fromJson(e as Map<String, dynamic>))
+            .toList());
       } else {
         Utils.showSnackBar(
             title: 'Thông báo',
@@ -84,9 +81,9 @@ class Servicecontroller extends GetxController {
                 'Lỗi khi tải loại dịch vụ: ${data?['error']?['message'] ?? 'Vui lòng thử lại.'}');
       }
     } catch (e) {
-      Utils.showSnackBar(
-          title: 'Thông báo', message: 'Lỗi khi tải loại dịch vụ: $e');
-      //debugPrint('Phản hồi từ getServiceList API: $e', wrapWidth: 1024);
+      // Utils.showSnackBar(
+      //     title: 'Thông báo', message: 'Lỗi khi tải loại dịch vụ: $e');
+      debugPrint('Phản hồi từ aaatServiceList API: $e', wrapWidth: 1024);
     } finally {
       isLoadingTypes.value = false;
     }

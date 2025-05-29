@@ -2,6 +2,7 @@ import 'package:app_hm/Controller/Appointment/Appointmentcontroller.dart';
 import 'package:app_hm/Controller/Payment/PaymentController.dart';
 import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/Model/Appointment/ApointmentModel.dart';
+import 'package:app_hm/Model/Deposits/DepositModel.dart';
 import 'package:app_hm/Model/Payment/PaymentModel.dart';
 import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Utils/Utils.dart';
@@ -18,6 +19,7 @@ class Appoointmentdetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Appointmentcontroller controller = Get.find<Appointmentcontroller>();
+
     // final Appointmentcontroller controller = Get.put(Appointmentcontroller());
     final dynamic receivedAppointmentId = Get.arguments['appointment_id'];
     final int? appointmentId =
@@ -116,13 +118,26 @@ class Appoointmentdetail extends StatelessWidget {
       Appointmentcontroller controller,
       BuildContext context,
       int appointmentId) {
+    final PaymentController paymentController = Get.put(PaymentController());
     switch (step) {
       // Status 0: Đang xử lý yêu cầu
       case 0:
         return _processingCard(m);
       // Status 1: Báo giá
       case 1:
-        return _quoteCard(m, controller, context, appointmentId);
+        if (paymentController.deposit.value?.appointment_id != appointmentId ||
+            (paymentController.deposit.value == null &&
+                !paymentController.isLoading.value)) {
+          // Sử dụng addPostFrameCallback để tránh lỗi setState/markNeedsBuild trong quá trình build
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            // Kiểm tra xem widget còn mounted không trước khi gọi setState hoặc các hàm của controller
+            if (context.mounted) {
+              paymentController.fetchDeposit(appointmentId);
+            }
+          });
+        }
+        return _quoteCard(
+            m, controller, context, appointmentId, paymentController);
       // Status 2: Chấp nhận báo giá
       case 2:
         return _confirmQuoteCard(m, controller);
@@ -144,6 +159,34 @@ class Appoointmentdetail extends StatelessWidget {
       default:
         return const SizedBox.shrink();
     }
+  }
+
+  // Hàm tiện ích để hiển thị thông tin đặt cọc
+  Widget _buildDepositInfoRow(String label, String value,
+      {Color? color, FontWeight? fontWeight}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 3.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label,
+              style: const TextStyle(
+                  fontSize: 14,
+                  color: ColorHex.black)), // Sử dụng màu từ ColorHex của bạn
+          Expanded(
+            child: Text(
+              value,
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: fontWeight ?? FontWeight.w500,
+                  color: color ??
+                      ColorHex.black), // Sử dụng màu từ ColorHex của bạn
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   // Đang xử lý yêu cầu
@@ -225,134 +268,244 @@ class Appoointmentdetail extends StatelessWidget {
   }
 
   // báo giá
-  Widget _quoteCard(AppointmentModel m, Appointmentcontroller controller,
-      BuildContext context, int appointmentId) {
-    double totalPrice = 0;
-    if (m.services != null) {
-      for (var service in m.services!) {
-        totalPrice += service.price ?? 0;
-      }
-    }
+  Widget _quoteCard(
+    AppointmentModel m,
+    Appointmentcontroller
+        appointmentController, // Đổi tên để phân biệt với paymentController
+    BuildContext context,
+    int appointmentId,
+    PaymentController paymentController, // Tham số PaymentController
+  ) {
+    // Định dạng tiền tệ
+    final currencyFormatter =
+        NumberFormat.currency(locale: 'vi_VN', symbol: '₫');
+    return Obx(() {
+      // Lấy thông tin đặt cọc từ paymentController
+      final DepositModel? deposit = paymentController.deposit.value;
+      final bool isLoadingDeposit = paymentController.isLoading.value;
 
-    final formattedPrice =
-        NumberFormat.currency(locale: 'vi_VN', symbol: '₫').format(totalPrice);
+      // Điều kiện để hiển thị nút thanh toán đặt cọc
+      bool canPayDeposit = deposit != null &&
+          deposit.status == 0 && // 0: Chưa thanh toá
+          deposit.amount != null &&
+          deposit.amount! > 0;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        color: ColorHex.grey_shade300,
-        child: Padding(
-          padding: const EdgeInsets.all(15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${'service'.tr}:',
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-              ),
-              const Divider(),
-              // Danh sách từng service
-              ...m.services?.map((s) {
-                    final price = NumberFormat.currency(
-                            locale: 'vi_VN', symbol: '₫')
-                        .format(
-                            double.tryParse(s.price?.toString() ?? '0') ?? 0);
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          color: ColorHex.grey_shade300, // Sử dụng màu từ ColorHex của bạn
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${'service'.tr}:',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 14),
+                ),
+                const Divider(),
+                // Danh sách từng service
+                if (m.services == null || m.services!.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text("Không có dịch vụ nào được chọn.",
+                        style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            color: Colors.grey[700])),
+                  )
+                else
+                  ...m.services!.map((s) {
+                    final price = currencyFormatter.format(
+                        double.tryParse(s.price?.toString() ?? '0') ?? 0);
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                  child: Text(
-                                s.service_name ?? '',
-                                style: const TextStyle(fontSize: 13),
-                              )),
-                              const SizedBox(
-                                width: 8,
-                              ),
-                              Text(price,
-                                  style: const TextStyle(color: Colors.red)),
-                            ],
+                          Expanded(
+                            child: Text(
+                              s.service_name ?? 'N/A',
+                              style: const TextStyle(fontSize: 13),
+                            ),
                           ),
+                          const SizedBox(width: 8),
+                          Text(price,
+                              style: const TextStyle(color: Colors.red)),
                         ],
                       ),
                     );
-                  }).toList() ??
-                  [],
-              const Divider(),
+                  }).toList(),
+                const Divider(),
 
-              // Tổng tiền
-              Padding(
-                padding: const EdgeInsets.only(top: 8, bottom: 16),
-                child: Row(
-                  children: [
-                    const Text(
-                      'Tổng:',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                // Hiển thị thông tin đặt cọc
+                if (isLoadingDeposit)
+                  const Center(
+                      child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    child: CircularProgressIndicator(),
+                  ))
+                else if (deposit != null &&
+                    deposit.amount != null &&
+                    deposit.amount! > 0)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Thông tin đặt cọc:',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: ColorHex.black), // Màu tùy chỉnh
+                      ),
+                      const SizedBox(height: 10),
+                      _buildDepositInfoRow('Số tiền cần cọc:',
+                          currencyFormatter.format(deposit.amount ?? 0),
+                          color: (deposit.status == 1
+                              ? Colors.green
+                              : ColorHex.total_color), // Màu cho số tiền
+                          fontWeight: FontWeight.bold),
+                      if (deposit.created_at != null)
+                        _buildDepositInfoRow(
+                            'Ngày tạo yêu cầu cọc:',
+                            DateFormat('dd/MM/yyyy HH:mm')
+                                .format(DateTime.parse(deposit.created_at!))),
+                      _buildDepositInfoRow(
+                          'Trạng thái cọc:',
+                          deposit.status == 0
+                              ? 'Chưa thanh toán'
+                              : (deposit.status == 1
+                                  ? 'Đã thanh toán'
+                                  : 'Thất bại'),
+                          color: deposit.status == 0
+                              ? Colors.orange[700]
+                              : (deposit.status == 1
+                                  ? Colors.green
+                                  : Colors.red),
+                          fontWeight: FontWeight.bold),
+                      if (deposit.status == 1 && deposit.deposit_date != null)
+                        _buildDepositInfoRow(
+                            'Ngày thanh toán cọc:',
+                            DateFormat('dd/MM/yyyy HH:mm')
+                                .format(DateTime.parse(deposit.deposit_date!))),
+                      const SizedBox(height: 16),
+                    ],
+                  )
+                else if (deposit != null &&
+                    (deposit.amount == null || deposit.amount == 0))
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Center(
+                      child: Text(
+                        'Lịch hẹn này không yêu cầu đặt cọc.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            color: Colors.grey[700],
+                            fontSize: 14),
+                      ),
                     ),
-                    const SizedBox(width: 8),
-                    Text(
-                      formattedPrice, // Sử dụng formattedPrice
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Colors.red),
+                  )
+                else // deposit == null (chưa có thông tin từ API)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Center(
+                      child: Text(
+                        'Không tải được thông tin đặt cọc. Vui lòng thử lại.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            color: Colors.red[700],
+                            fontSize: 14),
+                      ),
                     ),
-                  ],
-                ),
-              ),
+                  ),
 
-              // Nút Hủy/Đồng ý
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () {
-                        _showCancelDialog(controller, context, appointmentId);
-                      },
-                      style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: ColorHex.grey_shade600),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
+                // Nút Thanh toán chỉ hiển thị nếu cần và deposit.status == 0)
+                if (canPayDeposit)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          paymentController.depositPayment(
+                            deposit.deposit_id!,
+                            appointmentId,
+                            deposit.amount!,
+                          );
+                        },
+                        icon: const Icon(Icons.payment, color: Colors.white),
+                        label: Text(
+                          'Thanh toán đặt cọc ${currencyFormatter.format(deposit.amount ?? 0)}',
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: ColorHex.total_color, // Màu nút
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
                         ),
                       ),
-                      child: Text('cancel'.tr,
-                          style: const TextStyle(color: ColorHex.black)),
                     ),
                   ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        controller.acceptQuote(appointmentId);
-                        Get.back();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        side: const BorderSide(color: ColorHex.grey),
-                        backgroundColor: ColorHex.total_color,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
+
+                // Nút Hủy lịch hẹn và Đồng ý báo giá
+
+                if (deposit == null ||
+                    deposit.status !=
+                        1) // Nếu chưa có cọc hoặc cọc chưa thanh toán
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () {
+                            _showCancelDialog(
+                                appointmentController, context, appointmentId);
+                          },
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(
+                                color: ColorHex.grey_shade600), // Màu viền
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          ),
+                          child: Text('cancel'.tr,
+                              style: const TextStyle(
+                                  color: ColorHex.black, fontSize: 14)),
                         ),
                       ),
-                      child: Text('accept'.tr,
-                          style: const TextStyle(color: ColorHex.white)),
+                    ],
+                  )
+                else if (deposit != null &&
+                    deposit.status == 1) // Nếu đã đặt cọc thành công
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 16.0, bottom: 8.0),
+                      child: Text(
+                        "Bạn đã đặt cọc thành công.\nGara sẽ sớm xử lý lịch hẹn của bạn.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.green[700],
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14),
+                      ),
                     ),
                   ),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
 // chấp nhận báo giá
@@ -520,7 +673,8 @@ class Appoointmentdetail extends StatelessWidget {
     final svTotal = controller.serviceTotal.value;
     final ptTotal = controller.partsTotal.value;
     final grandTotal = controller.totalAmount.value;
-
+    final totalAfter = controller.totalAfter.value;
+    final depositAmount = controller.depositAmount.value;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Card(
@@ -582,7 +736,24 @@ class Appoointmentdetail extends StatelessWidget {
                 ],
               ),
               const Divider(height: 20),
+              // (chi phí dịch vụ + phụ tùng)
 
+              // Total dịch vụ
+              Row(
+                children: [
+                  const Text('- Tiền cọc: ',
+                      style: TextStyle(
+                          fontSize: 13, color: ColorHex.grey_shade600)),
+                  const Spacer(),
+                  Text(
+                    NumberFormat.currency(locale: 'vi_VN', symbol: '₫')
+                        .format(depositAmount),
+                    style: const TextStyle(
+                        fontSize: 13, color: ColorHex.grey_shade600),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
               // Tổng cộng
               Row(
                 children: [
@@ -595,7 +766,7 @@ class Appoointmentdetail extends StatelessWidget {
                   const Spacer(),
                   Text(
                     NumberFormat.currency(locale: 'vi_VN', symbol: '₫')
-                        .format(grandTotal),
+                        .format(totalAfter),
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
@@ -669,7 +840,7 @@ class Appoointmentdetail extends StatelessWidget {
     final controller = Get.put(PaymentController());
 
     if (m.appointment_id != null && controller.payment.value == null) {
-      controller.fetchPayment(m.appointment_id!);
+      controller.fetchPayment(m.appointment_id!); // <-- Thay đổi ở đây
     }
 
     return Obx(() {

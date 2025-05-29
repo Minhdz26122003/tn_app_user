@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:app_hm/Controller/Appointment/AppointmentController.dart';
 import 'package:app_hm/Global/Constant.dart';
+import 'package:app_hm/Model/Deposits/DepositModel.dart';
 import 'package:app_hm/Model/Payment/PaymentModel.dart';
+import 'package:app_hm/Router/AppPage.dart';
 import 'package:app_hm/Services/APICaller.dart';
 import 'package:app_hm/Utils/Utils.dart';
 import 'package:app_hm/View/Payment/VnPayWebViewPage%20.dart';
@@ -21,13 +23,14 @@ class PaymentController extends GetxController {
   //final String baseUrl = "http://192.168.1.2/apihm/User/";
   late final AppLinks _appLinks; // Khởi tạo AppLinks
   StreamSubscription? _appLinksSubscription; // Để lắng nghe Deep Links
-
+  RxBool isLoading = false.obs;
   // Biến giữ PaymentModel
   int uid = 0;
   RxList<PaymentModel> paymentList = RxList<PaymentModel>();
   RxInt selectedMethod = 0.obs;
   // theo dõi đối tượng chọn bắt đầu là null
   Rxn<PaymentModel> payment = Rxn<PaymentModel>();
+  Rxn<DepositModel> deposit = Rxn<DepositModel>();
 
   RxBool isLoadingPayment = false.obs;
   RxBool isProcessingOnline = false.obs;
@@ -128,6 +131,75 @@ class PaymentController extends GetxController {
     }
   }
 
+  // Hàm tạo thanh toán VNPAY cho tiền đặt cọc
+  Future<void> depositPayment(
+      int depositId, int appointmentId, double amount) async {
+    isLoading.value = true;
+    DateTime t = DateTime.now();
+    String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(t);
+    String keyCert =
+        Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime);
+
+    var param = {
+      "keyCert": keyCert,
+      "time": formattedTime,
+      "deposit_id": depositId,
+      "amount": amount,
+      "uid": uid,
+      "appointment_id": appointmentId,
+    };
+
+    try {
+      var data =
+          await APICaller.getInstance().post('Payment/pay_deposit.php', param);
+
+      debugPrint('Phản hồi từ API add_deposit_online.php: $data');
+
+      if (data != null && data['status'] == 'success') {
+        String paymentUrl = data['data']['payment_url'];
+        debugPrint('VNPAY Deposit URL: $paymentUrl');
+        if (paymentUrl != null && paymentUrl.isNotEmpty) {
+          print('VNPAY URL: $paymentUrl');
+
+          final result = await Get.to<bool>(
+            () => VnPayWebViewPage(url: paymentUrl),
+            fullscreenDialog: true,
+          );
+          if (result == true) {
+            Get.back();
+            Get.snackbar('Thành công', 'Thanh toán tiền cọc hoàn tất.',
+                snackPosition: SnackPosition.TOP);
+          } else {
+            Get.snackbar('Hủy/Thất bại', 'Giao dịch chưa hoàn thành.',
+                snackPosition: SnackPosition.TOP);
+          }
+        } else {
+          Get.snackbar(
+            'Lỗi',
+            'URL thanh toán VNPAY không hợp lệ hoặc không có.',
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: Get.theme.colorScheme.error,
+            colorText: Get.theme.colorScheme.onError,
+          );
+        }
+      } else {
+        // Lấy thông báo lỗi cụ thể từ server nếu có
+        final serverMessage = data?['error']?['message']?.toString();
+        final msg = serverMessage ??
+            'Không thể khởi tạo thanh toán VNPAY cho tiền cọc.'; //
+        Utils.showSnackBar(title: 'Lỗi', message: msg); //
+        debugPrint('Lỗi khi tạo URL thanh toán cọc VNPAY: $msg'); //
+      }
+    } catch (e) {
+      debugPrint('Lỗi API createVnPayDepositPayment: $e');
+      Utils.showSnackBar(
+          title: 'Lỗi',
+          message: 'Không thể kết nối tới máy chủ khi tạo thanh toán cọc.');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   Future<void> createVnPayPayment({
     required int appointment_id,
     required double total_price,
@@ -154,7 +226,7 @@ class PaymentController extends GetxController {
       var responseData =
           await APICaller.getInstance().post('Payment/add_online.php', params);
       Get.back(); // Đóng loading dialog
-      print('Đã nhận phản hồi từ API');
+
       print('responseData: $responseData');
 
       if (responseData == null) {
@@ -179,8 +251,8 @@ class PaymentController extends GetxController {
             fullscreenDialog: true,
           );
           if (result == true) {
-            Get.back();
-            Get.back();
+            Get.offAndToNamed(Routes.personal);
+
             Get.snackbar('Thành công', 'Thanh toán hoàn tất.',
                 snackPosition: SnackPosition.TOP);
           } else {
@@ -224,8 +296,64 @@ class PaymentController extends GetxController {
     }
   }
 
-  /// 1) Fetch thông tin payment từ server
+  /// Fetch thông tin cọc
+  Future<void> fetchDeposit(int appointmentId) async {
+    isLoading.value = true;
+    try {
+      DateTime timeNow = DateTime.now();
+      String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
+      String keyCert =
+          Utils.generateMd5(Constant.NEXT_PUBLIC_KEY_CERT + formattedTime);
 
+      var param = {
+        "keyCert": keyCert,
+        "time": formattedTime,
+        "uid": uid, // Đảm bảo uid được khởi tạo trong PaymentController
+        "appointment_id": appointmentId,
+      };
+
+      debugPrint(
+          'Fetching deposit for appointment_id: $appointmentId with UID: $uid');
+      var data =
+          await APICaller.getInstance().post('Payment/get_deposit.php', param);
+
+      if (data != null && data['status'] == 'success') {
+        if (data['data'] != null && data['data']['deposit'] != null) {
+          deposit.value = DepositModel.fromJson(data['data']['deposit']);
+          debugPrint('Loaded deposit: ${deposit.value!.toJson()}');
+        } else {
+          deposit.value = null; // Không có đặt cọc
+          debugPrint('No deposit found for appointment ID: $appointmentId');
+        }
+      } else {
+        final msg =
+            data?['error']?['message'] ?? 'Không tải được thông tin đặt cọc.';
+        debugPrint('Error fetching deposit: $msg');
+        Get.snackbar(
+          'Lỗi',
+          msg,
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+        deposit.value = null;
+      }
+    } catch (e) {
+      debugPrint('Exception while fetching deposit: $e');
+      Get.snackbar(
+        'Lỗi hệ thống',
+        'Không thể kết nối tới máy chủ hoặc xảy ra lỗi mạng khi lấy đặt cọc.',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      deposit.value = null;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  /// Fetch thông tin payment từ server
   Future<void> fetchPayment(int appointmentId) async {
     isLoadingPayment.value = true;
     try {

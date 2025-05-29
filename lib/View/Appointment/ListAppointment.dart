@@ -13,7 +13,7 @@ class Appointmentlist extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<Appointmentcontroller>();
+    final Appointmentcontroller controller = Get.put(Appointmentcontroller());
 
     return Scaffold(
       appBar: AppBar(
@@ -24,7 +24,7 @@ class Appointmentlist extends StatelessWidget {
         //leading: const BackButton(color: Colors.white),
         leading: GestureDetector(
           onTap: () {
-            Get.offAllNamed(Routes.dashboard);
+            Get.offAndToNamed(Routes.personal);
           },
           child: const Icon(Icons.arrow_back, color: ColorHex.white),
         ),

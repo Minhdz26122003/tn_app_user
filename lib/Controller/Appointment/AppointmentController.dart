@@ -5,6 +5,7 @@ import 'package:app_hm/Model/Account/AccountModel.dart';
 import 'package:app_hm/Model/Appointment/ApointmentModel.dart';
 import 'package:app_hm/Model/Car/CarModel.dart';
 import 'package:app_hm/Model/Center/CenterModel.dart';
+import 'package:app_hm/Model/Deposits/DepositModel.dart';
 import 'package:app_hm/Model/Service/ServiceModel.dart';
 import 'package:app_hm/Model/Service/TypeServiceModel.dart';
 import 'package:app_hm/Router/AppPage.dart';
@@ -38,6 +39,8 @@ class Appointmentcontroller extends GetxController {
   RxDouble serviceTotal = 0.0.obs;
   RxDouble partsTotal = 0.0.obs;
   RxDouble totalAmount = 0.0.obs;
+  RxDouble depositAmount = 0.0.obs;
+  RxDouble totalAfter = 0.0.obs;
   RxInt currentStep = 1.obs;
   var description = ''.obs;
 
@@ -131,9 +134,7 @@ class Appointmentcontroller extends GetxController {
 
   // build slot thời gian , so sánh với thời gian hiện tại
   Future<void> buildSlots() async {
-    // Thêm isLoading ở đây để hiển thị trạng thái tải cho các slots
     isLoading.value = true;
-
     final labels =
         selectedSession.value == 'Sáng' ? morningTimes : afternoonTimes;
     final date = selectedDate.value;
@@ -164,10 +165,10 @@ class Appointmentcontroller extends GetxController {
       ));
     }
     slots.value = tempSlots;
-    isLoading.value = false; // Tắt loading sau khi hoàn thành
+    isLoading.value = false;
   }
 
-  // Hàm _checkAppointmentAvailability (không thay đổi so với phiên bản trước)
+  // Hàm _checkAppointmentAvailability
   Future<bool> _checkAppointmentAvailability(
       String appointmentDate, String appointmentTime) async {
     DateTime timeNow = DateTime.now();
@@ -341,12 +342,11 @@ class Appointmentcontroller extends GetxController {
         // lưu hóa đơn
         final total = totalAmount.value;
         await addPayment(appoiId, total);
-
+        await getAppointmentList();
         Utils.showSnackBar(
           title: 'notification'.tr,
           message: 'Đã xác nhận thành công',
         );
-        await getAppointmentList();
       } else {
         final msg =
             response['error']?['message'] ?? 'Chấp nhận hoá đơn thất bại';
@@ -659,7 +659,10 @@ class Appointmentcontroller extends GetxController {
 
       final data = await APICaller.getInstance()
           .post('Payment/get_payment_detail.php', params);
-      //print('list $data');
+
+      debugPrint('Phản hồi từ API get_payment_detail.php: $data',
+          wrapWidth: 1024); // Log phản hồi
+
       if (data != null && data['status'] == 'success') {
         // Parse services
         final svs = (data['data']['services'] as List<dynamic>)
@@ -676,16 +679,25 @@ class Appointmentcontroller extends GetxController {
         // Tổng tiền
         serviceTotal.value = (data['data']['service_total'] as num).toDouble();
         partsTotal.value = (data['data']['parts_total'] as num).toDouble();
+        depositAmount.value =
+            (data['data']['deposit_amount'] as num).toDouble();
         totalAmount.value = (data['data']['total'] as num).toDouble();
+        totalAfter.value = (data['data']['total_after'] as num).toDouble();
+
+        debugPrint(
+            'Tiền đặt cọc đã tải: ${depositAmount.value}'); // Log tiền đặt cọc
       } else {
         final msg =
             data?['error']?['message'] ?? 'Không thể tải thông tin thanh toán';
         Utils.showSnackBar(title: 'Lỗi', message: msg);
+        debugPrint('Lỗi khi tải thông tin thanh toán: $msg'); // Log lỗi
       }
-    } catch (e) {
-      debugPrint('Lỗi API getSettlementUser: $e');
-      // Utils.showSnackBar(
-      //     title: 'Lỗi', message: 'Không thể kết nối tới máy chủ');
+    } catch (e, stackTrace) {
+      debugPrint('Lỗi ngoại lệ API getSettlementUser: $e');
+      debugPrint('Stack trace: $stackTrace');
+      Utils.showSnackBar(
+          title: 'Lỗi',
+          message: 'Không thể kết nối tới máy chủ hoặc lỗi xử lý dữ liệu.');
     } finally {
       isLoadingSettlement.value = false;
     }

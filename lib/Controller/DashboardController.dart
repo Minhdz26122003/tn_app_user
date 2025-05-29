@@ -123,8 +123,8 @@ class Dashboardcontroller extends GetxController {
         typeList.addAll(listItem);
       }
     } catch (e) {
-      //debugPrint("Lỗi API getServiceTypeList : $e", wrapWidth: 1024);
-      Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+      debugPrint("Lỗi API getServiceTypeList : $e", wrapWidth: 1024);
+      //Utils.showSnackBar(title: 'notification'.tr, message: '$e');
     }
     // finally {
     //   isLoading.value = false;
@@ -152,8 +152,8 @@ class Dashboardcontroller extends GetxController {
         serviceList.addAll(listItem);
       }
     } catch (e) {
-      //debugPrint("Lỗi API getServiceList: $e", wrapWidth: 1024);
-      Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+      debugPrint("Lỗi API getServiceList: $e", wrapWidth: 1024);
+      //Utils.showSnackBar(title: 'notification'.tr, message: '$e');
     }
     // finally {
     //   isLoading.value = false;

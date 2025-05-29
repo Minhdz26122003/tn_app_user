@@ -17,18 +17,11 @@ class Payment extends StatelessWidget {
     // Lấy dữ liệu từ arguments
     final Map<String, dynamic> args = Get.arguments;
     final int appointmentId = args['appointment_id'];
-    // total_price ở đây có thể là totalPrice mà bạn truyền qua
-    // Tuy nhiên, nếu bạn muốn hiển thị totalAmount được tính từ Settlement,
-    // thì bạn sẽ dựa vào controller.totalAmount.value
-    // final double totalPriceFromArgs = args['total_price'];
 
     // Khởi tạo hoặc tìm AppointmentController
     final appointmentController = Get.put(Appointmentcontroller());
     final paymentController = Get.put(PaymentController());
 
-    // Gọi hàm để lấy chi tiết thanh toán khi màn hình được tạo
-    // Điều này sẽ tải dữ liệu dịch vụ và phụ tùng
-    // Có thể cân nhắc gọi trong onInit của một GetxController cho PaymentScreen nếu dùng GetxController
     WidgetsBinding.instance.addPostFrameCallback((_) {
       appointmentController.getSettlementUser(appointmentId);
     });
@@ -56,10 +49,14 @@ class Payment extends StatelessWidget {
                 }
 
                 // Lấy tổng tiền từ controller của appointment, đây sẽ là totalAmount của Settlement
-                final totalAmt = appointmentController.totalAmount.value ?? 0;
+                final totalAmt = appointmentController.totalAfter.value ?? 0;
+                final deposit = appointmentController.depositAmount.value ?? 0;
                 final formattedTotalAmt =
                     NumberFormat.currency(locale: 'vi_VN', symbol: '₫')
                         .format(totalAmt);
+                final depositTotal =
+                    NumberFormat.currency(locale: 'vi_VN', symbol: '₫')
+                        .format(deposit);
 
                 return ListView(
                   children: [
@@ -118,9 +115,20 @@ class Payment extends StatelessWidget {
                             style: const TextStyle(color: ColorHex.status_0)),
                       );
                     }),
-
                     const Divider(),
-
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Số tiền đặt cọc:',
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w600)),
+                        Text('-' + depositTotal,
+                            style: const TextStyle(
+                                color: Colors.red, fontSize: 12)),
+                      ],
+                    ),
+                    const Divider(thickness: 2),
+                    const SizedBox(height: 24),
                     // Tổng cộng
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
