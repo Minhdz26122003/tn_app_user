@@ -78,8 +78,8 @@ class NotificationController extends GetxController {
           isLoading.value = false;
         }
       } catch (e) {
-        //debugPrint(" Lỗi API: $e", wrapWidth: 1024);
-        Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+        debugPrint(" Lỗi API: $e", wrapWidth: 1024);
+        //Utils.showSnackBar(title: 'notification'.tr, message: '$e');
         isLoading.value = false;
       }
     }

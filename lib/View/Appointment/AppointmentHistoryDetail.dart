@@ -437,7 +437,8 @@ class Appointmenthistorydetail extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              final totalAmt = controller.totalAmount.value ?? 0;
+              final totalAmt = controller.totalAfter.value ?? 0;
+              final depositAmount = controller.depositAmount.value ?? 0;
 
               return ListView(
                 controller: scrollCtrl,
@@ -502,6 +503,24 @@ class Appointmenthistorydetail extends StatelessWidget {
 
                   const Divider(),
 
+                  // Tiền cọc
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Tiền cọc:',
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold)),
+                      Text(
+                        NumberFormat.currency(locale: 'vi_VN', symbol: '₫')
+                            .format(depositAmount),
+                        style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.redAccent),
+                      ),
+                    ],
+                  ),
+                  const Divider(),
                   // Tổng cộng
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

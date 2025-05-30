@@ -53,11 +53,11 @@ class Dashboardcontroller extends GetxController {
     firebaseUser.bindStream(FirebaseAuth.instance.authStateChanges());
     checkPhpToken();
     ever<User?>(firebaseUser, (_) => updateIsLoggedIn());
-
+    getServiceTypeList();
+    getServiceList();
     try {
       isLoading.value = true;
-      getServiceTypeList();
-      getServiceList();
+
       username.value =
           await Utils.getStringValueWithKey(Constant.USERNAME) ?? '';
       fullname.value = await Utils.getStringValueWithKey(Constant.FULL_NAME) ??
