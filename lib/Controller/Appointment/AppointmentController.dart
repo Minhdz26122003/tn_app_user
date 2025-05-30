@@ -626,13 +626,13 @@ class Appointmentcontroller extends GetxController {
           body: 'Bạn có lịch hẹn được đặt vào lúc '
               '${DateFormat('HH:mm dd/MM/yyyy').format(apptDT)}',
         );
-        Get.offAllNamed(Routes.appointmentlist);
+        Get.offAndToNamed(Routes.appointmentlist);
       } else {
-        debugPrint("Lỗi APIdl: " + data?['error']['message'], wrapWidth: 1024);
+        Utils.showSnackBar(title: 'Thông báo', message: 'Lỗi');
       }
     } catch (e) {
-      debugPrint("Lỗi APIdl2: $e", wrapWidth: 1024);
-      //Utils.showSnackBar(title: 'Thông báo', message: 'Lỗi: $e');
+      //debugPrint("Lỗi APIdl2: $e", wrapWidth: 1024);
+      Utils.showSnackBar(title: 'Thông báo', message: 'Lỗi: $e');
     } finally {
       isBooking.value = false;
     }
@@ -690,11 +690,11 @@ class Appointmentcontroller extends GetxController {
         final msg =
             data?['error']?['message'] ?? 'Không thể tải thông tin thanh toán';
         Utils.showSnackBar(title: 'Lỗi', message: msg);
-        debugPrint('Lỗi khi tải thông tin thanh toán: $msg'); // Log lỗi
+        //debugPrint('Lỗi khi tải thông tin thanh toán: $msg'); // Log lỗi
       }
     } catch (e, stackTrace) {
-      debugPrint('Lỗi ngoại lệ API getSettlementUser: $e');
-      debugPrint('Stack trace: $stackTrace');
+      //debugPrint('Lỗi ngoại lệ API getSettlementUser: $e');
+      //debugPrint('Stack trace: $stackTrace');
       Utils.showSnackBar(
           title: 'Lỗi',
           message: 'Không thể kết nối tới máy chủ hoặc lỗi xử lý dữ liệu.');

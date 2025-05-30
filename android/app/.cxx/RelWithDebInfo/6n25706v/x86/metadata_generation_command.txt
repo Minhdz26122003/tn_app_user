@@ -1,0 +1,20 @@
+                        -HD:\dev\flutter_windows_3.24.4-stable\flutter\packages\flutter_tools\gradle\src\main\groovy
+-DCMAKE_SYSTEM_NAME=Android
+-DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+-DCMAKE_SYSTEM_VERSION=23
+-DANDROID_PLATFORM=android-23
+-DANDROID_ABI=x86
+-DCMAKE_ANDROID_ARCH_ABI=x86
+-DANDROID_NDK=D:\AndRoid\Tools\ndk\26.3.11579264
+-DCMAKE_ANDROID_NDK=D:\AndRoid\Tools\ndk\26.3.11579264
+-DCMAKE_TOOLCHAIN_FILE=D:\AndRoid\Tools\ndk\26.3.11579264\build\cmake\android.toolchain.cmake
+-DCMAKE_MAKE_PROGRAM=D:\AndRoid\Tools\cmake\3.22.1\bin\ninja.exe
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=D:\Documents\Flutter\app_hm\build\app\intermediates\cxx\RelWithDebInfo\6n25706v\obj\x86
+-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=D:\Documents\Flutter\app_hm\build\app\intermediates\cxx\RelWithDebInfo\6n25706v\obj\x86
+-DCMAKE_BUILD_TYPE=RelWithDebInfo
+-BD:\Documents\Flutter\app_hm\android\app\.cxx\RelWithDebInfo\6n25706v\x86
+-GNinja
+-Wno-dev
+--no-warn-unused-cli
+                        Build command args: []
+                        Version: 2

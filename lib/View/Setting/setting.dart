@@ -32,8 +32,7 @@ class Setting extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(top: 10, left: 5),
-                      child: Expanded(
-                          child: Column(
+                      child: Column(
                         children: [
                           // _item(
                           //   title: 'language'.tr,
@@ -51,7 +50,7 @@ class Setting extends StatelessWidget {
                             },
                           ),
                         ],
-                      )),
+                      ),
                     ),
                   ],
                 );

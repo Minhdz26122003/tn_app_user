@@ -135,99 +135,97 @@ class Personal extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _buildSectionTitle('personal_information'.tr),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildSectionTitle('personal_information'.tr),
+                            _item(
+                              title: 'personal_information'.tr,
+                              //svg: 'assets/icons/profile.svg',
+                              svg: 'assets/icons/personal1.svg',
+                              onTap: () {
+                                if (!controller.isLoggedIn.value) {
+                                  Get.toNamed(Routes.login);
+                                } else {
+                                  Get.toNamed(Routes.personaldetail);
+                                }
+                              },
+                            ),
+                            const SizedBox(height: 5),
+                            _item(
+                              title: 'mycar'.tr,
+                              svg: 'assets/icons/car1.svg',
+                              onTap: () {
+                                if (!controller.isLoggedIn.value) {
+                                  Get.toNamed(Routes.login);
+                                } else {
+                                  Get.toNamed(Routes.car);
+                                }
+                              },
+                            ),
+                            const SizedBox(height: 5),
+                            if (controller.loginMethod.value !=
+                                LoginMethod.firebase)
                               _item(
-                                title: 'personal_information'.tr,
-                                //svg: 'assets/icons/profile.svg',
-                                svg: 'assets/icons/personal1.svg',
+                                title: 'change_password'.tr,
+                                //svg: 'assets/icons/sercurity.svg',
+                                svg: 'assets/icons/change_pass1.svg',
                                 onTap: () {
                                   if (!controller.isLoggedIn.value) {
                                     Get.toNamed(Routes.login);
                                   } else {
-                                    Get.toNamed(Routes.personaldetail);
+                                    Get.toNamed(Routes.changepassword);
                                   }
                                 },
                               ),
-                              const SizedBox(height: 5),
+                            const SizedBox(height: 20),
+                            _buildSectionTitle('appointment'.tr),
+                            _item(
+                              title: 'list_appointment'.tr,
+                              //svg: 'assets/icons/appointment.svg',
+                              svg: 'assets/icons/appointment_list1.svg',
+                              onTap: () {
+                                if (!controller.isLoggedIn.value) {
+                                  Get.toNamed(Routes.login);
+                                } else {
+                                  apct.getAppointmentList();
+                                  Get.toNamed(Routes.appointmentlist);
+                                }
+                              },
+                            ),
+                            const SizedBox(height: 20),
+                            _buildSectionTitle('setting'.tr),
+                            _item(
+                              title: 'setting'.tr,
+                              svg: 'assets/icons/setting1.svg',
+                              onTap: () {
+                                Get.toNamed(Routes.setting);
+                                // PushNotifications.scheduleQuickTest(
+                                //     title: 'Test 10 s',
+                                //     body: 'Bạn sẽ thấy sau 10s');
+                              },
+                            ),
+                            const SizedBox(height: 5),
+                            _item(
+                              title: 'guide'.tr,
+                              svg: 'assets/icons/guide.svg',
+                              onTap: () {
+                                Get.toNamed(Routes.permissionguide);
+                                //Get.toNamed(Routes.chatscreen);
+                              },
+                            ),
+                            const SizedBox(height: 5),
+                            if (controller.isLoggedIn.value)
                               _item(
-                                title: 'mycar'.tr,
-                                svg: 'assets/icons/car1.svg',
+                                svg: 'assets/icons/logout1.svg',
+                                title: 'log_out'.tr,
+                                isLogout: true,
                                 onTap: () {
-                                  if (!controller.isLoggedIn.value) {
-                                    Get.toNamed(Routes.login);
-                                  } else {
-                                    Get.toNamed(Routes.car);
-                                  }
+                                  Auth.backLogin(true);
                                 },
                               ),
-                              const SizedBox(height: 5),
-                              if (controller.loginMethod.value !=
-                                  LoginMethod.firebase)
-                                _item(
-                                  title: 'change_password'.tr,
-                                  //svg: 'assets/icons/sercurity.svg',
-                                  svg: 'assets/icons/change_pass1.svg',
-                                  onTap: () {
-                                    if (!controller.isLoggedIn.value) {
-                                      Get.toNamed(Routes.login);
-                                    } else {
-                                      Get.toNamed(Routes.changepassword);
-                                    }
-                                  },
-                                ),
-                              const SizedBox(height: 20),
-                              _buildSectionTitle('appointment'.tr),
-                              _item(
-                                title: 'list_appointment'.tr,
-                                //svg: 'assets/icons/appointment.svg',
-                                svg: 'assets/icons/appointment_list1.svg',
-                                onTap: () {
-                                  if (!controller.isLoggedIn.value) {
-                                    Get.toNamed(Routes.login);
-                                  } else {
-                                    apct.getAppointmentList();
-                                    Get.toNamed(Routes.appointmentlist);
-                                  }
-                                },
-                              ),
-                              const SizedBox(height: 20),
-                              _buildSectionTitle('setting'.tr),
-                              _item(
-                                title: 'setting'.tr,
-                                svg: 'assets/icons/setting1.svg',
-                                onTap: () {
-                                  Get.toNamed(Routes.setting);
-                                  // PushNotifications.scheduleQuickTest(
-                                  //     title: 'Test 10 s',
-                                  //     body: 'Bạn sẽ thấy sau 10s');
-                                },
-                              ),
-                              const SizedBox(height: 5),
-                              _item(
-                                title: 'guide'.tr,
-                                svg: 'assets/icons/guide.svg',
-                                onTap: () {
-                                  Get.toNamed(Routes.permissionguide);
-                                  //Get.toNamed(Routes.chatscreen);
-                                },
-                              ),
-                              const SizedBox(height: 5),
-                              if (controller.isLoggedIn.value)
-                                _item(
-                                  svg: 'assets/icons/logout1.svg',
-                                  title: 'log_out'.tr,
-                                  isLogout: true,
-                                  onTap: () {
-                                    Auth.backLogin(true);
-                                  },
-                                ),
-                            ],
-                          ),
+                          ],
                         ),
                       ),
                     ),

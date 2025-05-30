@@ -25,287 +25,285 @@ class Signup extends StatelessWidget {
           },
         ),
       ),
-      body: Expanded(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Obx(
-              () => Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'welcome'.tr,
-                      style: const TextStyle(
-                        color: ColorHex.status_2,
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
+      body: SingleChildScrollView(
+        // Thay Expanded bằng SingleChildScrollView
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: Obx(
+            () => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'welcome'.tr,
+                    style: const TextStyle(
+                      color: ColorHex.status_2,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'sign_up'.tr,
+                    style: const TextStyle(
+                      color: ColorHex.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'sign_up'.tr,
-                      style: const TextStyle(
-                        color: ColorHex.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Column(
+                  // Bỏ Container không cần thiết nếu nó chỉ chứa một Column
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'fullname'.tr,
+                      style: const TextStyle(fontSize: 12),
+                      textAlign: TextAlign.start,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'fullname'.tr,
-                          style: const TextStyle(fontSize: 12),
-                          textAlign: TextAlign.start,
-                        ),
-                        TextField(
-                          controller: controller.textFullName,
-                          onChanged: (value) {},
-                          decoration: InputDecoration(
-                            hintText: 'fullname'.tr,
-                            hintStyle: const TextStyle(color: ColorHex.grey),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 10),
-                            border: const OutlineInputBorder(),
+                    TextField(
+                      controller: controller.textFullName,
+                      onChanged: (value) {},
+                      decoration: InputDecoration(
+                        hintText: 'fullname'.tr,
+                        hintStyle: const TextStyle(color: ColorHex.grey),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 10),
+                        border: const OutlineInputBorder(),
+                      ),
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      'username'.tr,
+                      style: const TextStyle(fontSize: 12),
+                      textAlign: TextAlign.start,
+                    ),
+                    TextField(
+                      controller: controller.textUserName,
+                      onChanged: (value) {},
+                      decoration: InputDecoration(
+                        hintText: 'username'.tr,
+                        hintStyle: const TextStyle(color: ColorHex.grey),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 10),
+                        border: const OutlineInputBorder(),
+                      ),
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      'email'.tr,
+                      style: const TextStyle(fontSize: 12),
+                      textAlign: TextAlign.start,
+                    ),
+                    TextField(
+                      controller: controller.textEmail,
+                      onChanged: (value) {},
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        hintText: 'email'.tr,
+                        hintStyle: const TextStyle(color: ColorHex.grey),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 10),
+                        border: const OutlineInputBorder(),
+                      ),
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      'phone_number'.tr,
+                      style: const TextStyle(fontSize: 12),
+                      textAlign: TextAlign.start,
+                    ),
+                    TextField(
+                      controller: controller.textPhonenum,
+                      onChanged: (value) {},
+                      keyboardType: TextInputType.phone,
+                      decoration: InputDecoration(
+                        hintText: 'phone_number'.tr,
+                        hintStyle: const TextStyle(color: ColorHex.grey),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 10),
+                        border: const OutlineInputBorder(),
+                      ),
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      'password'.tr,
+                      style: const TextStyle(fontSize: 12),
+                      textAlign: TextAlign.start,
+                    ),
+                    TextField(
+                      obscureText: controller.isHidePassword.value,
+                      controller: controller.textPass,
+                      onChanged: (value) {},
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        hintText: 'password'.tr,
+                        hintStyle: const TextStyle(color: ColorHex.grey),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 10),
+                        border: const OutlineInputBorder(),
+                        suffixIcon: InkWell(
+                          onTap: () {
+                            controller.isHidePassword.value =
+                                !controller.isHidePassword.value;
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: SvgPicture.asset(
+                                controller.isHidePassword.value
+                                    ? 'assets/icons/hidden.svg'
+                                    : 'assets/icons/eye_login.svg',
+                                fit: BoxFit.cover),
                           ),
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
                         ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          'username'.tr,
-                          style: const TextStyle(fontSize: 12),
-                          textAlign: TextAlign.start,
-                        ),
-                        TextField(
-                          controller: controller.textUserName,
-                          onChanged: (value) {},
-                          decoration: InputDecoration(
-                            hintText: 'username'.tr,
-                            hintStyle: const TextStyle(color: ColorHex.grey),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 10),
-                            border: const OutlineInputBorder(),
+                      ),
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      'confirm_password'.tr,
+                      style: const TextStyle(fontSize: 12),
+                      textAlign: TextAlign.start,
+                    ),
+                    TextField(
+                      obscureText: controller.isHideConfirmPassword.value,
+                      controller: controller.textConfirmPass,
+                      onChanged: (value) {},
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        hintText: 'confirm_password'.tr,
+                        hintStyle: const TextStyle(color: ColorHex.grey),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 10),
+                        border: const OutlineInputBorder(),
+                        suffixIcon: InkWell(
+                          onTap: () {
+                            controller.isHideConfirmPassword.value =
+                                !controller.isHideConfirmPassword.value;
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: SvgPicture.asset(
+                                controller.isHideConfirmPassword.value
+                                    ? 'assets/icons/hidden.svg'
+                                    : 'assets/icons/eye_login.svg',
+                                fit: BoxFit.cover),
                           ),
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
                         ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          'email'.tr,
-                          style: const TextStyle(fontSize: 12),
-                          textAlign: TextAlign.start,
-                        ),
-                        TextField(
-                          controller: controller.textEmail,
-                          onChanged: (value) {},
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
-                            hintText: 'email'.tr,
-                            hintStyle: const TextStyle(color: ColorHex.grey),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 10),
-                            border: const OutlineInputBorder(),
-                          ),
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          'phone_number'.tr,
-                          style: const TextStyle(fontSize: 12),
-                          textAlign: TextAlign.start,
-                        ),
-                        TextField(
-                          controller: controller.textPhonenum,
-                          onChanged: (value) {},
-                          keyboardType: TextInputType.phone,
-                          decoration: InputDecoration(
-                            hintText: 'phone_number'.tr,
-                            hintStyle: const TextStyle(color: ColorHex.grey),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 10),
-                            border: const OutlineInputBorder(),
-                          ),
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          'password'.tr,
-                          style: const TextStyle(fontSize: 12),
-                          textAlign: TextAlign.start,
-                        ),
-                        TextField(
-                          obscureText: controller.isHidePassword.value,
-                          controller: controller.textPass,
-                          onChanged: (value) {},
-                          keyboardType: TextInputType.text,
-                          decoration: InputDecoration(
-                            hintText: 'password'.tr,
-                            hintStyle: const TextStyle(color: ColorHex.grey),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 10),
-                            border: const OutlineInputBorder(),
-                            suffixIcon: InkWell(
-                              onTap: () {
-                                controller.isHidePassword.value =
-                                    !controller.isHidePassword.value;
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: SvgPicture.asset(
-                                    controller.isHidePassword.value
-                                        ? 'assets/icons/hidden.svg'
-                                        : 'assets/icons/eye_login.svg',
-                                    fit: BoxFit.cover),
-                              ),
-                            ),
-                          ),
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          'confirm_password'.tr,
-                          style: const TextStyle(fontSize: 12),
-                          textAlign: TextAlign.start,
-                        ),
-                        TextField(
-                          obscureText: controller.isHideConfirmPassword.value,
-                          controller: controller.textConfirmPass,
-                          onChanged: (value) {},
-                          keyboardType: TextInputType.text,
-                          decoration: InputDecoration(
-                            hintText: 'confirm_password'.tr,
-                            hintStyle: const TextStyle(color: ColorHex.grey),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 10),
-                            border: const OutlineInputBorder(),
-                            suffixIcon: InkWell(
-                              onTap: () {
-                                controller.isHideConfirmPassword.value =
-                                    !controller.isHideConfirmPassword.value;
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: SvgPicture.asset(
-                                    controller.isHideConfirmPassword.value
-                                        ? 'assets/icons/hidden.svg'
-                                        : 'assets/icons/eye_login.svg',
-                                    fit: BoxFit.cover),
-                              ),
-                            ),
-                          ),
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Align(
+                      ),
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          if (!controller.isLoading.value) {
+                            if (controller.textPass.text !=
+                                controller.textConfirmPass.text) {
+                              Utils.showSnackBar(
+                                title: 'Thông báo',
+                                message: 'password_not_match'.tr,
+                              );
+                              return;
+                            }
+
+                            controller.isLoading.value = true;
+
+                            // Gọi API đăng ký
+                            await controller.registerWithPHP(
+                              userName: controller.textUserName.text,
+                              password: controller.textPass.text,
+                              email: controller.textEmail.text,
+                              fullName: controller.textFullName.text,
+                              phonenum: controller.textPhonenum.text,
+                            );
+
+                            controller.isLoading.value = false;
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
                           alignment: Alignment.center,
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              if (!controller.isLoading.value) {
-                                if (controller.textPass.text !=
-                                    controller.textConfirmPass.text) {
-                                  Utils.showSnackBar(
-                                    title: 'Thông báo',
-                                    message: 'password_not_match'.tr,
-                                  );
-                                  return;
-                                }
-
-                                controller.isLoading.value = true;
-
-                                // Gọi API đăng ký
-                                await controller.registerWithPHP(
-                                  userName: controller.textUserName.text,
-                                  password: controller.textPass.text,
-                                  email: controller.textEmail.text,
-                                  fullName: controller.textFullName.text,
-                                  phonenum: controller.textPhonenum.text,
-                                );
-
-                                controller.isLoading.value = false;
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              alignment: Alignment.center,
-                              foregroundColor: ColorHex.white,
-                              backgroundColor: ColorHex.status_2,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 120, vertical: 15),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              elevation: 5,
-                            ),
-                            child: controller.isLoading.value
-                                ? const CircularProgressIndicator(
-                                    color: ColorHex.white,
-                                  )
-                                : Text(
-                                    'sign_up'.tr,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                          foregroundColor: ColorHex.white,
+                          backgroundColor: ColorHex.status_2,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 120, vertical: 15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
+                          elevation: 5,
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'already_have_account'.tr,
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Get.offAllNamed(Routes.login);
-                              },
-                              child: Text(
-                                'login_now'.tr,
+                        child: controller.isLoading.value
+                            ? const CircularProgressIndicator(
+                                color: ColorHex.white,
+                              )
+                            : Text(
+                                'sign_up'.tr,
                                 style: const TextStyle(
-                                  fontSize: 12,
-                                  color: ColorHex.status_2,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'already_have_account'.tr,
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Get.offAllNamed(Routes.login);
+                          },
+                          child: Text(
+                            'login_now'.tr,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: ColorHex.status_2,
+                              fontWeight: FontWeight.bold,
                             ),
-                          ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
