@@ -72,9 +72,15 @@ class Appointmenthistory extends StatelessWidget {
           }
         }
 
-        return ListView(
-          padding: EdgeInsets.zero,
-          children: children,
+        return RefreshIndicator(
+          onRefresh: () async {
+            await controller.getAppointmentList(); // Gọi hàm tải lại danh sách
+          },
+          child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            children: children,
+          ),
         );
       }),
     );

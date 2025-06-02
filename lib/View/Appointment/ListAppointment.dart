@@ -45,28 +45,33 @@ class Appointmentlist extends StatelessWidget {
             ),
           );
         }
-        return ListView.builder(
-          padding: const EdgeInsets.only(top: 5),
-          itemCount: controller.pendingAppointments.length,
-          itemBuilder: (c, i) {
-            final appt = controller.pendingAppointments[i];
-            return appointmentCard(
-              model: appt,
-              onTap: () async {
-                // Nếu status = 5 thì load settlement trước
-                if (appt.status == 5) {
-                  if (appt.appointment_id != null) {
-                    await controller.getSettlementUser(appt.appointment_id!);
-                  }
-                }
-                // Sau đó mới navigate sang trang chi tiết
-                Get.toNamed(
-                  Routes.appoointmentdetail,
-                  arguments: {'appointment_id': appt.appointment_id},
-                );
-              },
-            );
+        return RefreshIndicator(
+          onRefresh: () async {
+            await controller.getAppointmentList(); // Gọi hàm tải lại danh sách
           },
+          child: ListView.builder(
+            padding: const EdgeInsets.only(top: 5),
+            itemCount: controller.pendingAppointments.length,
+            itemBuilder: (c, i) {
+              final appt = controller.pendingAppointments[i];
+              return appointmentCard(
+                model: appt,
+                onTap: () async {
+                  // Nếu status = 5 thì load settlement trước
+                  if (appt.status == 5) {
+                    if (appt.appointment_id != null) {
+                      await controller.getSettlementUser(appt.appointment_id!);
+                    }
+                  }
+                  // Sau đó mới navigate sang trang chi tiết
+                  Get.toNamed(
+                    Routes.appoointmentdetail,
+                    arguments: {'appointment_id': appt.appointment_id},
+                  );
+                },
+              );
+            },
+          ),
         );
       }),
       bottomSheet: Padding(

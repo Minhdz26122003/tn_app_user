@@ -37,7 +37,7 @@ class PushNotifications {
     //print('device token ''${await Utils.getStringValueWithKey(Constant.FCMTOKEN)}');
   }
 
-  Future<void> saveFcmToken(String userId) async {
+  Future<void> saveFcmToken(int userId) async {
     DateTime timeNow = DateTime.now();
     String? token = await FirebaseMessaging.instance.getToken();
     String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);

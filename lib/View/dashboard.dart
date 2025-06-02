@@ -1,4 +1,7 @@
+import 'package:app_hm/Controller/Appointment/Appointmentcontroller.dart';
 import 'package:app_hm/Controller/DashboardController.dart';
+import 'package:app_hm/Controller/Notification/NotificationController.dart';
+import 'package:app_hm/Controller/ServiceC/ServiceController.dart';
 import 'package:app_hm/Global/ColorHex.dart';
 import 'package:app_hm/View/Personal/Personal.dart';
 import 'package:app_hm/View/Book/Servicebook.dart';
@@ -13,6 +16,10 @@ class Dashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(Dashboardcontroller());
 
+    // Then put other controllers that Home and other tabs might need
+    Get.put(Appointmentcontroller());
+    Get.put(NotificationController());
+    Get.put(Servicecontroller());
     return Obx(
       () => controller.isLoading.value
           ? const Scaffold(

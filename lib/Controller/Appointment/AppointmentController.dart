@@ -106,21 +106,12 @@ class Appointmentcontroller extends GetxController {
     //everAll([selectedDate, selectedSession], (_) => buildSlots());
     buildSlots();
     checkedValuesService.value = List<bool>.filled(serviceList.length, false);
-    await getServiceTypeList();
-    await getServiceList();
-    await getAddressList();
+    everAll([selectedDate, selectedSession], (_) => buildSlots());
     await getCarList();
-    // chọn xe mặc định
-    if (carList.isNotEmpty) {
+    if (carList.isNotEmpty && selectedCar.value == null) {
       selectedCar.value = carList.first;
     }
-    await getAppointmentList();
-
-    everAll([selectedDate, selectedSession], (_) => buildSlots());
-    //await buildSlots();
-
     await getAccount();
-
     super.onInit();
   }
 
@@ -128,6 +119,16 @@ class Appointmentcontroller extends GetxController {
   void onClose() {
     print('on close second');
     super.onClose();
+  }
+
+  Future<void> refreshAppointmentsAndServiceTypes() async {
+    uid = await Utils.getIntValueWithKey(Constant.UUID_USER_ACC);
+
+    await getServiceTypeList();
+    await getServiceList();
+    await getAddressList();
+
+    await getAppointmentList();
   }
 
   void updateDate(DateTime d) => selectedDate.value = d;
@@ -139,7 +140,9 @@ class Appointmentcontroller extends GetxController {
         selectedSession.value == 'Sáng' ? morningTimes : afternoonTimes;
     final date = selectedDate.value;
 
-    List<TimeSlot> tempSlots = [];
+    List<Future<bool>> availabilityChecks = [];
+    List<DateTime> dateTimesForSlots =
+        []; // Lưu trữ DateTime để tránh tính toán lại
 
     for (String label in labels) {
       final parts = label.split(':');
@@ -150,18 +153,23 @@ class Appointmentcontroller extends GetxController {
         int.parse(parts[0]),
         int.parse(parts[1]),
       );
-
-      // Gọi API mà không truyền car_id
-      bool isBooked = await _checkAppointmentAvailability(
+      dateTimesForSlots.add(dt);
+      availabilityChecks.add(_checkAppointmentAvailability(
         DateFormat('yyyy-MM-dd').format(date),
         label,
-      );
+      ));
+    }
 
+    List<bool> bookedStatuses =
+        await Future.wait(availabilityChecks); // Chạy song song
+
+    List<TimeSlot> tempSlots = [];
+    for (int i = 0; i < labels.length; i++) {
       tempSlots.add(TimeSlot(
-        label,
-        dt,
-        isSelected: label == selectedTime.value,
-        isBooked: isBooked,
+        labels[i],
+        dateTimesForSlots[i],
+        isSelected: labels[i] == selectedTime.value,
+        isBooked: bookedStatuses[i],
       ));
     }
     slots.value = tempSlots;
@@ -264,6 +272,28 @@ class Appointmentcontroller extends GetxController {
     }
   }
 
+  void resetAppointmentState() {
+    // Reset các biến liên quan đến quy trình đặt lịch
+    currentStep.value = 1;
+    selectedDate.value = DateTime.now();
+    selectedSession.value = "Sáng";
+    selectedTime.value = "";
+    descriptionController.clear();
+    description.value = '';
+
+    selectedType.value = null;
+
+    checkedValuesService.value = List<bool>.filled(serviceList.length, false);
+    selectedCar.value = null;
+    selectedAddress.value = null;
+
+    if (carList.isNotEmpty) {
+      selectedCar.value = carList.first;
+    }
+
+    buildSlots();
+  }
+
   // Hủy lịch hẹn
   void cancelAppoint(int appoiId, String reason) async {
     if (cancelreason.text.trim().isEmpty) {
@@ -285,10 +315,13 @@ class Appointmentcontroller extends GetxController {
           .post('Appointment/cancel_appointment.php', param);
       //print("data huy: $param");
       if (response != null && response['status'] == 'success') {
+        Get.back();
         Utils.showSnackBar(
           title: 'notification'.tr,
           message: response?['error']['message'] ?? 'Hủy lịch hẹn thành công ',
         );
+        cancelreason.clear();
+
         await getAppointmentList();
       }
     } catch (e) {
@@ -609,7 +642,7 @@ class Appointmentcontroller extends GetxController {
         // );
 
         await getAppointmentList();
-        buildSlots();
+        // buildSlots();
 
         final apptDT = DateTime(
           selectedDate.value.year,
@@ -627,6 +660,7 @@ class Appointmentcontroller extends GetxController {
               '${DateFormat('HH:mm dd/MM/yyyy').format(apptDT)}',
         );
         Get.offAndToNamed(Routes.appointmentlist);
+        resetAppointmentState();
       } else {
         Utils.showSnackBar(title: 'Thông báo', message: 'Lỗi');
       }
@@ -735,7 +769,7 @@ class Appointmentcontroller extends GetxController {
     try {
       int uid = await Utils.getIntValueWithKey(Constant.UUID_USER_ACC);
 
-      await pushNotifications.saveFcmToken(uid.toString());
+      await pushNotifications.saveFcmToken(uid);
     } catch (e, stack) {
       debugPrint('EXCEPTION khi saveFcmToken: $e');
       debugPrint('$stack');

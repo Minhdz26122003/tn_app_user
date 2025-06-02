@@ -15,7 +15,7 @@ class Listservice extends StatelessWidget {
     final int typeId = args['type_id'] as int;
     final String typeName = args['type_name'] as String? ?? 'Dịch vụ';
 
-    final Servicecontroller controller = Get.put(Servicecontroller());
+    final Servicecontroller controller = Get.find<Servicecontroller>();
     final Appointmentcontroller Appointcontroller =
         Get.find<Appointmentcontroller>();
 

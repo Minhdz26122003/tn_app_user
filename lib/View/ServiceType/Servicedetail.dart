@@ -10,7 +10,7 @@ class Servicedetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Servicecontroller controller = Get.put(Servicecontroller());
+    final Servicecontroller controller = Get.find<Servicecontroller>();
     final service = Get.arguments as Service;
 
     return Scaffold(

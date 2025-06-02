@@ -1,5 +1,6 @@
 import 'package:app_hm/Controller/Appointment/Appointmentcontroller.dart';
 import 'package:app_hm/Controller/Notification/NotificationController.dart';
+import 'package:app_hm/Controller/ServiceC/ServiceController.dart';
 import 'package:app_hm/Global/Constant.dart';
 import 'package:app_hm/Model/Service/ServiceModel.dart';
 import 'package:app_hm/Model/Service/TypeServiceModel.dart';
@@ -51,21 +52,65 @@ class Dashboardcontroller extends GetxController {
     final idx = Get.arguments;
     if (idx is int) currentPageIndex.value = idx;
     firebaseUser.bindStream(FirebaseAuth.instance.authStateChanges());
-    await resetData();
+    await _initialLoad();
     ever<User?>(firebaseUser, (_) => updateIsLoggedIn());
   }
 
-  Future<void> resetData() async {
+  Future<void> _initialLoad() async {
+    isLoading.value = true;
     try {
       await checkPhpToken();
 
-      await Future.wait<void>([
+      Get.put(Appointmentcontroller(),
+          permanent: true); // Ensure it's available
+      Get.put(NotificationController(),
+          permanent: true); // Ensure it's available
+      Get.put(Servicecontroller(), permanent: true); // Ensure it's available
+
+      final apptC = Get.find<Appointmentcontroller>();
+      final nc = Get.find<NotificationController>();
+
+      List<Future> initialTasks = [
         getServiceTypeList(),
         getServiceList(),
         _loadLocalUserData(),
-      ]);
+        apptC.getServiceTypeList(),
+        apptC.getServiceList(),
+        apptC.getAddressList(),
+        apptC.getCarList(),
+        apptC.getAppointmentList(),
+        nc.refreshData(),
+      ];
+      await Future.wait(initialTasks);
+      await apptC.buildSlots();
     } catch (e) {
-      print("Lỗi khi tải dữ liệu trong onInit: $e");
+      print("Lỗi khi tải dữ liệu ban đầu trong DashboardController: $e");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> resetData() async {
+    isLoading.value = true; // Set loading to true during refresh
+    try {
+      final apptC = Get.find<Appointmentcontroller>();
+      final nc = Get.find<NotificationController>();
+
+      List<Future> refreshTasks = [
+        getServiceTypeList(),
+        getServiceList(),
+        _loadLocalUserData(),
+        apptC.getServiceTypeList(),
+        apptC.getServiceList(),
+        apptC.getAddressList(),
+        apptC.getCarList(),
+        apptC.getAppointmentList(),
+        nc.refreshData(),
+      ];
+      await Future.wait(refreshTasks);
+      await apptC.buildSlots();
+    } catch (e) {
+      print("Lỗi khi làm mới dữ liệu trang chủ trong DashboardController: $e");
     } finally {
       isLoading.value = false;
     }
