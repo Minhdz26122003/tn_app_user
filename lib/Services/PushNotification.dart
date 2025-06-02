@@ -204,70 +204,73 @@ class PushNotifications {
 
   // Thông báo định kỳ
   static Future<void> scheduleReminders(
-    int uid, // uid người dùng
-    DateTime appointmentDateTime, // thời điểm lịch hẹn
-    {
+    int uid,
+    DateTime appointmentDateTime, {
     required String title,
     String? body,
   }) async {
-    // 1. Xoá bản ghi cũ trong database và xoá notification đã schedule:
-    await _flutterLocalNotificationsPlugin
-        .cancelAll(); // hoặc cancel list ids cũ
+    try {
+      await _flutterLocalNotificationsPlugin.cancelAll();
+      print('All previously scheduled notifications cancelled.');
 
-    final plugin = _flutterLocalNotificationsPlugin;
-    final now = tz.TZDateTime.now(tz.local);
+      final plugin = _flutterLocalNotificationsPlugin;
+      final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
 
-    // Các khoảng cần nhắc
-    final reminders = [
-      const Duration(hours: 1),
-      const Duration(minutes: 30),
-    ];
-    print('now $now');
-    final int baseNotificationId =
-        appointmentDateTime.millisecondsSinceEpoch ~/ 10000; // Giảm bớt số lớn
+      final reminders = [
+        const Duration(hours: 1),
+        const Duration(minutes: 30),
+      ];
 
-    int idOffset =
-        0; // Để tạo ID duy nhất cho mỗi nhắc nhở của cùng một cuộc hẹn
+      final int baseNotificationId =
+          (appointmentDateTime.millisecondsSinceEpoch ~/ 1000);
 
-    for (var dur in reminders) {
-      // Tính thời điểm firing
-      final fireTime = tz.TZDateTime.from(
-        appointmentDateTime.subtract(dur),
-        tz.local,
-      );
-      print('fireTime $fireTime');
-      if (fireTime.isAfter(now)) {
-        final label = dur.inMinutes >= 60 ? '1 giờ trước' : '30 phút trước';
-        final notifTitle = title;
-        final notifBody = body ?? '$title ($label)';
+      int idOffset = 0;
 
-        final int notificationId = baseNotificationId + idOffset;
-        idOffset++;
-
-        debugPrint(
-            'Scheduling notification with ID: $notificationId, Title: $notifTitle, FireTime: $fireTime');
-
-        await plugin.zonedSchedule(
-          notificationId, // Sử dụng UUID làm ID
-          notifTitle,
-          notifBody,
-          fireTime,
-          const NotificationDetails(
-            android: AndroidNotificationDetails(
-              'demo1-4b8c1',
-              'All Notifications',
-              channelDescription: 'Kênh thông báo',
-              importance: Importance.max,
-              priority: Priority.high,
-            ),
-          ),
-          uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime,
-          androidAllowWhileIdle: true,
+      for (var dur in reminders) {
+        final tz.TZDateTime fireTime = tz.TZDateTime.from(
+          appointmentDateTime.subtract(dur),
+          tz.local,
         );
+        print('Calculated fireTime: $fireTime for duration: $dur');
 
-        //await saveNotification(uid, notifTitle, notifBody);
+        if (fireTime.isAfter(now)) {
+          final String label = dur.inMinutes >= 60
+              ? '${dur.inHours} giờ trước'
+              : '${dur.inMinutes} phút trước';
+          final String notifTitle = title;
+          final String notifBody = body ?? '$title ($label)';
+          final int notificationId = baseNotificationId + idOffset;
+          idOffset++;
+
+          await plugin.zonedSchedule(
+            notificationId,
+            notifTitle,
+            notifBody,
+            fireTime,
+            const NotificationDetails(
+              android: AndroidNotificationDetails(
+                'demo1-4b8c1',
+                'All Notifications',
+                channelDescription: 'Kênh thông báo nhắc nhở lịch hẹn',
+                importance: Importance.max,
+                priority: Priority.high,
+                icon: '@mipmap/ic_launcher',
+              ),
+            ),
+            uiLocalNotificationDateInterpretation:
+                UILocalNotificationDateInterpretation.absoluteTime,
+            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+            payload: null,
+          );
+
+          //await saveNotification(uid, notifTitle, notifBody);
+        } else {
+          print(
+              'Skipped scheduling for $dur as fireTime ($fireTime) is in the past.');
+        }
       }
+    } catch (e) {
+      print('Error in scheduleReminders: $e');
     }
   }
 }

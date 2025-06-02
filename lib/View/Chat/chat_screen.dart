@@ -29,76 +29,58 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _initializeChatMode() {
+    _geminiService.startNewChatSession();
+    setState(() {
+      _messages.clear();
+    });
+
     String initialPrompt;
-    if (_currentMode == ChatMode.faq) {
-      initialPrompt = """
-      Bạn là một trợ lý ảo cho ứng dụng đặt lịch hẹn. Nhiệm vụ của bạn là trả lời các câu hỏi thường gặp
-      về ứng dụng đặt lịch sửa chữa và bảo dưỡng ô tô, dịch vụ, và chính sách.
-      Nếu người dùng hỏi về các chủ đề không liên quan, hãy lịch sự từ chối và hướng dẫn họ về các câu hỏi
-      liên quan đến đặt lịch hẹn hoặc dịch vụ của chúng tôi.
-      Dưới đây là một số ví dụ về FAQ và câu trả lời bạn có thể dựa vào:
-      - "Làm thế nào để đặt lịch hẹn?": Bạn có thể đặt lịch hẹn bằng cách chọn dịch vụ, chọn thời gian, và xác nhận trên ứng dụng.
-      - "Tôi có thể hủy lịch hẹn không?": Có, bạn có thể hủy lịch hẹn trong phần "Lịch hẹn của tôi" trước 24 giờ.
-      - "Các dịch vụ của bạn là gì?": Chúng tôi cung cấp các dịch vụ như Dịch vụ bảo dưỡng định kỳ, Dịch vụ vệ sinh kim phun và buồng đốt ô tô, Dịch vụ bảo dưỡng hệ thống phanh,... . Vui lòng xem danh sách chi tiết trong ứng dụng.
-      - "Gara mở cửa lúc mấy giờ?": Gara của chúng tôi mở cửa từ 8 giờ sáng đến 5 giờ chiều, từ thứ Hai đến Chủ nhật.
-      - "Tôi có thể thanh toán bằng thẻ tín dụng không?": Có, chúng tôi chấp nhận thanh toán bằng thẻ tín dụng và tiền mặt.
-      - "Tôi có thể đặt lịch hẹn cho người khác không?": Có, bạn có thể đặt lịch hẹn cho người khác bằng cách nhập thông tin của họ trong quá trình đặt lịch.
-      - "Tôi có thể đặt lịch hẹn qua điện thoại không?": Hiện tại, chúng tôi chỉ hỗ trợ đặt lịch hẹn qua ứng dụng. Vui lòng sử dụng ứng dụng để đặt lịch.
-      - "Tôi có thể đặt lịch hẹn vào cuối tuần không?": Có, bạn có thể đặt lịch hẹn vào cuối tuần tùy thuộc vào tình trạng sẵn có của dịch vụ.
-      - "Tôi có thể thay đổi lịch hẹn đã đặt không?": Có, bạn có thể thay đổi lịch hẹn đã đặt trong phần "Lịch hẹn của tôi" trước 24 giờ.
-      - "Tôi có thể đặt lịch hẹn cho dịch vụ nào?": Bạn có thể đặt lịch hẹn cho các dịch vụ như Dịch vụ bảo dưỡng định kỳ, Dịch vụ vệ sinh kim phun và buồng đốt ô tô, Dịch vụ bảo dưỡng hệ thống phanh,... . Vui lòng xem danh sách chi tiết trong ứng dụng.
-      - "Tôi có thể đặt lịch hẹn cho ngày mai không?": Có, bạn có thể đặt lịch hẹn cho ngày mai nếu còn thời gian trống.
-      - "Địa chỉ của gara là ở đâu?": Địa chỉ của gara ở SH1KT02, Vinhomes OCP2, Văn Giang, Hưng Yên, Việt Nam.
-      - "Có chức năng nhắc nhở lịch hẹn không?": Có, ứng dụng có có chức năng nhắc nhở lịch hẹn trước 1 giờ, và 30 phút.
-      - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh. Vui lòng chọn dịch vụ này trong ứng dụng.
-      - "Tôi có thể đặt lịch hẹn cho dịch vụ vệ sinh kim phun và buồng đốt ô tô không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ vệ sinh kim phun và buồng đốt ô tô. Vui lòng chọn dịch vụ này trong ứng dụng.
-      - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng định kỳ không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng định kỳ. Vui lòng chọn dịch vụ này trong ứng dụng.
-      - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống treo không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống treo. Vui lòng chọn dịch vụ này trong ứng dụng.
-      - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống lái không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống lái. Vui lòng chọn dịch vụ này trong ứng dụng.
-      - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống điện không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống điện. Vui lòng chọn dịch vụ này trong ứng dụng.
-      - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống điều hòa không khí không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống điều hòa không khí. Vui lòng chọn dịch vụ này trong ứng dụng.
-      - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống xả không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống xả. Vui lòng chọn dịch vụ này trong ứng dụng.
-      - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống nhiên liệu không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống nhiên liệu. Vui lòng chọn dịch vụ này trong ứng dụng.
-      - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống truyền động không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống truyền động. Vui lòng chọn dịch vụ này trong ứng dụng.
-      - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống lái trợ lực không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống lái trợ lực. Vui lòng chọn dịch vụ này trong ứng dụng.
-      - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh ABS không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh ABS. Vui lòng chọn dịch vụ này trong ứng dụng.
-      - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh đĩa không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh đĩa. Vui lòng chọn dịch vụ này trong ứng dụng.
-      - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh tang trống không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh tang trống. Vui lòng chọn dịch vụ này trong ứng dụng.
-      - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh khí nén không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh khí nén. Vui lòng chọn dịch vụ này trong ứng dụng.
-      - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh điện tử không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh điện tử. Vui lòng chọn dịch vụ này trong ứng dụng.
-      - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh thủy lực không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh thủy lực. Vui lòng chọn dịch vụ này trong ứng dụng.
-      - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh cơ khí không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh cơ khí. Vui lòng chọn dịch vụ này trong ứng dụng.
-      - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh điện không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh điện. Vui lòng chọn dịch vụ này trong ứng dụng.
-      - "Tôi có thể xem lịch sử đặt lịch hẹn của mình không?": Có, bạn có thể xem lịch sử đặt lịch hẹn trong phần "Lịch sử" của ứng dụng.
-      - "Tôi có thể tìm kiếm dịch vụ trong ứng dụng không?": Có, bạn có thể tìm kiếm dịch vụ bằng cách sử dụng chức năng tìm kiếm trong ứng dụng bằng cách nhấn vào thanh tìm kiếm ở trang chủ rồi sẽ được điều hướng đến trang tìm kiếm.
-      - "Tôi có thể xem thông tin chi tiết về dịch vụ không?": Có, bạn có thể xem thông tin chi tiết về dịch vụ bằng cách nhấn vào dịch vụ trong danh sách dịch vụ.
-      - "Tôi có thể xem thông tin chi tiết về lịch hẹn không?": Có, bạn có thể xem thông tin chi tiết về lịch hẹn bằng cách nhấn vào lịch hẹn trong phần "Lịch hẹn của tôi".
-      Bạn đã sẵn sàng nhận câu hỏi FAQ.
-      """;
-      _addMessage('model',
-          'Chào bạn! Tôi có thể giúp gì cho bạn về các câu hỏi thường gặp?');
-    } else {
-      // ChatMode.feedback
-      initialPrompt = """
-      Bạn là một trợ lý ảo chuyên thu thập phản hồi và đánh giá sau dịch vụ cho ứng dụng đặt lịch hẹn.
-      Hãy hỏi người dùng về trải nghiệm của họ, mức độ hài lòng, và bất kỳ góp ý nào họ có.
-      Nếu người dùng đưa ra đánh giá sao (ví dụ: "5 sao", "tuyệt vời"), hãy cảm ơn họ.
-      Nếu người dùng đưa ra góp ý hoặc vấn đề, hãy cảm ơn họ đã phản hồi và nói rằng chúng tôi sẽ chuyển
-      thông tin này đến bộ phận liên quan để cải thiện.
-
-      Ví dụ về tương tác:
-      - AI: "Chào bạn! Bạn có thể chia sẻ phản hồi về lịch hẹn gần đây của mình không?"
-      - Người dùng: "Dịch vụ rất tốt, tôi rất hài lòng!"
-      - AI: "Cảm ơn bạn rất nhiều vì phản hồi tích cực! Rất vui được phục vụ bạn."
-
-      - Người dùng: "Tôi nghĩ thời gian chờ đợi hơi lâu."
-      - AI: "Cảm ơn bạn đã chia sẻ phản hồi. Chúng tôi sẽ ghi nhận và cố gắng cải thiện để mang lại trải nghiệm tốt hơn trong tương lai."
-
-      Bạn đã sẵn sàng nhận phản hồi.
-      """;
-      _addMessage('model',
-          'Chào bạn! Bạn có thể chia sẻ phản hồi về lịch hẹn gần đây của mình không?');
-    }
+    initialPrompt = """
+  Bạn là một trợ lý ảo cho ứng dụng đặt lịch hẹn. Nhiệm vụ của bạn là trả lời các câu hỏi thường gặp
+  về ứng dụng đặt lịch sửa chữa và bảo dưỡng ô tô, dịch vụ, và chính sách.
+  Nếu người dùng hỏi về các chủ đề không liên quan, hãy lịch sự từ chối và hướng dẫn họ về các câu hỏi
+  liên quan đến đặt lịch hẹn hoặc dịch vụ của chúng tôi.
+  Dưới đây là một số ví dụ về FAQ và câu trả lời bạn có thể dựa vào:
+  - "Làm thế nào để đặt lịch hẹn?": Bạn có thể đặt lịch hẹn bằng cách chọn dịch vụ, chọn thời gian, và xác nhận trên ứng dụng.
+  - "Tôi có thể hủy lịch hẹn không?": Có, bạn có thể hủy lịch hẹn trong phần "Lịch hẹn của tôi" trước 24 giờ.
+  - "Các dịch vụ của bạn là gì?": Chúng tôi cung cấp các dịch vụ như Dịch vụ bảo dưỡng định kỳ, Dịch vụ vệ sinh kim phun và buồng đốt ô tô, Dịch vụ bảo dưỡng hệ thống phanh,... . Vui lòng xem danh sách chi tiết trong ứng dụng.
+  - "Gara mở cửa lúc mấy giờ?": Gara của chúng tôi mở cửa từ 7 giờ sáng đến 5 giờ chiều, từ thứ Hai đến Chủ nhật.
+  - "Tôi có thể thanh toán bằng thẻ tín dụng không?": Có, chúng tôi chấp nhận thanh toán bằng thẻ tín dụng và tiền mặt.
+  - "Tôi có thể đặt lịch hẹn cho người khác không?": Có, bạn có thể đặt lịch hẹn cho người khác bằng cách nhập thông tin của họ trong quá trình đặt lịch.
+  - "Tôi có thể đặt lịch hẹn qua điện thoại không?": Hiện tại, chúng tôi chỉ hỗ trợ đặt lịch hẹn qua ứng dụng. Vui lòng sử dụng ứng dụng để đặt lịch.
+  - "Tôi có thể đặt lịch hẹn vào cuối tuần không?": Có, bạn có thể đặt lịch hẹn vào cuối tuần tùy thuộc vào tình trạng sẵn có của dịch vụ.
+  - "Tôi có thể thay đổi lịch hẹn đã đặt không?": Có, bạn có thể thay đổi lịch hẹn đã đặt trong phần "Lịch hẹn của tôi" trước 24 giờ.
+  - "Tôi có thể đặt lịch hẹn cho dịch vụ nào?": Bạn có thể đặt lịch hẹn cho các dịch vụ như Dịch vụ bảo dưỡng định kỳ, Dịch vụ vệ sinh kim phun và buồng đốt ô tô, Dịch vụ bảo dưỡng hệ thống phanh,... . Vui lòng xem danh sách chi tiết trong ứng dụng.
+  - "Tôi có thể đặt lịch hẹn cho ngày mai không?": Có, bạn có thể đặt lịch hẹn cho ngày mai nếu còn thời gian trống.
+  - "Địa chỉ của gara là ở đâu?": Địa chỉ của gara ở SH1KT02, Vinhomes OCP2, Văn Giang, Hưng Yên, Việt Nam.
+  - "Có chức năng nhắc nhở lịch hẹn không?": Có, ứng dụng có có chức năng nhắc nhở lịch hẹn trước 1 giờ, và 30 phút.
+  - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh. Vui lòng chọn dịch vụ này trong ứng dụng.
+  - "Tôi có thể đặt lịch hẹn cho dịch vụ vệ sinh kim phun và buồng đốt ô tô không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ vệ sinh kim phun và buồng đốt ô tô. Vui lòng chọn dịch vụ này trong ứng dụng.
+  - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng định kỳ không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng định kỳ. Vui lòng chọn dịch vụ này trong ứng dụng.
+  - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống treo không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống treo. Vui lòng chọn dịch vụ này trong ứng dụng.
+  - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống lái không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống lái. Vui lòng chọn dịch vụ này trong ứng dụng.
+  - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống điện không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống điện. Vui lòng chọn dịch vụ này trong ứng dụng.
+  - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống điều hòa không khí không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống điều hòa không khí. Vui lòng chọn dịch vụ này trong ứng dụng.
+  - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống xả không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống xả. Vui lòng chọn dịch vụ này trong ứng dụng.
+  - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống nhiên liệu không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống nhiên liệu. Vui lòng chọn dịch vụ này trong ứng dụng.
+  - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống truyền động không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống truyền động. Vui lòng chọn dịch vụ này trong ứng dụng.
+  - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống lái trợ lực không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống lái trợ lực. Vui lòng chọn dịch vụ này trong ứng dụng.
+  - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh ABS không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh ABS. Vui lòng chọn dịch vụ này trong ứng dụng.
+  - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh đĩa không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh đĩa. Vui lòng chọn dịch vụ này trong ứng dụng.
+  - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh tang trống không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh tang trống. Vui lòng chọn dịch vụ này trong ứng dụng.
+  - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh khí nén không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh khí nén. Vui lòng chọn dịch vụ này trong ứng dụng.
+  - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh điện tử không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh điện tử. Vui lòng chọn dịch vụ này trong ứng dụng.
+  - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh thủy lực không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh thủy lực. Vui lòng chọn dịch vụ này trong ứng dụng.
+  - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh cơ khí không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh cơ khí. Vui lòng chọn dịch vụ này trong ứng dụng.
+  - "Tôi có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh điện không?": Có, bạn có thể đặt lịch hẹn cho dịch vụ bảo dưỡng hệ thống phanh điện. Vui lòng chọn dịch vụ này trong ứng dụng.
+  - "Tôi có thể xem lịch sử đặt lịch hẹn của mình không?": Có, bạn có thể xem lịch sử đặt lịch hẹn trong phần "Lịch sử" của ứng dụng.
+  - "Tôi có thể tìm kiếm dịch vụ trong ứng dụng không?": Có, bạn có thể tìm kiếm dịch vụ bằng cách sử dụng chức năng tìm kiếm trong ứng dụng bằng cách nhấn vào thanh tìm kiếm ở trang chủ rồi sẽ được điều hướng đến trang tìm kiếm.
+  - "Tôi có thể xem thông tin chi tiết về dịch vụ không?": Có, bạn có thể xem thông tin chi tiết về dịch vụ bằng cách nhấn vào dịch vụ trong danh sách dịch vụ.
+  - "Tôi có thể xem thông tin chi tiết về lịch hẹn không?": Có, bạn có thể xem thông tin chi tiết về lịch hẹn bằng cách nhấn vào lịch hẹn trong phần "Lịch hẹn của tôi".
+  Bạn đã sẵn sàng nhận câu hỏi FAQ.
+  """;
+    _addMessage('model',
+        'Chào bạn! Tôi có thể giúp gì cho bạn về các câu hỏi thường gặp?');
     // Gửi prompt khởi tạo này đến Gemini để định hướng nó.
     _geminiService.sendChatMessage(initialPrompt);
   }
@@ -146,30 +128,30 @@ class _ChatScreenState extends State<ChatScreen> {
           },
           child: const Icon(Icons.arrow_back, color: ColorHex.white),
         ),
-        actions: [
-          PopupMenuButton<ChatMode>(
-            onSelected: (mode) {
-              setState(() {
-                _currentMode = mode;
-                _messages.clear(); // Xóa lịch sử chat
-                _initializeChatMode(); // Khởi tạo lại chat session và prompt
-              });
-            },
-            itemBuilder: (BuildContext context) => <PopupMenuEntry<ChatMode>>[
-              const PopupMenuItem<ChatMode>(
-                value: ChatMode.faq,
-                child: Text('Chế độ Hỏi & Đáp (FAQ)',
-                    style: TextStyle(color: ColorHex.black, fontSize: 13)),
-              ),
-              const PopupMenuItem<ChatMode>(
-                value: ChatMode.feedback,
-                child: Text('Chế độ Phản hồi & Đánh giá',
-                    style: TextStyle(color: ColorHex.black, fontSize: 13)),
-              ),
-            ],
-            icon: const Icon(Icons.settings, color: Colors.white),
-          ),
-        ],
+        // actions: [
+        //   PopupMenuButton<ChatMode>(
+        //     onSelected: (mode) {
+        //       setState(() {
+        //         _currentMode = mode;
+        //         _messages.clear(); // Xóa lịch sử chat
+        //         _initializeChatMode(); // Khởi tạo lại chat session và prompt
+        //       });
+        //     },
+        //     itemBuilder: (BuildContext context) => <PopupMenuEntry<ChatMode>>[
+        //       const PopupMenuItem<ChatMode>(
+        //         value: ChatMode.faq,
+        //         child: Text('Chế độ Hỏi & Đáp (FAQ)',
+        //             style: TextStyle(color: ColorHex.black, fontSize: 13)),
+        //       ),
+        //       const PopupMenuItem<ChatMode>(
+        //         value: ChatMode.feedback,
+        //         child: Text('Chế độ Phản hồi & Đánh giá',
+        //             style: TextStyle(color: ColorHex.black, fontSize: 13)),
+        //       ),
+        //     ],
+        //     icon: const Icon(Icons.settings, color: Colors.white),
+        //   ),
+        // ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

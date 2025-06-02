@@ -65,6 +65,7 @@ class Listservice extends StatelessWidget {
   Widget _ServiceCard(
       BuildContext context, Service service, Servicecontroller controller) {
     return Card(
+      key: ValueKey(service.service_id),
       margin: const EdgeInsets.symmetric(horizontal: 16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       clipBehavior: Clip.antiAlias,

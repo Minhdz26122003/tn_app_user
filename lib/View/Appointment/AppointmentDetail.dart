@@ -13,6 +13,9 @@ import 'package:timeline_tile/timeline_tile.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+final GlobalKey<ScaffoldState> _appointmentDetailScaffoldKey =
+    GlobalKey<ScaffoldState>();
+
 class Appoointmentdetail extends StatelessWidget {
   const Appoointmentdetail();
 
@@ -30,6 +33,7 @@ class Appoointmentdetail extends StatelessWidget {
     }
 
     return Scaffold(
+      key: _appointmentDetailScaffoldKey, // <-- Thêm key vào Scaffold
       appBar: AppBar(
         title: Text(
           'detail_service'.tr,

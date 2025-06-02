@@ -8,6 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
+final GlobalKey<ScaffoldState> _listAppointmentScaffoldKey =
+    GlobalKey<ScaffoldState>();
+
 class Appointmentlist extends StatelessWidget {
   const Appointmentlist();
 
@@ -15,6 +18,7 @@ class Appointmentlist extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<Appointmentcontroller>();
     return Scaffold(
+      key: _listAppointmentScaffoldKey, // <-- Thêm key vào Scaffold
       appBar: AppBar(
         title: Text('list_appointment'.tr,
             style: const TextStyle(color: ColorHex.white, fontSize: 17)),
@@ -109,6 +113,7 @@ class Appointmentlist extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Card(
+        key: ValueKey(model.appointment_id),
         margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         elevation: 2,

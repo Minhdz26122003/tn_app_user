@@ -51,34 +51,42 @@ class Dashboardcontroller extends GetxController {
     final idx = Get.arguments;
     if (idx is int) currentPageIndex.value = idx;
     firebaseUser.bindStream(FirebaseAuth.instance.authStateChanges());
-    checkPhpToken();
+    await resetData();
     ever<User?>(firebaseUser, (_) => updateIsLoggedIn());
-    getServiceTypeList();
-    getServiceList();
-    try {
-      isLoading.value = true;
+  }
 
-      username.value =
-          await Utils.getStringValueWithKey(Constant.USERNAME) ?? '';
-      fullname.value = await Utils.getStringValueWithKey(Constant.FULL_NAME) ??
-          ''; // Đảm bảo tải fullname
-      avatar.value =
-          await Utils.getStringValueWithKey(Constant.AVATAR_USER) ?? '';
-      email.value = await Utils.getStringValueWithKey(Constant.EMAIL) ?? '';
-      phoneNumber.value =
-          await Utils.getStringValueWithKey(Constant.PHONENUM) ?? '';
-      birthDate.value =
-          await Utils.getStringValueWithKey(Constant.BIRTHDAY) ?? '';
-      gender.value = await Utils.getStringValueWithKey(Constant.GENDER) ?? '';
-      address.value = await Utils.getStringValueWithKey(Constant.ADDRESS) ?? '';
+  Future<void> resetData() async {
+    try {
+      await checkPhpToken();
+
+      await Future.wait<void>([
+        getServiceTypeList(),
+        getServiceList(),
+        _loadLocalUserData(),
+      ]);
     } catch (e) {
-      print("Lỗi khi tải dữ liệu: $e");
+      print("Lỗi khi tải dữ liệu trong onInit: $e");
     } finally {
       isLoading.value = false;
     }
   }
 
-  void checkPhpToken() async {
+  Future<void> _loadLocalUserData() async {
+    username.value = await Utils.getStringValueWithKey(Constant.USERNAME) ?? '';
+    fullname.value =
+        await Utils.getStringValueWithKey(Constant.FULL_NAME) ?? '';
+    avatar.value =
+        await Utils.getStringValueWithKey(Constant.AVATAR_USER) ?? '';
+    email.value = await Utils.getStringValueWithKey(Constant.EMAIL) ?? '';
+    phoneNumber.value =
+        await Utils.getStringValueWithKey(Constant.PHONENUM) ?? '';
+    birthDate.value =
+        await Utils.getStringValueWithKey(Constant.BIRTHDAY) ?? '';
+    gender.value = await Utils.getIntValueWithKey(Constant.GENDER) ?? '';
+    address.value = await Utils.getStringValueWithKey(Constant.ADDRESS) ?? '';
+  }
+
+  Future<void> checkPhpToken() async {
     String token = await Utils.getStringValueWithKey(Constant.ACCESS_TOKEN);
     isPhpLoggedIn.value = token.isNotEmpty;
     updateIsLoggedIn();

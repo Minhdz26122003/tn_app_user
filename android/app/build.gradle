@@ -31,7 +31,15 @@ android
         versionName = flutter.versionName
         multiDexEnabled true
     }
-
+    // new 
+    // signingConfigs {
+    //     debug {
+    //         storeFile file('D:/Documents/Flutter/app_hm/android/debug.keystore') 
+    //         storePassword 'android'
+    //         keyAlias 'androiddebugkey'
+    //         keyPassword 'android'
+    //     }
+    // }
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
@@ -39,6 +47,24 @@ android
             signingConfig = signingConfigs.debug
         }
     }
+    // buildTypes {
+    //     release {
+    //         // Sử dụng debug signing config cho bản release để dễ dàng build APK test
+    //         //signingConfig signingConfigs.debug
+
+    //         // Bật minify và shrink (quan trọng để ProGuard hoạt động)
+    //         minifyEnabled true
+    //         shrinkResources true // Tùy chọn nhưng khuyến nghị để giảm kích thước APK
+
+    //         // Chỉ định tệp quy tắc ProGuard
+    //         proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    //     }
+    //      debug {
+    //         // Cấu hình cho bản debug (thường không cần minify)
+    //         minifyEnabled false
+    //         shrinkResources false
+    //     }
+    // }
 }
 
 flutter {

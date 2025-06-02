@@ -34,13 +34,12 @@ class Servicecontroller extends GetxController {
   String formatCurrency(double? amount) {
     if (amount == null || amount == double.infinity)
       return ''; // Hiển thị rỗng cho giá vô cực
-    // Sử dụng NumberFormat.currency với locale 'vi_VN' và symbol '₫' để định dạng tiền Việt Nam
+
     return NumberFormat.currency(locale: 'vi_VN', symbol: '₫', decimalDigits: 0)
         .format(amount);
   }
 
   double parseCurrency(String formattedString) {
-    // Loại bỏ tất cả các ký tự không phải số (ví dụ: "₫", ".", ",")
     String cleanString = formattedString.replaceAll(RegExp(r'[^\d]'), '');
     return double.tryParse(cleanString) ?? 0.0;
   }
@@ -55,7 +54,7 @@ class Servicecontroller extends GetxController {
 
   // Hàm tải danh sách loại dịch vụ
   Future<void> getServiceTypeList() async {
-    isLoadingTypes.value = true;
+    // isLoadingTypes.value = true;
     try {
       DateTime timeNow = DateTime.now();
       String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
@@ -78,15 +77,16 @@ class Servicecontroller extends GetxController {
         Utils.showSnackBar(
             title: 'Thông báo',
             message:
-                'Lỗi khi tải loại dịch vụ: ${data?['error']?['message'] ?? 'Vui lòng thử lại.'}');
+                'Lỗi khi tải loại: ${data?['error']?['message'] ?? 'Vui lòng thử lại.'}');
       }
     } catch (e) {
       // Utils.showSnackBar(
       //     title: 'Thông báo', message: 'Lỗi khi tải loại dịch vụ: $e');
       debugPrint('Phản hồi từ aaatServiceList API: $e', wrapWidth: 1024);
-    } finally {
-      isLoadingTypes.value = false;
     }
+    // finally {
+    //   isLoadingTypes.value = false;
+    // }
   }
 
   // Hàm chính để tìm kiếm dịch vụ với các bộ lọc

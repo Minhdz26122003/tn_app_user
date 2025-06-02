@@ -171,6 +171,9 @@ class Appointmenttime extends StatelessWidget {
   // Widget hiển thị thời gian
   Widget _ViewTimes(Appointmentcontroller controller) {
     return Obx(() {
+      if (controller.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
       return Wrap(
         spacing: 16,
         runSpacing: 16,

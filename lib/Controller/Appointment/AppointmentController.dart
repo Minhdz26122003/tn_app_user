@@ -117,7 +117,7 @@ class Appointmentcontroller extends GetxController {
     await getAppointmentList();
 
     everAll([selectedDate, selectedSession], (_) => buildSlots());
-    await buildSlots();
+    //await buildSlots();
 
     await getAccount();
 

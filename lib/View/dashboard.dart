@@ -12,6 +12,7 @@ class Dashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(Dashboardcontroller());
+
     return Obx(
       () => controller.isLoading.value
           ? const Scaffold(

@@ -246,7 +246,7 @@ class _ServicesearchState extends State<Servicesearch> {
                   return const Center(child: CircularProgressIndicator());
                 } else if (ctrl.filteredServices.isEmpty) {
                   return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20.0),
+                    padding: EdgeInsets.symmetric(vertical: 10.0),
                     child: Center(
                       child: Text('Không tìm thấy dịch vụ nào phù hợp.',
                           style: TextStyle(color: Colors.grey, fontSize: 16)),

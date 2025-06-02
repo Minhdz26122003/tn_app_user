@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+final GlobalKey<ScaffoldState> _personalScaffoldKey =
+    GlobalKey<ScaffoldState>();
+
 class Personal extends StatelessWidget {
   const Personal({super.key});
 
@@ -15,6 +18,7 @@ class Personal extends StatelessWidget {
     final controller = Get.put(Dashboardcontroller());
     final apct = Get.find<Appointmentcontroller>();
     return Scaffold(
+      key: _personalScaffoldKey, // <-- Thêm key vào Scaffold
       backgroundColor: ColorHex.white,
       body: Obx(() {
         return controller.isLoading.value
