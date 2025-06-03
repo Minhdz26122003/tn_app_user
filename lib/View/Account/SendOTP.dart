@@ -9,7 +9,7 @@ class Sentotp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(LoginController());
+    final controller = Get.find<LoginController>();
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -31,6 +31,9 @@ class Sentotp extends StatelessWidget {
             padding:
                 const EdgeInsets.only(top: 20, right: 30, bottom: 30, left: 30),
             child: Obx(() {
+              if (controller.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -43,18 +46,15 @@ class Sentotp extends StatelessWidget {
                   RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
-                      style: const TextStyle(
-                          color: ColorHex.black,
-                          fontSize: 13), // Định dạng chung
+                      style:
+                          const TextStyle(color: ColorHex.black, fontSize: 13),
                       children: [
                         TextSpan(
                           text: 'we_send_password'.tr,
                         ),
                         TextSpan(
                           text: controller.textEmail.text,
-                          style: const TextStyle(
-                              color:
-                                  ColorHex.total_color), // Màu cho phần email
+                          style: const TextStyle(color: ColorHex.total_color),
                         ),
                       ],
                     ),

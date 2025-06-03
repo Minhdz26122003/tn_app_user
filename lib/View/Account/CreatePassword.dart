@@ -26,152 +26,156 @@ class Createpassword extends StatelessWidget {
         ),
       ),
       body: SizedBox(
-        width: MediaQuery.of(context).size.width, // Chiều rộng màn hình
+        width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(30),
             child: Obx(
-              () => Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 60,
-                  ),
-                  Text(
-                    'create_new_password'.tr,
-                    style: const TextStyle(
-                      color: ColorHex.total_color,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+              () {
+                if (controller.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 60,
                     ),
-                    textAlign: TextAlign.start,
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'validate_password'.tr,
-                    style: const TextStyle(
-                      color: ColorHex.status_0,
-                      fontSize: 12,
-                      fontStyle: FontStyle.italic,
+                    Text(
+                      'create_new_password'.tr,
+                      style: const TextStyle(
+                        color: ColorHex.total_color,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.start,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'new_password'.tr,
-                          style: const TextStyle(fontSize: 12),
-                          textAlign: TextAlign.start,
-                        ),
-                        TextField(
-                          controller: controller.textPasswordNew,
-                          obscureText: controller.isHidePasswordNew.value,
-                          onChanged: (value) {},
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.lock_outline),
-                            hintText: 'new_password'.tr,
-                            hintStyle: const TextStyle(color: ColorHex.grey),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 10),
-                            border: const OutlineInputBorder(),
-                            suffixIcon: InkWell(
-                              onTap: () {
-                                controller.isHidePassword.value =
-                                    !controller.isHidePassword.value;
+                    const SizedBox(height: 10),
+                    Text(
+                      'validate_password'.tr,
+                      style: const TextStyle(
+                        color: ColorHex.status_0,
+                        fontSize: 12,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'new_password'.tr,
+                            style: const TextStyle(fontSize: 12),
+                            textAlign: TextAlign.start,
+                          ),
+                          TextField(
+                            controller: controller.textPasswordNew,
+                            obscureText: controller.isHidePasswordNew.value,
+                            onChanged: (value) {},
+                            decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.lock_outline),
+                              hintText: 'new_password'.tr,
+                              hintStyle: const TextStyle(color: ColorHex.grey),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 10),
+                              border: const OutlineInputBorder(),
+                              suffixIcon: InkWell(
+                                onTap: () {
+                                  controller.isHidePassword.value =
+                                      !controller.isHidePassword.value;
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: SvgPicture.asset(
+                                      controller.isHidePassword.value
+                                          ? 'assets/icons/hidden.svg'
+                                          : 'assets/icons/eye_login.svg',
+                                      fit: BoxFit.cover),
+                                ),
+                              ),
+                            ),
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w500),
+                          ),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          Text(
+                            'confirm_password'.tr,
+                            style: const TextStyle(fontSize: 12),
+                            textAlign: TextAlign.start,
+                          ),
+                          TextField(
+                            obscureText: controller.isHidePasswordConfirm.value,
+                            controller: controller.textPasswordConfirm,
+                            onChanged: (value) {},
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.lock_outline),
+                              hintText: 'confirm_password'.tr,
+                              hintStyle: const TextStyle(color: ColorHex.grey),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 10),
+                              border: const OutlineInputBorder(),
+                              suffixIcon: InkWell(
+                                onTap: () {
+                                  controller.isHidePasswordConfirm.value =
+                                      !controller.isHidePasswordConfirm.value;
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: SvgPicture.asset(
+                                      controller.isHidePasswordConfirm.value
+                                          ? 'assets/icons/hidden.svg'
+                                          : 'assets/icons/eye_login.svg',
+                                      fit: BoxFit.cover),
+                                ),
+                              ),
+                            ),
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w500),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const SizedBox(
+                            height: 40,
+                          ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                controller.createPassword();
                               },
-                              child: Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: SvgPicture.asset(
-                                    controller.isHidePassword.value
-                                        ? 'assets/icons/hidden.svg'
-                                        : 'assets/icons/eye_login.svg',
-                                    fit: BoxFit.cover),
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: ColorHex.white,
+                                backgroundColor: ColorHex.total_color,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 90, vertical: 15),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                elevation: 5,
+                              ),
+                              child: Text(
+                                'create_password'.tr,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        Text(
-                          'confirm_password'.tr,
-                          style: const TextStyle(fontSize: 12),
-                          textAlign: TextAlign.start,
-                        ),
-                        TextField(
-                          obscureText: controller.isHidePasswordConfirm.value,
-                          controller: controller.textPasswordConfirm,
-                          onChanged: (value) {},
-                          keyboardType: TextInputType.text,
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.lock_outline),
-                            hintText: 'confirm_password'.tr,
-                            hintStyle: const TextStyle(color: ColorHex.grey),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 10),
-                            border: const OutlineInputBorder(),
-                            suffixIcon: InkWell(
-                              onTap: () {
-                                controller.isHidePasswordConfirm.value =
-                                    !controller.isHidePasswordConfirm.value;
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: SvgPicture.asset(
-                                    controller.isHidePasswordConfirm.value
-                                        ? 'assets/icons/hidden.svg'
-                                        : 'assets/icons/eye_login.svg',
-                                    fit: BoxFit.cover),
-                              ),
-                            ),
-                          ),
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        const SizedBox(
-                          height: 40,
-                        ),
-                        Align(
-                          alignment: Alignment.center,
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              controller.createPassword();
-                            },
-                            style: ElevatedButton.styleFrom(
-                              foregroundColor: ColorHex.white,
-                              backgroundColor: ColorHex.total_color,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 100, vertical: 15),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              elevation: 5,
-                            ),
-                            child: Text(
-                              'create_password'.tr,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                );
+              },
             ),
           ),
         ),

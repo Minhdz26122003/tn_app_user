@@ -29,12 +29,6 @@ class LoginController extends GetxController {
   TextEditingController textPasswordConfirm = TextEditingController();
 
   @override
-  void onInit() async {
-    refeshData();
-    super.onInit();
-  }
-
-  @override
   void onClose() {
     timer?.cancel();
     super.onClose();
@@ -70,6 +64,7 @@ class LoginController extends GetxController {
       Utils.showSnackBar(
           title: 'notification'.tr, message: 'email_formatted'.tr);
     } else {
+      isLoading.value = true;
       DateTime timeNow = DateTime.now(); // Di chuyển vào trong hàm
       String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
       var param = {
@@ -88,7 +83,7 @@ class LoginController extends GetxController {
           startTimer();
           Utils.showSnackBar(
               title: 'notification'.tr, message: "Đã gửi mã OTP thành công");
-          refeshData();
+
           Get.toNamed(Routes.sendtopt);
         } else {
           Utils.showSnackBar(
@@ -97,6 +92,8 @@ class LoginController extends GetxController {
       } catch (e) {
         // Utils.showSnackBar(title: 'notification'.tr, message: '$e');
         debugPrint("Lỗi API: $e", wrapWidth: 1024);
+      } finally {
+        isLoading.value = false;
       }
     }
   }
@@ -112,6 +109,7 @@ class LoginController extends GetxController {
     } else if (textOTP.text.trim().isEmpty) {
       Utils.showSnackBar(title: 'notification'.tr, message: 'enter_otp'.tr);
     } else {
+      isLoading.value = true;
       DateTime timeNow = DateTime.now(); // Di chuyển vào trong hàm
       String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
       var param = {
@@ -128,14 +126,17 @@ class LoginController extends GetxController {
         if (response != null && response["error"]["code"] == 0) {
           Utils.showSnackBar(
               title: 'notification'.tr, message: "Xác thực OTP thành công");
-          refeshData();
+
           Get.toNamed(Routes.createpassword);
         } else {
           Utils.showSnackBar(
               title: 'notification'.tr, message: response["error"]["message"]);
         }
       } catch (e) {
-        Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+        //Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+        debugPrint("Lỗi API: $e", wrapWidth: 1024);
+      } finally {
+        isLoading.value = false;
       }
     }
   }
@@ -159,6 +160,7 @@ class LoginController extends GetxController {
       Utils.showSnackBar(
           title: 'notification'.tr, message: 'password_not_match'.tr);
     } else {
+      isLoading.value = true;
       DateTime timeNow = DateTime.now();
       String formattedTime = DateFormat('MM/dd/yyyy HH:mm:ss').format(timeNow);
       var param = {
@@ -182,6 +184,8 @@ class LoginController extends GetxController {
         }
       } catch (e) {
         Utils.showSnackBar(title: 'notification'.tr, message: '$e');
+      } finally {
+        isLoading.value = false;
       }
     }
   }

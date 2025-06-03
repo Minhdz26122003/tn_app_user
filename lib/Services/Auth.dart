@@ -21,13 +21,14 @@ class Auth {
 
     try {
       clearData();
-      Get.offAllNamed(Routes.dashboard);
+      Get.back();
       await FirebaseAuth.instance.signOut();
       await GoogleSignIn().signOut();
 
-      final controller = Get.isRegistered<Dashboardcontroller>()
-          ? Get.find<Dashboardcontroller>()
-          : Get.put(Dashboardcontroller());
+      // final controller = Get.isRegistered<Dashboardcontroller>()
+      //     ? Get.find<Dashboardcontroller>()
+      //     : Get.put(Dashboardcontroller());
+      final controller = Get.find<Dashboardcontroller>();
       controller
         ..username.value = ''
         ..email.value = ''
